@@ -1,27 +1,13 @@
-맞습니다. 아래는 **파일 링크가 아니라 기존 `index.html`을 전부 지우고 VS Code에 한 번에 복사·붙여넣는 전체 HTML 코드**입니다. 장문 학습 보고서는 삭제하고, **핵심 파라미터·학습 과정·성능 강점**만 간결하게 반영했습니다.  
-
-```html
 <!DOCTYPE html>
 <html lang="ko" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>
-        Physical AI | HD현대삼호 선박 작업구역 YOLO26n 검출 & 6축 로봇 좌표 자동보정 시스템
-    </title>
-
-    <!-- Tailwind CSS -->
+    <title>Physical AI | HD현대삼호 LNG선 의장·용접 AI 비전 전처리 & 6축 로봇 좌표 자동보정 시스템</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             background-color: #090d16;
@@ -42,22 +28,13 @@
         }
 
         .gradient-text {
-            background: linear-gradient(
-                135deg,
-                #38bdf8 0%,
-                #818cf8 50%,
-                #c084fc 100%
-            );
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .gradient-border {
-            border-image: linear-gradient(
-                to right,
-                #38bdf8,
-                #818cf8
-            ) 1;
+            border-image: linear-gradient(to right, #38bdf8, #818cf8) 1;
         }
 
         .glow-effect {
@@ -69,6 +46,7 @@
         }
 
         @keyframes pulse {
+
             0%,
             100% {
                 opacity: 1;
@@ -86,67 +64,31 @@
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 glass-panel border-b border-slate-800/80">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-
             <div class="flex items-center space-x-3">
                 <div
                     class="w-9 h-9 bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-500 rounded-xl flex items-center justify-center font-black text-white shadow-lg shadow-cyan-500/20">
-
                     <i class="fa-solid fa-robot text-sm"></i>
                 </div>
-
                 <div class="flex flex-col">
-                    <span class="font-bold text-lg tracking-wide text-white leading-tight">
-                        RoboOffset
-                        <span class="gradient-text">AI</span>
-                    </span>
-
-                    <span class="text-[10px] text-slate-400 font-mono tracking-widest uppercase">
-                        Physical AI Solutions
-                    </span>
+                    <span class="font-bold text-lg tracking-wide text-white leading-tight">RoboOffset <span
+                            class="gradient-text">AI</span></span>
+                    <span class="text-[10px] text-slate-400 font-mono tracking-widest uppercase">Physical AI
+                        Solutions</span>
                 </div>
             </div>
-
-            <div class="hidden xl:flex space-x-4 text-xs font-medium text-slate-300">
-                <a href="#overview"
-                    class="hover:text-cyan-400 transition-colors">
-                    솔루션 개요
-                </a>
-
-                <a href="#problem"
-                    class="hover:text-cyan-400 transition-colors">
-                    현장 과제
-                </a>
-
-                <a href="#pipeline"
-                    class="hover:text-cyan-400 transition-colors">
-                    전처리 파이프라인
-                </a>
-
-                <a href="#process"
-                    class="hover:text-cyan-400 transition-colors">
-                    작업별 프로세스
-                </a>
-
-                <a href="#yolo-training"
-                    class="hover:text-cyan-400 transition-colors">
-                    AI 파인튜닝
-                </a>
-
-                <a href="#safety"
-                    class="hover:text-cyan-400 transition-colors">
-                    안전 & 인터록
-                </a>
-
-                <a href="#simulator"
-                    class="hover:text-cyan-400 transition-colors">
-                    실시간 시뮬레이터
-                </a>
+            <div class="hidden lg:flex space-x-6 text-sm font-medium text-slate-300">
+                <a href="#overview" class="hover:text-cyan-400 transition-colors">솔루션 개요</a>
+                <a href="#problem" class="hover:text-cyan-400 transition-colors">현장 과제</a>
+                <a href="#pipeline" class="hover:text-cyan-400 transition-colors">전처리 파이프라인</a>
+                <a href="#process" class="hover:text-cyan-400 transition-colors">작업별 프로세스</a>
+                <a href="#safety" class="hover:text-cyan-400 transition-colors">안전 & 인터록</a>
+                <a href="#simulator" class="hover:text-cyan-400 transition-colors">실시간 시뮬레이터</a>
+                <a href="#metrics" class="hover:text-cyan-400 transition-colors">목표 KPI</a>
+                <a href="#roi" class="hover:text-cyan-400 transition-colors">ROI 분석</a>
             </div>
-
             <div class="flex items-center space-x-4">
                 <a href="#contact"
                     class="px-4 py-2 text-xs font-semibold rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/25 transition-all transform hover:-translate-y-0.5">
-
                     도입 상담 신청
                 </a>
             </div>
@@ -156,1871 +98,585 @@
     <!-- Hero Section -->
     <section id="overview"
         class="pt-32 pb-20 px-6 max-w-7xl mx-auto min-h-screen flex flex-col justify-center relative overflow-hidden">
-
         <!-- Background Decorative Glows -->
-        <div
-            class="absolute top-1/4 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl -z-10">
-        </div>
-
-        <div
-            class="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -z-10">
-        </div>
+        <div class="absolute top-1/4 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl -z-10"></div>
+        <div class="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -z-10"></div>
 
         <div
             class="inline-flex items-center space-x-2 bg-slate-800/90 border border-slate-700/80 px-3.5 py-1.5 rounded-full w-fit mb-6 glow-effect">
-
             <span class="flex h-2 w-2 rounded-full bg-cyan-400 animate-ping"></span>
-
-            <span class="text-xs font-mono font-semibold text-cyan-300 uppercase tracking-wider">
-                HD현대삼호 LNG운반선 기관실 블록 선행의장 Physical AI
-            </span>
+            <span class="text-xs font-mono font-semibold text-cyan-300 uppercase tracking-wider">HD현대삼호 LNG운반선 기관실 블록
+                선행의장 Physical AI</span>
         </div>
 
         <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-6">
             HD현대삼호 선박 의장품 체결·용접<br>
-
-            <span class="gradient-text">
-                Eye-in-Hand RGB-D AI 비전 & 좌표 자동보정
-            </span>
+            <span class="gradient-text">Eye-in-Hand RGB-D AI 비전 & 좌표 자동보정</span>
         </h1>
-
         <p class="text-slate-300 text-base md:text-lg max-w-4xl mb-10 leading-relaxed font-light">
-            조선소 기관실 블록의 브래킷·파이프 서포트 조립,
-            M16 볼트 체결, 필릿용접 공정에 적용하는 Physical AI 시스템입니다.
-
-            저조도, 스패터·흄, 숍프라이머 반사 및 제작 열변형 환경에서도
-            <strong class="text-cyan-400 font-semibold">
-                5단계 영상 전처리 파이프라인
-            </strong>을 거쳐 로봇 작업 좌표를 자동 보정합니다.
-
-            또한
-            <strong class="text-indigo-300 font-semibold">
-                YOLO26n 전이학습 모델
-            </strong>을 활용하여 볼트 체결부·용접부·케이블 접속부를 검출하고,
-            검출 결과를 로봇 작업 좌표 생성 단계와 연결합니다.
+            조선소 기관실 블록의 브래킷·파이프 서포트 조립, M16 볼트 체결, 필릿용접 공정 적용.
+            저조도, 스패터·흄, 숍프라이머 반사 및 제작 열변형 환경에서도 <strong class="text-cyan-400 font-semibold">5단계 전처리
+                파이프라인</strong>(Quality Gate, Bilateral Filter, CLAHE, AprilTag ROI, Hand-Eye Calib)을 거쳐
+            로봇 작업 좌표를 <strong class="text-cyan-400 font-semibold">500ms 이내(실시간 보정 250ms)</strong>에 서브밀리미터 수준(오차 ±2mm
+            이내)으로 자동 보정합니다.
         </p>
 
         <!-- KPI Key Cards -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-12">
-
             <div
                 class="glass-panel p-5 rounded-2xl border-l-4 border-l-cyan-400 hover:border-l-cyan-300 transition-all">
-
-                <div class="text-slate-400 text-xs font-medium mb-1">
-                    좌표 정밀도
-                </div>
-
-                <div class="text-3xl font-bold text-white font-mono">
-                    ±0.15
-                    <span class="text-sm font-normal text-cyan-400 ml-1">
-                        mm
-                    </span>
-                </div>
-
-                <p class="text-[11px] text-slate-400 mt-1">
-                    평균오차 ≤±2mm / 각도 ≤±1°
-                </p>
+                <div class="text-slate-400 text-xs font-medium mb-1">좌표 정밀도 (3D Base)</div>
+                <div class="text-3xl font-bold text-white font-mono">±0.15<span
+                        class="text-sm font-normal text-cyan-400 ml-1">mm</span></div>
+                <p class="text-[11px] text-slate-400 mt-1">평균오차 ≤±2mm / 각도 ≤±1°</p>
             </div>
-
             <div
                 class="glass-panel p-5 rounded-2xl border-l-4 border-l-indigo-400 hover:border-l-indigo-300 transition-all">
-
-                <div class="text-slate-400 text-xs font-medium mb-1">
-                    전처리 & 좌표 연산
-                </div>
-
-                <div class="text-3xl font-bold text-white font-mono">
-                    ≤ 500
-                    <span class="text-sm font-normal text-indigo-400 ml-1">
-                        ms
-                    </span>
-                </div>
-
-                <p class="text-[11px] text-slate-400 mt-1">
-                    실시간 좌표 보정 250ms 목표
-                </p>
+                <div class="text-slate-400 text-xs font-medium mb-1">전처리 & 좌표 연산 지연</div>
+                <div class="text-3xl font-bold text-white font-mono">≤ 500<span
+                        class="text-sm font-normal text-indigo-400 ml-1">ms</span></div>
+                <p class="text-[11px] text-slate-400 mt-1">작업 전 500ms / 품질판정 ≤1s</p>
             </div>
-
             <div
                 class="glass-panel p-5 rounded-2xl border-l-4 border-l-emerald-400 hover:border-l-emerald-300 transition-all">
-
-                <div class="text-slate-400 text-xs font-medium mb-1">
-                    작업구역 검출
-                </div>
-
-                <div class="text-3xl font-bold text-white font-mono">
-                    3
-                    <span class="text-sm font-normal text-emerald-400 ml-1">
-                        Classes
-                    </span>
-                </div>
-
-                <p class="text-[11px] text-slate-400 mt-1">
-                    볼트 · 용접 · 케이블 접속부
-                </p>
+                <div class="text-slate-400 text-xs font-medium mb-1">체결/용접 검출 정확도</div>
+                <div class="text-3xl font-bold text-white font-mono">99.0<span
+                        class="text-sm font-normal text-emerald-400 ml-1">%+</span></div>
+                <p class="text-[11px] text-slate-400 mt-1">체결불량 99% / 용접외관 95%</p>
             </div>
-
             <div
                 class="glass-panel p-5 rounded-2xl border-l-4 border-l-purple-400 hover:border-l-purple-300 transition-all">
-
-                <div class="text-slate-400 text-xs font-medium mb-1">
-                    수동 재티칭 공수 절감
-                </div>
-
-                <div class="text-3xl font-bold text-white font-mono">
-                    40
-                    <span class="text-sm font-normal text-purple-400 ml-1">
-                        %+
-                    </span>
-                </div>
-
-                <p class="text-[11px] text-slate-400 mt-1">
-                    블록 제작편차 자동 수용 보정
-                </p>
+                <div class="text-slate-400 text-xs font-medium mb-1">수동 재티칭 공수 절감</div>
+                <div class="text-3xl font-bold text-white font-mono">40<span
+                        class="text-sm font-normal text-purple-400 ml-1">%+</span></div>
+                <p class="text-[11px] text-slate-400 mt-1">블록 제작편차 자동 수용 보정</p>
             </div>
         </div>
     </section>
 
-    <!-- Safety Section -->
-    <section id="safety"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
-
+    <!-- Core Safety Rules & Interlock Section -->
+    <section id="safety" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
         <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Safety & Interlock Protocol
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                핵심 안전관리 및 로봇 인터록 기준
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3">
-                불량 판단 시 무리한 로봇 이동을 방지하고
-                작업자와 장비를 보호하는 3단계 안전 제어
-            </p>
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Safety & Interlock Protocol</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">핵심 안전관리 및 로봇 인터록 기준</h3>
+            <p class="text-slate-400 text-sm mt-3">불량 판단 시 무리한 로봇 이동을 방지하고 작업자와 장비를 보호하는 3단계 이중 안전 제어망</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-
-            <!-- 1. 재촬영 -->
+            <!-- 1. 재촬영 조건 -->
             <div
                 class="glass-panel p-6 rounded-2xl border border-amber-500/30 bg-gradient-to-b from-amber-950/20 to-transparent">
-
                 <div class="flex items-center space-x-3 mb-4">
                     <div
-                        class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 text-lg">
-
+                        class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 text-lg font-bold">
                         <i class="fa-solid fa-rotate-right"></i>
                     </div>
-
                     <div>
-                        <h4 class="text-lg font-bold text-amber-300">
-                            ① 재촬영 실행
-                        </h4>
-
-                        <span class="text-[11px] text-amber-400/80">
-                            카메라 각도 변경 및 재취득
-                        </span>
+                        <h4 class="text-lg font-bold text-amber-300">① 재촬영 실행 조건</h4>
+                        <span class="text-[11px] text-amber-400/80">카메라 각도 변경 및 재촬영</span>
                     </div>
                 </div>
-
                 <ul class="space-y-3 text-xs text-slate-300">
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
-                        <span>시야 가림률</span>
-
-                        <span class="font-mono text-amber-400 font-bold">
-                            &gt; 40%
-                        </span>
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+                        <span>시야 가림률 (Occlusion)</span>
+                        <span class="font-mono text-amber-400 font-bold">> 40%</span>
                     </li>
-
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
-                        <span>Depth 결손률</span>
-
-                        <span class="font-mono text-amber-400 font-bold">
-                            &gt; 30%
-                        </span>
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+                        <span>Depth 결손률 (Loss Ratio)</span>
+                        <span class="font-mono text-amber-400 font-bold">> 30%</span>
                     </li>
-
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
                         <span>프레임 간 좌표 편차</span>
-
-                        <span class="font-mono text-amber-400 font-bold">
-                            &gt; 1.5mm
-                        </span>
+                        <span class="font-mono text-amber-400 font-bold">> 1.5 mm</span>
                     </li>
-
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
-                        <span>AI 신뢰도</span>
-
-                        <span class="font-mono text-amber-400 font-bold">
-                            기준 미달
-                        </span>
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+                        <span>AI 스코어 신뢰도</span>
+                        <span class="font-mono text-amber-400 font-bold">기준 미달</span>
                     </li>
                 </ul>
             </div>
 
-            <!-- 2. 작업자 확인 -->
+            <!-- 2. 작업자 확인 조건 -->
             <div
                 class="glass-panel p-6 rounded-2xl border border-orange-500/30 bg-gradient-to-b from-orange-950/20 to-transparent">
-
                 <div class="flex items-center space-x-3 mb-4">
                     <div
-                        class="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 text-lg">
-
+                        class="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 text-lg font-bold">
                         <i class="fa-solid fa-user-gear"></i>
                     </div>
-
                     <div>
-                        <h4 class="text-lg font-bold text-orange-300">
-                            ② 작업자 확인
-                        </h4>
-
-                        <span class="text-[11px] text-orange-400/80">
-                            수동 개입 및 현장 점검
-                        </span>
+                        <h4 class="text-lg font-bold text-orange-300">② 작업자 확인 요청</h4>
+                        <span class="text-[11px] text-orange-400/80">수동 개입 및 현장 점검</span>
                     </div>
                 </div>
-
                 <ul class="space-y-3 text-xs text-slate-300">
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
                         <span>CAD 대비 위치 편차</span>
-
-                        <span class="font-mono text-orange-400 font-bold">
-                            &gt; 20mm
-                        </span>
+                        <span class="font-mono text-orange-400 font-bold">> 20.0 mm</span>
                     </li>
-
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
-                        <span>재촬영 후 신뢰도</span>
-
-                        <span class="font-mono text-orange-400 font-bold">
-                            2회 연속 부족
-                        </span>
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+                        <span>재촬영 후 AI 신뢰도</span>
+                        <span class="font-mono text-orange-400 font-bold">2회 연속 부족</span>
                     </li>
-
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
-                        <span>토크·각도 데이터</span>
-
-                        <span class="font-mono text-orange-400 font-bold">
-                            비전 판정 불일치
-                        </span>
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+                        <span>토크/각도 데이터</span>
+                        <span class="font-mono text-orange-400 font-bold">비전 판정 불일치</span>
                     </li>
-
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
-                        <span>로봇 상태</span>
-
-                        <span class="font-mono text-orange-400 font-bold">
-                            승인 대기
-                        </span>
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+                        <span>작업자 승인</span>
+                        <span class="font-mono text-orange-400 font-bold">대기 상태 전환</span>
                     </li>
                 </ul>
             </div>
 
-            <!-- 3. 정지 -->
+            <!-- 3. 로봇 정지 / Safety PLC 인터록 -->
             <div
                 class="glass-panel p-6 rounded-2xl border border-red-500/40 bg-gradient-to-b from-red-950/30 to-transparent glow-effect">
-
                 <div class="flex items-center space-x-3 mb-4">
                     <div
-                        class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 text-lg">
-
-                        <i class="fa-solid fa-hand"></i>
+                        class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 text-lg font-bold">
+                        <i class="fa-solid fa-hand text-red-400"></i>
                     </div>
-
                     <div>
-                        <h4 class="text-lg font-bold text-red-300">
-                            ③ Safety PLC 정지
-                        </h4>
-
-                        <span class="text-[11px] text-red-400/80">
-                            위험 발생 시 즉시 인터록
-                        </span>
+                        <h4 class="text-lg font-bold text-red-300">③ Safety PLC 인터록 정지</h4>
+                        <span class="text-[11px] text-red-400/80">로봇 하드웨어 즉시 비상정지</span>
                     </div>
                 </div>
-
                 <ul class="space-y-3 text-xs text-slate-300">
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
-                        <span>AprilTag 기준점</span>
-
-                        <span class="font-mono text-red-400 font-bold">
-                            검출 실패
-                        </span>
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+                        <span>AprilTag / 기준점</span>
+                        <span class="font-mono text-red-400 font-bold">검출 실패 (Fail)</span>
                     </li>
-
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
                         <span>최대 좌표 오차</span>
-
-                        <span class="font-mono text-red-400 font-bold">
-                            &gt; 5mm
-                        </span>
+                        <span class="font-mono text-red-400 font-bold">> 5.0 mm</span>
                     </li>
-
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
-                        <span>아크광·충돌 위험</span>
-
-                        <span class="font-mono text-red-400 font-bold">
-                            즉시 정지
-                        </span>
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+                        <span>아크광 포화 / 충돌</span>
+                        <span class="font-mono text-red-400 font-bold">위험 검출 즉시</span>
                     </li>
-
-                    <li
-                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
-
-                        <span>Calibration 데이터</span>
-
-                        <span class="font-mono text-red-400 font-bold">
-                            불일치
-                        </span>
+                    <li class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+                        <span>Calib 데이터 불일치</span>
+                        <span class="font-mono text-red-400 font-bold">하드웨어 Interlock</span>
                     </li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Preprocessing Pipeline -->
-    <section id="pipeline"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
-
+    <!-- Dedicated 5-Step Preprocessing Pipeline Section -->
+    <section id="pipeline" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
         <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Data Preprocessing Pipeline
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                데이터 전처리 5단계 핵심 파이프라인
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3">
-                불량 프레임 차단부터 로봇 3D 좌표 최적화까지 단계적으로 처리합니다.
-            </p>
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Data Preprocessing Pipeline</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">데이터 전처리 5단계 핵심 파이프라인</h3>
+            <p class="text-slate-400 text-sm mt-3">불량 프레임 원천 차단부터 서브밀리미터 좌표 최적화까지 완벽 제어</p>
         </div>
 
+        <!-- Pipeline Flow Grid -->
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-12">
-
             <!-- Stage 1 -->
             <div
                 class="glass-panel p-5 rounded-2xl border border-cyan-500/20 hover:border-cyan-400/60 transition-all flex flex-col justify-between">
-
                 <div>
                     <div class="flex items-center justify-between mb-3">
                         <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300">
-
-                            STAGE 01
-                        </span>
-
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300">STAGE
+                            01</span>
                         <i class="fa-solid fa-camera-rotate text-cyan-400 text-sm"></i>
                     </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Geometry & Quality Gate
-                    </h4>
-
+                    <h4 class="text-sm font-bold text-white mb-2">Geometry & Quality Gate</h4>
                     <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        렌즈 왜곡을 보정하고 흐림, 과노출, 가림,
-                        Depth 결손 프레임을 재촬영 대상으로 분류합니다.
+                        Camera Calibration으로 렌즈 왜곡을 제거하고, 흐림·과노출·가림(>40%)·Depth 결손(>30%) 프레임 즉시 재촬영 분류.
                     </p>
                 </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-cyan-400 font-mono">
-
-                    Output: 정상 RGB-D
+                <div class="pt-3 border-t border-slate-800 text-[10px] text-cyan-400 font-mono">
+                    Output: 정상 RGB-D 프레임
                 </div>
             </div>
 
             <!-- Stage 2 -->
             <div
                 class="glass-panel p-5 rounded-2xl border border-indigo-500/20 hover:border-indigo-400/60 transition-all flex flex-col justify-between">
-
                 <div>
                     <div class="flex items-center justify-between mb-3">
                         <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-500/20 text-indigo-300">
-
-                            STAGE 02
-                        </span>
-
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-500/20 text-indigo-300">STAGE
+                            02</span>
                         <i class="fa-solid fa-filter text-indigo-400 text-sm"></i>
                     </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Sensor Noise Clean-Up
-                    </h4>
-
+                    <h4 class="text-sm font-bold text-white mb-2">Sensor Noise Clean-Up</h4>
                     <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        Bilateral Filter로 철분진과 스패터 노이즈를 억제하면서
-                        볼트와 용접 비드의 경계는 보존합니다.
+                        Bilateral Filter 기반 노이즈 제거. 철분진 및 용접 스패터 점 노이즈를 억제하면서 볼트/비드 엣지 선명도 보존.
                     </p>
                 </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-indigo-400 font-mono">
-
-                    Output: Clean RGB-D
+                <div class="pt-3 border-t border-slate-800 text-[10px] text-indigo-400 font-mono">
+                    Output: 엣지 보존 Clean RGB-D
                 </div>
             </div>
 
             <!-- Stage 3 -->
             <div
                 class="glass-panel p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-400/60 transition-all flex flex-col justify-between">
-
                 <div>
                     <div class="flex items-center justify-between mb-3">
                         <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300">
-
-                            STAGE 03
-                        </span>
-
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300">STAGE
+                            03</span>
                         <i class="fa-solid fa-sliders text-emerald-400 text-sm"></i>
                     </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Photometric Normalization
-                    </h4>
-
+                    <h4 class="text-sm font-bold text-white mb-2">Photometric Normalization</h4>
                     <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        CLAHE를 적용해 저조도와 국부 그림자를 완화하고
-                        작업 대상과 금속 배경의 대비를 높입니다.
+                        CLAHE(대비 제한 적응형 히스토그램 평탄화) 적용. 국부 그림자/저조도 완화 및 숍프라이머 도료 대비 균일화.
                     </p>
                 </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-emerald-400 font-mono">
-
-                    Output: 대비 정규화 영상
+                <div class="pt-3 border-t border-slate-800 text-[10px] text-emerald-400 font-mono">
+                    Output: 정규화 조명/대비 영상
                 </div>
             </div>
 
             <!-- Stage 4 -->
             <div
                 class="glass-panel p-5 rounded-2xl border border-amber-500/20 hover:border-amber-400/60 transition-all flex flex-col justify-between">
-
                 <div>
                     <div class="flex items-center justify-between mb-3">
                         <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300">
-
-                            STAGE 04
-                        </span>
-
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300">STAGE
+                            04</span>
                         <i class="fa-solid fa-crop-simple text-amber-400 text-sm"></i>
                     </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Feature & ROI Enhancement
-                    </h4>
-
+                    <h4 class="text-sm font-bold text-white mb-2">Feature & ROI Enhancement</h4>
                     <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        AprilTag와 CAD 예상좌표를 활용해 작업 대상 ROI를 추출하고
-                        주변 배관과 구조물의 영향을 줄입니다.
+                        AprilTag 및 CAD 예상좌표 연동. 체결·용접 대상 구역 ROI 마스킹으로 주변 배경 파이프 및 보강재 왜곡 제거.
                     </p>
                 </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-amber-400 font-mono">
-
-                    Output: 작업 대상 ROI
+                <div class="pt-3 border-t border-slate-800 text-[10px] text-amber-400 font-mono">
+                    Output: 체결/용접 강조 ROI
                 </div>
             </div>
 
             <!-- Stage 5 -->
             <div
                 class="glass-panel p-5 rounded-2xl border border-purple-500/20 hover:border-purple-400/60 transition-all flex flex-col justify-between">
-
                 <div>
                     <div class="flex items-center justify-between mb-3">
                         <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300">
-
-                            STAGE 05
-                        </span>
-
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300">STAGE
+                            05</span>
                         <i class="fa-solid fa-cube text-purple-400 text-sm"></i>
                     </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Coordinate Optimization
-                    </h4>
-
+                    <h4 class="text-sm font-bold text-white mb-2">Coordinate Optimization</h4>
                     <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        Hand-Eye Calibration을 적용하여 카메라 좌표를
-                        Robot Base 좌표로 변환하고 제작 편차를 보정합니다.
+                        Hand-Eye Calibration 적용. 카메라 3D 좌표(픽셀+Depth)를 Robot Base/Tool 좌표 변환 및 열변형 오프셋 보정.
                     </p>
                 </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-purple-400 font-mono">
-
-                    Output: 보정 로봇 좌표
+                <div class="pt-3 border-t border-slate-800 text-[10px] text-purple-400 font-mono">
+                    Output: 보정된 로봇 3D 좌표
                 </div>
             </div>
         </div>
 
+        <!-- Pipeline Execution Summary Banner -->
         <div
             class="glass-panel p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 flex flex-col md:flex-row items-center justify-between">
-
             <div class="flex items-center space-x-4 mb-4 md:mb-0">
                 <div
-                    class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
-
+                    class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl font-bold">
                     <i class="fa-solid fa-microchip"></i>
                 </div>
-
                 <div>
-                    <h4 class="text-base font-bold text-white">
-                        Eye-in-Hand RGB-D 온디바이스 연산
-                    </h4>
-
-                    <p class="text-xs text-slate-400">
-                        영상 취득 → 5단계 전처리 → 작업부 검출 → 3D 로봇 좌표 생성
-                    </p>
+                    <h4 class="text-base font-bold text-white">Eye-in-Hand RGB-D 온디바이스 Edge 전처리 연산</h4>
+                    <p class="text-xs text-slate-400">카메라 정지 트리거 ➔ 5단계 전처리 ➔ 3D 로봇 좌표 생성 (총 소요시간 500ms 미만)</p>
                 </div>
             </div>
-
             <a href="#simulator"
                 class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all">
-
-                시뮬레이터 확인
-                <i class="fa-solid fa-arrow-right ml-1"></i>
+                시뮬레이터에서 확인하기 <i class="fa-solid fa-arrow-right ml-1"></i>
             </a>
         </div>
-    </section>
 
-    <!-- Problem Section -->
-    <section id="problem"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
-
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Shipbuilding Field Challenges
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                조선소 선행의장 현장의 3대 장애 요소
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3">
-                기관실 블록 내부의 열악한 영상환경과 제작 편차를 극복합니다.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-
-            <!-- 영상환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-red-500/20 bg-gradient-to-b from-red-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
-
-                        <i class="fa-solid fa-lightbulb text-lg"></i>
-                    </div>
-
-                    <h4 class="text-lg font-bold text-red-300">
-                        ① 열악한 영상환경
-                    </h4>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>저조도 및 음영:</strong>
-                            복잡한 구조물에 의한 국부 그림자
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>금속 표면 반사:</strong>
-                            난반사와 고광량 핫스팟
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>낮은 색상 대비:</strong>
-                            숍프라이머와 의장품의 유사색
-                        </span>
-                    </li>
-                </ul>
+        <!-- Problem & Solution Section -->
+        <section id="problem" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Shipbuilding Field Challenges
+                </h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-white">조선소 선행의장 현장의 3대 환경 장애 요소</h3>
+                <p class="text-slate-400 text-sm mt-3">HD현대삼호 LNG운반선 기관실 블록 작업의 열악한 영상·작업·좌표 한계를 극복하는 AI 비전 솔루션</p>
             </div>
 
-            <!-- 작업환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-amber-500/20 bg-gradient-to-b from-amber-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
-
-                        <i class="fa-solid fa-fire-flame-curved text-lg"></i>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <!-- 1. 영상환경 -->
+                <div
+                    class="glass-panel p-6 rounded-2xl border border-red-500/20 bg-gradient-to-b from-red-950/10 to-transparent">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
+                            <i class="fa-solid fa-lightbulb text-lg"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-red-300">① 열악한 영상환경</h4>
                     </div>
-
-                    <h4 class="text-lg font-bold text-amber-300">
-                        ② 가혹한 작업환경
-                    </h4>
+                    <ul class="space-y-3 text-xs text-slate-300">
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
+                            <span><strong>저조도 & 음영:</strong> 블록 내부 복잡한 구조물의 국부 그림자 및 밝기 불균일</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
+                            <span><strong>금속 표면 반사:</strong> 가공 부품 표면의 난반사 및 핫스팟 형성</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
+                            <span><strong>숍프라이머 저대비:</strong> 방청 도료(Shop Primer)와 의장 부품 간 심각한 유사색 발생</span>
+                        </li>
+                    </ul>
                 </div>
 
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>아크광 및 흄:</strong>
-                            용접 작업 중 영상 포화 발생
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>분진 및 오염:</strong>
-                            보호창 오염으로 영상 품질 저하
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>구조물 가림:</strong>
-                            배관·공구·보강재에 의한 ROI 가림
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 좌표환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-purple-500/20 bg-gradient-to-b from-purple-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
-
-                        <i class="fa-solid fa-drafting-compass text-lg"></i>
+                <!-- 2. 작업환경 -->
+                <div
+                    class="glass-panel p-6 rounded-2xl border border-amber-500/20 bg-gradient-to-b from-amber-950/10 to-transparent">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+                            <i class="fa-solid fa-fire-flame-curved text-lg"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-amber-300">② 가혹한 작업환경</h4>
                     </div>
-
-                    <h4 class="text-lg font-bold text-purple-300">
-                        ③ 복합 좌표 변형
-                    </h4>
+                    <ul class="space-y-3 text-xs text-slate-300">
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
+                            <span><strong>아크광 & 흄/스패터:</strong> 용접 아크 고광량 포화 및 비산물에 의한 영상 훼손</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
+                            <span><strong>보호창 오염 & 분진:</strong> 철분진 축적 및 센서 윈도우 오염으로 화질 저하</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
+                            <span><strong>구조물 가림:</strong> 인접 파이프·보강재 및 작업 공구에 의한 ROI 오클루전</span>
+                        </li>
+                    </ul>
                 </div>
 
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>블록 제작 편차:</strong>
-                            용접 열변형과 조립 누적오차
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>Depth 데이터 결손:</strong>
-                            금속 반사부의 깊이정보 손실
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>로봇 진동:</strong>
-                            이동·정지 시 좌표 흔들림 발생
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Task Process Section -->
-    <section id="process"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
-
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Task-Specific Workflows
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                작업별 분기 처리 메커니즘
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3">
-                체결·용접·좌표 보정 작업에 맞춰 영상처리와 로봇 제어를 분기합니다.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-
-            <!-- 체결 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-cyan-500/20 hover:border-cyan-400/50 transition-all">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
-
-                        <i class="fa-solid fa-wrench"></i>
+                <!-- 3. 좌표환경 -->
+                <div
+                    class="glass-panel p-6 rounded-2xl border border-purple-500/20 bg-gradient-to-b from-purple-950/10 to-transparent">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+                            <i class="fa-solid fa-drafting-compass text-lg"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-purple-300">③ 복합 좌표 변형</h4>
                     </div>
+                    <ul class="space-y-3 text-xs text-slate-300">
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
+                            <span><strong>블록 제작 편차:</strong> 용접 열변형 및 조립 누적 오차로 CAD 좌표 불일치</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
+                            <span><strong>RGB-D 결손 & 왜곡:</strong> 광학 렌즈 왜곡 및 금속 반사부 Depth 데이터 Loss</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
+                            <span><strong>로봇 미세 진동:</strong> 이동/정지 순간 Hand-Eye 좌표계 과도 응답</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
+        <!-- User Scenario / Task-Specific Processing Section -->
+        <section id="process" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Task-Specific Workflows</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-white">작업별 분기 처리 메커니즘</h3>
+                <p class="text-slate-400 text-sm mt-3">의장 조립·볼트 체결 / 필릿 용접 / 3D 좌표 변환의 전문화된 실행 제어 흐름</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <!-- 1. 조립·체결 작업 -->
+                <div
+                    class="glass-panel p-6 rounded-2xl border border-cyan-500/20 hover:border-cyan-400/50 transition-all">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold">
+                            <i class="fa-solid fa-wrench"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-white">① 조립·체결 작업 (Fastening)</h4>
+                            <span class="text-[10px] font-mono text-cyan-400">브래킷·파이프 서포트 & M16 볼트</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-3 text-xs text-slate-300">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-cyan-400 font-bold">1.</span>
+                            <span>의장품 ROI 추출 후 M16 볼트·너트·와셔 영역 정밀 확대</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-cyan-400 font-bold">2.</span>
+                            <span>체결 유무 및 와셔 누락, 체결 마킹선 일치 여부 다중 검증</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-cyan-400 font-bold">3.</span>
+                            <span>체결 툴의 실시간 토크(Nm) 및 회전각(deg) 데이터와 비전 판정 통합 연계</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 2. 용접 작업 -->
+                <div
+                    class="glass-panel p-6 rounded-2xl border border-indigo-500/20 hover:border-indigo-400/50 transition-all">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold">
+                            <i class="fa-solid fa-volcano"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-white">② 필릿 용접 작업 (Welding)</h4>
+                            <span class="text-[10px] font-mono text-indigo-400">비드 형상 & 외관 품질 검사</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-3 text-xs text-slate-300">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-indigo-400 font-bold">1.</span>
+                            <span>아크 消등 및 흄 감소 후 안정적 정지 프레임 취득</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-indigo-400 font-bold">2.</span>
+                            <span>비드 ROI 추출 후 엣지 강화 및 길이·폭·각장 실측 연산</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-indigo-400 font-bold">3.</span>
+                            <span>언더컷, 오버랩, 과도 스패터, 피트 외관 불량 실시간 분류 및 재작업 판단</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 3. 좌표 인식 & 보정 -->
+                <div
+                    class="glass-panel p-6 rounded-2xl border border-purple-500/20 hover:border-purple-400/50 transition-all">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">
+                            <i class="fa-solid fa-crosshairs"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-white">③ 3D 좌표 인식 & 보정</h4>
+                            <span class="text-[10px] font-mono text-purple-400">Hand-Eye Calib & Base Transform</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-3 text-xs text-slate-300">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-purple-400 font-bold">1.</span>
+                            <span>AprilTag/Keypoint 픽셀 좌표 + Depth 결합 3D 카메라 좌표 산출</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-purple-400 font-bold">2.</span>
+                            <span>Hand-Eye Calibration 매트릭스 적용 Robot Base 3D 좌표 변환</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-purple-400 font-bold">3.</span>
+                            <span>CAD 설계 좌표 대비 제작/열변형 편차 오프셋(ΔX, ΔY, ΔZ, Δθ) 실시간 산출</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Simulator & Live Dashboard Section -->
+        <section id="simulator" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Live Simulation</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-white">실시간 AI 비전 좌표 자동보정 시뮬레이터</h3>
+                <p class="text-slate-400 text-sm mt-3">오프셋 편차 발생 시 250ms 이하 사이클로 로봇 작업 좌표가 자동 보정되는 과정을 직접 체험하세요.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Controls & Live Status (5 cols) -->
+                <div class="lg:col-span-5 glass-panel p-6 rounded-2xl flex flex-col justify-between">
                     <div>
-                        <h4 class="text-lg font-bold text-white">
-                            ① 조립·체결 작업
+                        <h4 class="text-base font-bold text-white mb-4 flex items-center justify-between">
+                            <span>위치 편차 시뮬레이션 제어</span>
+                            <span id="status-badge"
+                                class="px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">정상
+                                가동 중</span>
                         </h4>
 
-                        <span class="text-[10px] font-mono text-cyan-400">
-                            FASTENING
-                        </span>
-                    </div>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <span class="text-cyan-400 font-bold">1.</span>
-
-                        <span>
-                            볼트 체결부 ROI와 바운딩박스 검출
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-cyan-400 font-bold">2.</span>
-
-                        <span>
-                            체결 유무, 와셔 누락 및 마킹선 상태 확인
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-cyan-400 font-bold">3.</span>
-
-                        <span>
-                            토크·회전각 데이터와 비전 판정 연계
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 용접 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-indigo-500/20 hover:border-indigo-400/50 transition-all">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">
-
-                        <i class="fa-solid fa-fire-flame-curved"></i>
-                    </div>
-
-                    <div>
-                        <h4 class="text-lg font-bold text-white">
-                            ② 필릿 용접 작업
-                        </h4>
-
-                        <span class="text-[10px] font-mono text-indigo-400">
-                            WELDING
-                        </span>
-                    </div>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <span class="text-indigo-400 font-bold">1.</span>
-
-                        <span>
-                            용접 필요부와 배관 연결부 검출
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-indigo-400 font-bold">2.</span>
-
-                        <span>
-                            작업 대상 ROI 기반 용접 시작점 생성
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-indigo-400 font-bold">3.</span>
-
-                        <span>
-                            작업 후 비드 형상과 외관 상태 확인
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 좌표 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-purple-500/20 hover:border-purple-400/50 transition-all">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
-
-                        <i class="fa-solid fa-crosshairs"></i>
-                    </div>
-
-                    <div>
-                        <h4 class="text-lg font-bold text-white">
-                            ③ 3D 좌표 인식·보정
-                        </h4>
-
-                        <span class="text-[10px] font-mono text-purple-400">
-                            COORDINATE CALIBRATION
-                        </span>
-                    </div>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <span class="text-purple-400 font-bold">1.</span>
-
-                        <span>
-                            검출 중심점과 Depth를 결합해 3D 좌표 산출
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-purple-400 font-bold">2.</span>
-
-                        <span>
-                            Hand-Eye 행렬로 Robot Base 좌표 변환
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-purple-400 font-bold">3.</span>
-
-                        <span>
-                            CAD 대비 ΔX·ΔY·ΔZ·Δθ 오프셋 보정
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- YOLO26n Fine-Tuning Section -->
-    <section id="yolo-training"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
-
-        <div class="text-center max-w-3xl mx-auto mb-12">
-            <h2 class="text-xs font-mono text-indigo-400 tracking-widest uppercase mb-2">
-                YOLO26n Fine-Tuning
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                선박 작업구역 AI 파인튜닝
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3">
-                사전학습된 YOLO26n을 기반으로 볼트 체결부·용접부·케이블 접속부를 학습합니다.
-            </p>
-        </div>
-
-        <!-- Detection Classes -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-
-            <div
-                class="glass-panel p-5 rounded-2xl border border-cyan-500/25">
-
-                <div class="flex items-center justify-between mb-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400">
-
-                        <i class="fa-solid fa-screwdriver-wrench"></i>
-                    </div>
-
-                    <span
-                        class="px-2 py-1 rounded-md bg-cyan-500/10 text-cyan-300 text-[10px] font-mono">
-
-                        CLASS 0
-                    </span>
-                </div>
-
-                <h4 class="text-base font-bold text-white mb-1">
-                    볼트 체결부
-                </h4>
-
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    로봇이 볼팅 작업을 수행해야 하는 체결 위치를 바운딩박스로 검출합니다.
-                </p>
-            </div>
-
-            <div
-                class="glass-panel p-5 rounded-2xl border border-indigo-500/25">
-
-                <div class="flex items-center justify-between mb-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400">
-
-                        <i class="fa-solid fa-fire-flame-curved"></i>
-                    </div>
-
-                    <span
-                        class="px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-300 text-[10px] font-mono">
-
-                        CLASS 1
-                    </span>
-                </div>
-
-                <h4 class="text-base font-bold text-white mb-1">
-                    용접부
-                </h4>
-
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    배관과 철판 연결부 등 로봇 용접이 필요한 작업구역을 검출합니다.
-                </p>
-            </div>
-
-            <div
-                class="glass-panel p-5 rounded-2xl border border-purple-500/25">
-
-                <div class="flex items-center justify-between mb-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center text-purple-400">
-
-                        <i class="fa-solid fa-plug"></i>
-                    </div>
-
-                    <span
-                        class="px-2 py-1 rounded-md bg-purple-500/10 text-purple-300 text-[10px] font-mono">
-
-                        CLASS 2
-                    </span>
-                </div>
-
-                <h4 class="text-base font-bold text-white mb-1">
-                    케이블 접속부
-                </h4>
-
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    커넥터와 단자 등 케이블 체결 작업이 필요한 접속 위치를 검출합니다.
-                </p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
-
-            <!-- Core Parameters -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-indigo-500/20">
-
-                <div class="flex items-center gap-3 mb-5">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400">
-
-                        <i class="fa-solid fa-sliders"></i>
-                    </div>
-
-                    <div>
-                        <span class="text-[10px] font-mono text-indigo-400 uppercase tracking-wider">
-                            Core Parameters
-                        </span>
-
-                        <h3 class="text-lg font-bold text-white">
-                            핵심 학습 파라미터
-                        </h3>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Model
-                        </span>
-
-                        <strong class="font-mono text-cyan-300">
-                            yolo26n.pt
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Image Size
-                        </span>
-
-                        <strong class="font-mono text-cyan-300">
-                            1280
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Batch
-                        </span>
-
-                        <strong class="font-mono text-cyan-300">
-                            8
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Epochs
-                        </span>
-
-                        <strong class="font-mono text-indigo-300">
-                            300
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Patience
-                        </span>
-
-                        <strong class="font-mono text-indigo-300">
-                            20
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Optimizer
-                        </span>
-
-                        <strong class="font-mono text-indigo-300">
-                            AdamW
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Learning Rate
-                        </span>
-
-                        <strong class="font-mono text-purple-300">
-                            0.001
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Scale
-                        </span>
-
-                        <strong class="font-mono text-purple-300">
-                            0.5
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Mosaic
-                        </span>
-
-                        <strong class="font-mono text-purple-300">
-                            0.5
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Cache
-                        </span>
-
-                        <strong class="font-mono text-emerald-300">
-                            disk
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            AMP
-                        </span>
-
-                        <strong class="font-mono text-emerald-300">
-                            True
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Multi Scale
-                        </span>
-
-                        <strong class="font-mono text-emerald-300">
-                            False
-                        </strong>
-                    </div>
-                </div>
-
-                <div
-                    class="mt-4 p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
-
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        <strong class="text-indigo-300">
-                            1280 고해상도
-                        </strong>로 작은 볼트와 커넥터의 형상 정보를 보존하며,
-
-                        <strong class="text-indigo-300">
-                            AdamW·lr0=0.001
-                        </strong>로 사전학습 특징을 안정적으로 미세조정합니다.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Training Process -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-cyan-500/20">
-
-                <div class="flex items-center gap-3 mb-5">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400">
-
-                        <i class="fa-solid fa-layer-group"></i>
-                    </div>
-
-                    <div>
-                        <span class="text-[10px] font-mono text-cyan-400 uppercase tracking-wider">
-                            Training Process
-                        </span>
-
-                        <h3 class="text-lg font-bold text-white">
-                            2단계 파인튜닝 과정
-                        </h3>
-                    </div>
-                </div>
-
-                <div class="space-y-4">
-
-                    <div
-                        class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-
-                        <div class="flex items-start gap-3">
-                            <span
-                                class="shrink-0 w-7 h-7 rounded-lg bg-cyan-500/15 flex items-center justify-center text-cyan-300 text-xs font-bold">
-
-                                1
-                            </span>
-
+                        <!-- Controls Sliders -->
+                        <div class="space-y-4 text-xs">
                             <div>
-                                <h4 class="text-sm font-bold text-white">
-                                    사전 오류 점검
-                                </h4>
-
-                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                                    전체 학습 전
-                                    <code class="text-cyan-300">fraction=0.10</code>으로
-                                    데이터 경로, 클래스 번호, 라벨 위치와 GPU 메모리를 점검합니다.
-                                </p>
+                                <div class="flex justify-between text-slate-300 font-mono mb-1">
+                                    <span>X축 편차 (ΔX)</span>
+                                    <span id="val-dx" class="text-cyan-400 font-bold">+0.12 mm</span>
+                                </div>
+                                <input type="range" id="slider-dx" min="-2.0" max="2.0" step="0.05" value="0.12"
+                                    class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
                             </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-
-                        <div class="flex items-start gap-3">
-                            <span
-                                class="shrink-0 w-7 h-7 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-300 text-xs font-bold">
-
-                                2
-                            </span>
-
                             <div>
-                                <h4 class="text-sm font-bold text-white">
-                                    Stage 1 · 검출 Head 우선 학습
-                                </h4>
-
-                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                                    초기 30 Epoch 동안
-                                    <code class="text-indigo-300">freeze=10</code>을 적용하여
-                                    Backbone 특징을 보호하고 3개 작업 클래스의 분류 기준을 먼저 안정화합니다.
-                                </p>
+                                <div class="flex justify-between text-slate-300 font-mono mb-1">
+                                    <span>Y축 편차 (ΔY)</span>
+                                    <span id="val-dy" class="text-cyan-400 font-bold">-0.08 mm</span>
+                                </div>
+                                <input type="range" id="slider-dy" min="-2.0" max="2.0" step="0.05" value="-0.08"
+                                    class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
                             </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-
-                        <div class="flex items-start gap-3">
-                            <span
-                                class="shrink-0 w-7 h-7 rounded-lg bg-purple-500/15 flex items-center justify-center text-purple-300 text-xs font-bold">
-
-                                3
-                            </span>
-
                             <div>
-                                <h4 class="text-sm font-bold text-white">
-                                    Stage 2 · 전체 레이어 미세조정
-                                </h4>
-
-                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                                    이후 270 Epoch 동안
-                                    <code class="text-purple-300">freeze=None</code>으로 전환하여
-                                    금속 표면, 용접 비드, 케이블 단자의 세부 질감을 학습합니다.
-                                </p>
+                                <div class="flex justify-between text-slate-300 font-mono mb-1">
+                                    <span>회전각 편차 (Δθ)</span>
+                                    <span id="val-dt" class="text-cyan-400 font-bold">+0.25°</span>
+                                </div>
+                                <input type="range" id="slider-dt" min="-3.0" max="3.0" step="0.05" value="0.25"
+                                    class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
                             </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex space-x-3 mt-6">
+                            <button id="btn-random"
+                                class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-dice text-cyan-400"></i>
+                                <span>랜덤 편차 발생</span>
+                            </button>
+                            <button id="btn-calibrate"
+                                class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <span>AI 자동보정 실행</span>
+                            </button>
                         </div>
                     </div>
 
+                    <!-- Simulation Output Box -->
+                    <div class="mt-6 pt-4 border-t border-slate-800 text-xs font-mono space-y-2">
+                        <div class="flex justify-between text-slate-400">
+                            <span>추론 및 계산 지연:</span>
+                            <span id="res-latency" class="text-slate-200 font-bold">142 ms</span>
+                        </div>
+                        <div class="flex justify-between text-slate-400">
+                            <span>로봇 보정 오프셋:</span>
+                            <span id="res-offset" class="text-cyan-300 font-bold">ΔX: -0.12 / ΔY: +0.08</span>
+                        </div>
+                        <div class="flex justify-between text-slate-400">
+                            <span>보정 후 잔여 오차:</span>
+                            <span id="res-residual" class="text-emerald-400 font-bold">0.02 mm (Pass)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization Canvas / Chart (7 cols) -->
+                <div class="lg:col-span-7 glass-panel p-6 rounded-2xl flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-sm font-bold text-slate-200">체결/용접 좌표 정밀 시각화 (Target vs Detection)</h4>
+                        <span class="text-xs text-slate-400 font-mono">허용 공차 링: ±0.30mm</span>
+                    </div>
                     <div
-                        class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-
-                        <div class="flex items-start gap-3">
-                            <span
-                                class="shrink-0 w-7 h-7 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-300 text-xs font-bold">
-
-                                4
-                            </span>
-
-                            <div>
-                                <h4 class="text-sm font-bold text-white">
-                                    검증 및 최종 모델 선정
-                                </h4>
-
-                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                                    전체 mAP와 함께 클래스별 AP·Precision·Recall을 확인하고,
-                                    마지막 가중치가 아닌 최고 검증 성능의
-                                    <code class="text-emerald-300">best.pt</code>를 적용합니다.
-                                </p>
-                            </div>
-                        </div>
+                        class="relative w-full h-64 md:h-80 flex items-center justify-center bg-slate-950/60 rounded-xl border border-slate-800 overflow-hidden">
+                        <canvas id="calibrationCanvas" class="w-full h-full"></canvas>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Performance Strengths -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-7">
-
-            <div
-                class="glass-panel p-5 rounded-2xl border border-cyan-500/20">
-
-                <div
-                    class="w-9 h-9 rounded-lg bg-cyan-500/15 flex items-center justify-center text-cyan-400 mb-3">
-
-                    <i class="fa-solid fa-magnifying-glass-plus"></i>
-                </div>
-
-                <h4 class="text-sm font-bold text-cyan-300 mb-2">
-                    작은 작업부 검출
-                </h4>
-
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    imgsz=1280으로 작은 볼트와 케이블 접속부의 픽셀 정보를 보존합니다.
-                </p>
-            </div>
-
-            <div
-                class="glass-panel p-5 rounded-2xl border border-indigo-500/20">
-
-                <div
-                    class="w-9 h-9 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-400 mb-3">
-
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
-
-                <h4 class="text-sm font-bold text-indigo-300 mb-2">
-                    안정적인 전이학습
-                </h4>
-
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    단계적 동결 해제로 사전학습 특징의 급격한 손상을 방지합니다.
-                </p>
-            </div>
-
-            <div
-                class="glass-panel p-5 rounded-2xl border border-purple-500/20">
-
-                <div
-                    class="w-9 h-9 rounded-lg bg-purple-500/15 flex items-center justify-center text-purple-400 mb-3">
-
-                    <i class="fa-solid fa-arrows-to-circle"></i>
-                </div>
-
-                <h4 class="text-sm font-bold text-purple-300 mb-2">
-                    현장 일반화 성능
-                </h4>
-
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    scale=0.5와 mosaic=0.5로 작업거리와 배경 변화에 대응합니다.
-                </p>
-            </div>
-
-            <div
-                class="glass-panel p-5 rounded-2xl border border-emerald-500/20">
-
-                <div
-                    class="w-9 h-9 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-400 mb-3">
-
-                    <i class="fa-solid fa-gauge-high"></i>
-                </div>
-
-                <h4 class="text-sm font-bold text-emerald-300 mb-2">
-                    경량 실시간 운영
-                </h4>
-
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    Nano 모델과 AMP를 사용해 학습 자원과 추론 부담을 줄입니다.
-                </p>
-            </div>
-        </div>
-
-        <div
-            class="mt-7 glass-panel p-5 rounded-2xl border border-emerald-500/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-
-            <div class="flex items-start gap-3">
-                <i class="fa-solid fa-circle-check text-emerald-400 mt-0.5"></i>
-
-                <div>
-                    <h3 class="text-sm font-bold text-white">
-                        최종 적용 기준
-                    </h3>
-
-                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                        오류 분석에서는
-                        <code class="text-slate-300">conf=0.10</code>,
-                        현장 운영 초기값은
-                        <code class="text-emerald-300">conf=0.50</code>을 적용합니다.
-
-                        클래스별 Recall이 낮은 경우 전체 mAP가 높더라도
-                        실제 로봇 작업 모델로 사용하지 않습니다.
-                    </p>
-                </div>
-            </div>
-
-            <span
-                class="shrink-0 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-[11px] font-mono text-emerald-300">
-
-                OUTPUT · best.pt
-            </span>
-        </div>
-    </section>
-
-    <!-- Simulator Section -->
-    <section id="simulator"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
-
-        <div class="text-center max-w-3xl mx-auto mb-12">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Live Simulation
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                실시간 AI 비전 좌표 자동보정 시뮬레이터
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3">
-                위치 편차 발생 시 AI가 로봇 작업 좌표를 보정하는 과정을 확인합니다.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-            <!-- Controls -->
-            <div
-                class="lg:col-span-5 glass-panel p-6 rounded-2xl flex flex-col justify-between">
-
-                <div>
-                    <h4 class="text-base font-bold text-white mb-4 flex items-center justify-between">
-                        <span>
-                            위치 편차 시뮬레이션
-                        </span>
-
-                        <span id="status-badge"
-                            class="px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-
-                            정상 가동
-                        </span>
-                    </h4>
-
-                    <div class="space-y-4 text-xs">
-
-                        <div>
-                            <div class="flex justify-between text-slate-300 font-mono mb-1">
-                                <span>X축 편차</span>
-
-                                <span id="val-dx"
-                                    class="text-cyan-400 font-bold">
-
-                                    +0.12mm
-                                </span>
-                            </div>
-
-                            <input type="range"
-                                id="slider-dx"
-                                min="-2"
-                                max="2"
-                                step="0.05"
-                                value="0.12"
-                                class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between text-slate-300 font-mono mb-1">
-                                <span>Y축 편차</span>
-
-                                <span id="val-dy"
-                                    class="text-cyan-400 font-bold">
-
-                                    -0.08mm
-                                </span>
-                            </div>
-
-                            <input type="range"
-                                id="slider-dy"
-                                min="-2"
-                                max="2"
-                                step="0.05"
-                                value="-0.08"
-                                class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between text-slate-300 font-mono mb-1">
-                                <span>회전각 편차</span>
-
-                                <span id="val-dt"
-                                    class="text-cyan-400 font-bold">
-
-                                    +0.25°
-                                </span>
-                            </div>
-
-                            <input type="range"
-                                id="slider-dt"
-                                min="-3"
-                                max="3"
-                                step="0.05"
-                                value="0.25"
-                                class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
-                        </div>
-                    </div>
-
-                    <div class="flex space-x-3 mt-6">
-                        <button id="btn-random"
-                            class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition-all flex items-center justify-center space-x-2">
-
-                            <i class="fa-solid fa-dice text-cyan-400"></i>
-
-                            <span>
-                                랜덤 편차
-                            </span>
-                        </button>
-
-                        <button id="btn-calibrate"
-                            class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center space-x-2">
-
-                            <i class="fa-solid fa-wand-magic-sparkles"></i>
-
-                            <span>
-                                AI 자동보정
-                            </span>
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="mt-6 pt-4 border-t border-slate-800 text-xs font-mono space-y-2">
-
-                    <div class="flex justify-between text-slate-400">
-                        <span>연산 지연</span>
-
-                        <span id="res-latency"
-                            class="text-slate-200 font-bold">
-
-                            142ms
-                        </span>
-                    </div>
-
-                    <div class="flex justify-between text-slate-400">
-                        <span>보정 오프셋</span>
-
-                        <span id="res-offset"
-                            class="text-cyan-300 font-bold">
-
-                            ΔX: -0.12 / ΔY: +0.08
-                        </span>
-                    </div>
-
-                    <div class="flex justify-between text-slate-400">
-                        <span>잔여 오차</span>
-
-                        <span id="res-residual"
-                            class="text-emerald-400 font-bold">
-
-                            0.02mm · PASS
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Canvas -->
-            <div
-                class="lg:col-span-7 glass-panel p-6 rounded-2xl flex flex-col justify-between">
-
-                <div class="flex items-center justify-between mb-4">
-                    <h4 class="text-sm font-bold text-slate-200">
-                        목표 좌표와 검출 좌표 비교
-                    </h4>
-
-                    <span class="text-xs text-slate-400 font-mono">
-                        허용 공차 ±0.30mm
-                    </span>
-                </div>
-
-                <div
-                    class="relative w-full h-64 md:h-80 flex items-center justify-center bg-slate-950/60 rounded-xl border border-slate-800 overflow-hidden">
-
-                    <canvas id="calibrationCanvas"
-                        class="w-full h-full">
-                    </canvas>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact"
-        class="py-16 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
-
-        <div
-            class="glass-panel p-8 rounded-2xl text-center bg-gradient-to-r from-cyan-950/30 via-indigo-950/30 to-purple-950/30">
-
-            <h3 class="text-2xl font-bold text-white mb-3">
-                선박 의장·용접 Physical AI 시스템
-            </h3>
-
-            <p class="text-sm text-slate-400 mb-6">
-                작업부 검출부터 3D 좌표 자동보정까지 하나의 로봇 비전 시스템으로 연결합니다.
-            </p>
-
-            <a href="mailto:contact@example.com"
-                class="inline-flex items-center px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white text-sm font-bold transition-all">
-
-                <i class="fa-solid fa-envelope mr-2"></i>
-                프로젝트 문의
-            </a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-8 text-center text-xs text-slate-500 border-t border-slate-900">
-        <p>
-            © 2026 Physical AI Robotics Inc. All rights reserved.
-        </p>
-    </footer>
-
-    <script>
-        const canvas = document.getElementById('calibrationCanvas');
-        const ctx = canvas.getContext('2d');
-
-        const sliderDx = document.getElementById('slider-dx');
-        const sliderDy = document.getElementById('slider-dy');
-        const sliderDt = document.getElementById('slider-dt');
-
-        const valueDx = document.getElementById('val-dx');
-        const valueDy = document.getElementById('val-dy');
-        const valueDt = document.getElementById('val-dt');
-
-        const resultLatency = document.getElementById('res-latency');
-        const resultOffset = document.getElementById('res-offset');
-        const resultResidual = document.getElementById('res-residual');
-
-        const statusBadge = document.getElementById('status-badge');
-        const randomButton = document.getElementById('btn-random');
-        const calibrateButton = document.getElementById('btn-calibrate');
-
-        let dx = Number(sliderDx.value);
-        let dy = Number(sliderDy.value);
-        let dt = Number(sliderDt.value);
-
-        function formatSigned(value, unit = '') {
-            const number = Number(value);
-            const sign = number >= 0 ? '+' : '';
-
-            return `${sign}${number.toFixed(2)}${unit}`;
-        }
-
-        function resizeCanvas() {
-            const rect = canvas.getBoundingClientRect();
-            const deviceRatio = window.devicePixelRatio || 1;
-
-            canvas.width = rect.width * deviceRatio;
-            canvas.height = rect.height * deviceRatio;
-
-            ctx.setTransform(
-                deviceRatio,
-                0,
-                0,
-                deviceRatio,
-                0,
-                0
-            );
-
-            drawCalibration();
-        }
-
-        function drawCrosshair(x, y, size, strokeStyle, lineWidth = 2) {
-            ctx.strokeStyle = strokeStyle;
-            ctx.lineWidth = lineWidth;
-
-            ctx.beginPath();
-            ctx.moveTo(x - size, y);
-            ctx.lineTo(x + size, y);
-            ctx.moveTo(x, y - size);
-            ctx.lineTo(x, y + size);
-            ctx.stroke();
-        }
-
-        function drawCalibration() {
-            const width = canvas.clientWidth;
-            const height = canvas.clientHeight;
-
-            ctx.clearRect(0, 0, width, height);
-
-            ctx.fillStyle = 'rgba(2, 6, 23, 0.95)';
-            ctx.fillRect(0, 0, width, height);
-
-            const centerX = width / 2;
-            const centerY = height / 2;
-
-            ctx.strokeStyle = 'rgba(71, 85, 105, 0.35)';
-            ctx.lineWidth = 1;
-
-            for (let x = 0; x <= width; x += 30) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
-                ctx.stroke();
-            }
-
-            for (let y = 0; y <= height; y += 30) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(width, y);
-                ctx.stroke();
-            }
-
-            const toleranceRadius = 55;
-
-            ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
-            ctx.lineWidth = 2;
-            ctx.setLineDash([6, 6]);
-
-            ctx.beginPath();
-            ctx.arc(
-                centerX,
-                centerY,
-                toleranceRadius,
-                0,
-                Math.PI * 2
-            );
-            ctx.stroke();
-
-            ctx.setLineDash([]);
-
-            drawCrosshair(
-                centerX,
-                centerY,
-                15,
-                'rgba(52, 211, 153, 1)',
-                3
-            );
-
-            const scale = 40;
-            const detectionX = centerX + dx * scale;
-            const detectionY = centerY - dy * scale;
-
-            ctx.save();
-            ctx.translate(detectionX, detectionY);
-            ctx.rotate(dt * Math.PI / 180);
-
-            ctx.strokeStyle = 'rgba(129, 140, 248, 1)';
-            ctx.lineWidth = 3;
-
-            ctx.strokeRect(
-                -18,
-                -18,
-                36,
-                36
-            );
-
-            ctx.restore();
-
-            drawCrosshair(
-                detectionX,
-                detectionY,
-                12,
-                'rgba(129, 140, 248, 1)',
-                2
-            );
-
-            ctx.fillStyle = 'rgba(52, 211, 153, 1)';
-            ctx.font = '12px monospace';
-            ctx.fillText(
-                'TARGET',
-                centerX + 18,
-                centerY - 18
-            );
-
-            ctx.fillStyle = 'rgba(129, 140, 248, 1)';
-            ctx.fillText(
-                'DETECTION',
-                detectionX + 18,
-                detectionY + 28
-            );
-
-            ctx.strokeStyle = 'rgba(192, 132, 252, 0.7)';
-            ctx.lineWidth = 1.5;
-
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY);
-            ctx.lineTo(detectionX, detectionY);
-            ctx.stroke();
-        }
-
-        function updateValues() {
-            dx = Number(sliderDx.value);
-            dy = Number(sliderDy.value);
-            dt = Number(sliderDt.value);
-
-            valueDx.textContent = formatSigned(dx, 'mm');
-            valueDy.textContent = formatSigned(dy, 'mm');
-            valueDt.textContent = formatSigned(dt, '°');
-
-            resultOffset.textContent =
-                `ΔX: ${formatSigned(-dx)} / ΔY: ${formatSigned(-dy)}`;
-
-            const residual = Math.sqrt(
-                Math.pow(dx, 2) +
-                Math.pow(dy, 2)
-            );
-
-            if (residual <= 0.30) {
-                statusBadge.textContent = '정상 가동';
-                statusBadge.className =
-                    'px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
-
-                resultResidual.textContent =
-                    `${residual.toFixed(2)}mm · PASS`;
-
-                resultResidual.className =
-                    'text-emerald-400 font-bold';
-            } else {
-                statusBadge.textContent = '보정 필요';
-                statusBadge.className =
-                    'px-2.5 py-1 rounded-full text-[11px] font-mono bg-amber-500/20 text-amber-400 border border-amber-500/30';
-
-                resultResidual.textContent =
-                    `${residual.toFixed(2)}mm · OFFSET`;
-
-                resultResidual.className =
-                    'text-amber-400 font-bold';
-            }
-
-            drawCalibration();
-        }
-
-        sliderDx.addEventListener('input', updateValues);
-        sliderDy.addEventListener('input', updateValues);
-        sliderDt.addEventListener('input', updateValues);
-
-        randomButton.addEventListener('click', () => {
-            sliderDx.value =
-                (Math.random() * 4 - 2).toFixed(2);
-
-            sliderDy.value =
-                (Math.random() * 4 - 2).toFixed(2);
-
-            sliderDt.value =
-                (Math.random() * 6 - 3).toFixed(2);
-
-            resultLatency.textContent =
-                `${Math.floor(Math.random() * 100) + 120}ms`;
-
-            updateValues();
-        });
-
-        calibrateButton.addEventListener('click', () => {
-            const originalText = calibrateButton.innerHTML;
-
-            calibrateButton.disabled = true;
-            calibrateButton.innerHTML =
-                '<i class="fa-solid fa-spinner fa-spin"></i><span>보정 중</span>';
-
-            statusBadge.textContent = 'AI 보정 중';
-            statusBadge.className =
-                'px-2.5 py-1 rounded-full text-[11px] font-mono bg-indigo-500/20 text-indigo-400 border border-indigo-500/30';
-
-            setTimeout(() => {
-                sliderDx.value = '0.02';
-                sliderDy.value = '-0.01';
-                sliderDt.value = '0.05';
-
-                resultLatency.textContent =
-                    `${Math.floor(Math.random() * 80) + 120}ms`;
-
-                updateValues();
-
-                calibrateButton.disabled = false;
-                calibrateButton.innerHTML = originalText;
-            }, 700);
-        });
-
-        window.addEventListener('resize', resizeCanvas);
-
-        resizeCanvas();
-        updateValues();
-    </script>
-
+        </section>
+
+        <footer class="py-8 text-center text-xs text-slate-500 border-t border-slate-900">
+            <p>© 2026 Physical AI Robotics Inc. All rights reserved.</p>
+        </footer>
 </body>
 
 </html>
-```
