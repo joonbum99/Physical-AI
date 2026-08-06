@@ -349,7 +349,495 @@
             }
         }
 
+
+        /* =========================================================
+           ATTACHED IMAGE COLOR THEME OVERRIDE
+           내용 및 구조는 유지하고 색상·표면·타이포그래피만 변경
+           ========================================================= */
+        :root {
+            --sidebar-width: 177px;
+            --topbar-height: 52px;
+            --dashboard-bg: #0d1117;
+            --sidebar-bg: #171b21;
+            --topbar-bg: #0f141b;
+            --panel-bg: #151a20;
+            --panel-bg-soft: #181e25;
+            --panel-deep: #10151c;
+            --line-color: #242b33;
+            --line-soft: rgba(148, 163, 184, 0.10);
+            --mint: #00eea8;
+            --mint-strong: #00f5a9;
+            --mint-soft: rgba(0, 238, 168, 0.12);
+            --cyan: #22d3c5;
+            --white: #f3f6f4;
+            --text: #d5ddd9;
+            --muted: #8d9a95;
+            --muted-dark: #66736e;
+        }
+
+        html, body {
+            background: var(--dashboard-bg) !important;
+            color: var(--text) !important;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', system-ui, -apple-system, sans-serif !important;
+        }
+
+        .dashboard-sidebar {
+            width: var(--sidebar-width) !important;
+            background: var(--sidebar-bg) !important;
+            border-right: 1px solid #20262d !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-brand {
+            min-height: var(--topbar-height) !important;
+            height: var(--topbar-height) !important;
+            padding: 0 12px !important;
+            gap: 9px !important;
+            border-bottom: 1px solid #20262d !important;
+        }
+
+        .dashboard-brand-icon {
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 3px !important;
+            color: #dfe8e3 !important;
+            background: #252b31 !important;
+            border: 1px solid #30373e !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-brand .font-bold,
+        .dashboard-brand strong {
+            color: #f1f5f2 !important;
+        }
+
+        .dashboard-brand .text-slate-400,
+        .dashboard-brand .text-\[10px\] {
+            color: #a8b2ad !important;
+        }
+
+        .dashboard-nav {
+            padding: 11px 7px !important;
+            gap: 4px !important;
+        }
+
+        .dashboard-nav a {
+            min-height: 35px !important;
+            padding: 0 11px !important;
+            gap: 9px !important;
+            border-radius: 3px !important;
+            color: #a9b4ae !important;
+            font-size: 9px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.10em !important;
+            background: transparent !important;
+            border: 1px solid transparent !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-nav a i {
+            width: 15px !important;
+            color: #a4b4ab !important;
+            font-size: 13px !important;
+        }
+
+        .dashboard-nav a:hover,
+        .dashboard-nav a.active {
+            color: #052118 !important;
+            background: var(--mint) !important;
+            border-color: var(--mint) !important;
+            box-shadow: 0 0 14px rgba(0, 238, 168, 0.12) !important;
+        }
+
+        .dashboard-nav a:hover i,
+        .dashboard-nav a.active i {
+            color: #062219 !important;
+        }
+
+        .dashboard-sidebar-footer {
+            padding: 11px 7px 8px !important;
+            border-top: 1px solid #20262d !important;
+        }
+
+        .dashboard-report-button {
+            min-height: 31px !important;
+            border-radius: 3px !important;
+            color: #052118 !important;
+            background: var(--mint) !important;
+            font-size: 8px !important;
+            letter-spacing: 0.12em !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-topbar {
+            left: var(--sidebar-width) !important;
+            height: var(--topbar-height) !important;
+            padding: 0 28px !important;
+            background: var(--topbar-bg) !important;
+            border-bottom: 1px solid #20262d !important;
+            backdrop-filter: none !important;
+        }
+
+        .dashboard-status {
+            padding: 5px 10px !important;
+            gap: 7px !important;
+            color: #91a19a !important;
+            background: #171d23 !important;
+            border: 1px solid #20272e !important;
+            font-size: 8px !important;
+            letter-spacing: 0.10em !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-status-dot {
+            width: 6px !important;
+            height: 6px !important;
+            background: var(--mint) !important;
+            box-shadow: 0 0 7px rgba(0, 238, 168, 0.70) !important;
+        }
+
+        .dashboard-top-icons {
+            gap: 16px !important;
+            color: #8f9d97 !important;
+            font-size: 13px !important;
+        }
+
+        .dashboard-main {
+            margin-left: var(--sidebar-width) !important;
+            padding-top: var(--topbar-height) !important;
+            background: var(--dashboard-bg) !important;
+        }
+
+        .dashboard-main > section,
+        .dashboard-main > footer {
+            padding-left: 28px !important;
+            padding-right: 28px !important;
+        }
+
+        .dashboard-main #overview {
+            padding-top: 31px !important;
+            padding-bottom: 70px !important;
+        }
+
+        .dashboard-main #overview h1 {
+            color: var(--white) !important;
+            font-size: clamp(2rem, 3.5vw, 3.05rem) !important;
+            line-height: 1.18 !important;
+            letter-spacing: -0.035em !important;
+        }
+
+        .dashboard-main #overview .gradient-text,
+        .gradient-text {
+            background: none !important;
+            -webkit-text-fill-color: var(--mint) !important;
+            color: var(--mint) !important;
+        }
+
+        .dashboard-main #overview p {
+            color: #c4ceca !important;
+            font-size: 13px !important;
+            line-height: 1.75 !important;
+        }
+
+        .dashboard-main section:not(#overview) {
+            padding-top: 62px !important;
+            padding-bottom: 62px !important;
+            border-top: 1px solid #171d23 !important;
+        }
+
+        .dashboard-main section > .text-center h2 {
+            color: #9ac5d6 !important;
+            font-size: 9px !important;
+            letter-spacing: 0.12em !important;
+        }
+
+        .dashboard-main section > .text-center h3 {
+            color: var(--white) !important;
+            font-size: clamp(1.65rem, 3vw, 2.25rem) !important;
+            letter-spacing: -0.025em !important;
+        }
+
+        .dashboard-main section > .text-center p {
+            color: #9da9a4 !important;
+        }
+
+        .glass-panel,
+        .glass-card {
+            background: var(--panel-bg) !important;
+            border: 1px solid #252c33 !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.015) !important;
+            backdrop-filter: none !important;
+            border-radius: 4px !important;
+        }
+
+        .glass-panel:hover,
+        .glass-card:hover {
+            border-color: #313a42 !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .glow-effect {
+            box-shadow: none !important;
+        }
+
+        .dashboard-main .bg-slate-900\/60,
+        .dashboard-main .bg-slate-900\/50,
+        .dashboard-main .bg-slate-900\/40,
+        .dashboard-main .bg-slate-800\/90,
+        .dashboard-main .bg-slate-800\/60,
+        .dashboard-main .bg-slate-800\/50 {
+            background: var(--panel-deep) !important;
+        }
+
+        .dashboard-main .border-slate-800,
+        .dashboard-main .border-slate-700\/80,
+        .dashboard-main .border-slate-800\/80 {
+            border-color: #252c33 !important;
+        }
+
+        .dashboard-main .text-white,
+        .dashboard-main h1,
+        .dashboard-main h3,
+        .dashboard-main h4 {
+            color: var(--white) !important;
+        }
+
+        .dashboard-main .text-slate-300 {
+            color: #c5cfca !important;
+        }
+
+        .dashboard-main .text-slate-400 {
+            color: #929f99 !important;
+        }
+
+        .dashboard-main .text-slate-500 {
+            color: #6f7b76 !important;
+        }
+
+        /* 청록 계열은 첨부 이미지의 민트 포인트로 통일 */
+        .dashboard-main .text-cyan-300,
+        .dashboard-main .text-cyan-400,
+        .dashboard-main .text-emerald-300,
+        .dashboard-main .text-emerald-400,
+        .dashboard-main .text-indigo-300,
+        .dashboard-main .text-indigo-400,
+        .dashboard-main .text-purple-300,
+        .dashboard-main .text-purple-400 {
+            color: var(--mint) !important;
+        }
+
+        .dashboard-main .bg-cyan-500\/10,
+        .dashboard-main .bg-cyan-500\/15,
+        .dashboard-main .bg-cyan-500\/20,
+        .dashboard-main .bg-emerald-500\/10,
+        .dashboard-main .bg-emerald-500\/15,
+        .dashboard-main .bg-emerald-500\/20,
+        .dashboard-main .bg-indigo-500\/10,
+        .dashboard-main .bg-indigo-500\/15,
+        .dashboard-main .bg-indigo-500\/20,
+        .dashboard-main .bg-purple-500\/10,
+        .dashboard-main .bg-purple-500\/15,
+        .dashboard-main .bg-purple-500\/20 {
+            background: var(--mint-soft) !important;
+        }
+
+        .dashboard-main .border-cyan-500\/20,
+        .dashboard-main .border-cyan-500\/25,
+        .dashboard-main .border-cyan-400\/50,
+        .dashboard-main .border-cyan-400\/60,
+        .dashboard-main .border-emerald-500\/20,
+        .dashboard-main .border-emerald-500\/25,
+        .dashboard-main .border-indigo-500\/20,
+        .dashboard-main .border-indigo-500\/25,
+        .dashboard-main .border-purple-500\/20,
+        .dashboard-main .border-purple-500\/25 {
+            border-color: rgba(0, 238, 168, 0.25) !important;
+        }
+
+        .dashboard-main .bg-gradient-to-r,
+        .dashboard-main .bg-gradient-to-b,
+        .dashboard-main .bg-gradient-to-tr {
+            background-image: none !important;
+        }
+
+        .dashboard-main .rounded-full,
+        .dashboard-main .rounded-2xl,
+        .dashboard-main .rounded-xl,
+        .dashboard-main .rounded-lg {
+            border-radius: 4px !important;
+        }
+
+        .dashboard-main .shadow-lg,
+        .dashboard-main [class*="shadow-"] {
+            box-shadow: none !important;
+        }
+
+        .dashboard-main .border-l-cyan-400,
+        .dashboard-main .border-l-indigo-400,
+        .dashboard-main .border-l-emerald-400 {
+            border-left-color: var(--mint) !important;
+        }
+
+        .dashboard-main .border-l-purple-400 {
+            border-left-color: #7537ca !important;
+        }
+
+        .dashboard-main button,
+        .dashboard-main a[class*="bg-indigo"],
+        .dashboard-main a[class*="bg-cyan"],
+        .dashboard-main a[class*="bg-emerald"] {
+            border-radius: 3px !important;
+        }
+
+        .dashboard-main button[class*="bg-indigo"],
+        .dashboard-main button[class*="bg-cyan"],
+        .dashboard-main button[class*="bg-emerald"],
+        .dashboard-main a[class*="bg-indigo"],
+        .dashboard-main a[class*="bg-cyan"],
+        .dashboard-main a[class*="bg-emerald"] {
+            background: var(--mint) !important;
+            color: #062119 !important;
+            border-color: var(--mint) !important;
+        }
+
+        canvas {
+            filter: saturate(0.75) hue-rotate(115deg) !important;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-topbar { left: 0 !important; }
+            .dashboard-main { margin-left: 0 !important; }
+        }
+
     </style>
+
+
+    <!-- Unified Maritime AI palette + gradient description treatment -->
+    <style>
+        :root {
+            --marine-bg: #0b1017;
+            --marine-panel: rgba(18, 27, 36, 0.92);
+            --marine-panel-2: rgba(14, 24, 33, 0.96);
+            --marine-border: rgba(30, 230, 177, 0.22);
+            --marine-border-strong: rgba(31, 235, 184, 0.48);
+            --marine-accent: #18e6ad;
+            --marine-accent-2: #20c9d7;
+            --marine-accent-soft: rgba(24, 230, 173, 0.09);
+            --marine-text-soft: #aebbc2;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 78% 8%, rgba(24, 230, 173, 0.055), transparent 30%),
+                radial-gradient(circle at 30% 72%, rgba(32, 201, 215, 0.04), transparent 34%),
+                var(--marine-bg) !important;
+        }
+
+        /* 박스 색상을 청록·딥네이비 계열로 통일 */
+        .glass-panel,
+        .glass-card,
+        section [class*="bg-red-"],
+        section [class*="bg-orange-"],
+        section [class*="bg-amber-"],
+        section [class*="bg-yellow-"],
+        section [class*="bg-purple-"],
+        section [class*="bg-indigo-"],
+        section [class*="bg-blue-"],
+        section [class*="bg-emerald-"] {
+            background-color: var(--marine-panel) !important;
+            background-image: linear-gradient(145deg, rgba(24, 230, 173, 0.045), rgba(11, 16, 23, 0.18)) !important;
+            border-color: var(--marine-border) !important;
+        }
+
+        section .glass-panel:hover,
+        section .glass-card:hover {
+            border-color: var(--marine-border-strong) !important;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(24, 230, 173, 0.05) inset;
+        }
+
+        /* 서로 다른 색의 상단 테두리도 동일한 계열로 정리 */
+        section [class*="border-l-"],
+        section [class*="border-t-"] {
+            border-left-color: var(--marine-accent-2) !important;
+            border-top-color: var(--marine-accent) !important;
+        }
+
+        /* 아이콘 배경과 배지 색상 통일 */
+        section [class*="rounded-xl"][class*="bg-"]:has(i),
+        section [class*="rounded-lg"][class*="bg-"]:has(i),
+        section [class*="rounded-full"][class*="bg-"]:has(i) {
+            background: linear-gradient(135deg, rgba(24, 230, 173, 0.16), rgba(32, 201, 215, 0.08)) !important;
+            color: var(--marine-accent) !important;
+            border-color: rgba(24, 230, 173, 0.24) !important;
+        }
+
+        /* 긴 설명과 단계별 설명에 은은한 색 그라데이션 적용 */
+        .gradient-copy {
+            position: relative;
+            display: block;
+            padding: 0.78rem 0.9rem 0.78rem 1rem !important;
+            margin-top: 0.5rem;
+            border-left: 2px solid rgba(24, 230, 173, 0.65);
+            border-radius: 0 0.7rem 0.7rem 0;
+            background:
+                linear-gradient(90deg, rgba(24, 230, 173, 0.105) 0%, rgba(32, 201, 215, 0.055) 48%, rgba(11, 16, 23, 0) 100%) !important;
+            color: #c4d0d5 !important;
+        }
+
+        .gradient-copy strong,
+        .gradient-copy code {
+            color: #5ff2c8 !important;
+        }
+
+        /* 단계형 카드의 설명은 좌→우로 흐르는 동일 계열 강조 */
+        #pipeline .glass-panel p,
+        #yolo-training .glass-panel p,
+        #model-validation .glass-panel p,
+        #process .glass-panel li,
+        #safety .glass-panel li,
+        #problem .glass-panel li {
+            background-image: linear-gradient(90deg, rgba(24, 230, 173, 0.075), rgba(32, 201, 215, 0.028), transparent) !important;
+            border-radius: 0.55rem;
+        }
+
+        #process .glass-panel li,
+        #safety .glass-panel li,
+        #problem .glass-panel li {
+            padding: 0.55rem 0.65rem;
+        }
+
+        /* 제목·핵심 수치도 청록 계열로 통일하되 가독성 유지 */
+        section h2,
+        section .font-mono[class*="text-"] {
+            color: #63efc9 !important;
+        }
+
+        section h3,
+        section h4 {
+            text-shadow: 0 0 18px rgba(24, 230, 173, 0.045);
+        }
+
+        /* 진행선, 버튼, 활성 메뉴 */
+        a[class*="bg-gradient"],
+        button[class*="bg-gradient"],
+        .nav-link.active,
+        [aria-current="page"] {
+            background-image: linear-gradient(90deg, #18e6ad, #20c9d7) !important;
+            color: #06110f !important;
+        }
+
+        /* 모바일에서도 그라데이션 설명의 여백을 과도하게 차지하지 않도록 조정 */
+        @media (max-width: 768px) {
+            .gradient-copy {
+                padding: 0.65rem 0.7rem 0.65rem 0.82rem !important;
+            }
+        }
+    </style>
+
 </head>
 
 <body class="antialiased selection:bg-cyan-500 selection:text-slate-900">
@@ -1952,6 +2440,161 @@
         </div>
     </section>
 
+    <!-- ROI Section -->
+    <section id="roi"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-xs font-mono text-emerald-400 tracking-widest uppercase mb-2">
+                Return on Investment
+            </h2>
+
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                ⑥ ROI · 투자비 대비 연간 절감효과
+            </h3>
+
+            <p class="text-slate-400 text-sm mt-3 gradient-copy">
+                초기 투자비와 연간 절감액을 동일한 기준으로 비교하여 시스템의 경제성을 정량화합니다.
+            </p>
+        </div>
+
+        <!-- ROI Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/35 via-slate-950/55 to-slate-950/80">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-mono text-emerald-300 uppercase tracking-wider">Initial Investment</span>
+                    <i class="fa-solid fa-coins text-emerald-400"></i>
+                </div>
+                <div class="text-3xl font-black text-white font-mono">
+                    2,300<span class="text-base text-emerald-300 ml-1">만원</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-2 gradient-copy">
+                    카메라·조명, 산업용 PC, 로봇 통신·제어장치, SW 개발비를 포함한 총 초기 투자비입니다.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/35 via-slate-950/55 to-slate-950/80">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-mono text-emerald-300 uppercase tracking-wider">Annual Saving</span>
+                    <i class="fa-solid fa-chart-line text-emerald-400"></i>
+                </div>
+                <div class="text-3xl font-black text-white font-mono">
+                    4,000<span class="text-base text-emerald-300 ml-1">만원/년</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-2 gradient-copy">
+                    재티칭 공수, 위치 불량·재작업, 생산중단시간 감소 효과를 합산한 연간 절감액입니다.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-400/40 bg-gradient-to-br from-emerald-900/45 via-emerald-950/35 to-slate-950/80 shadow-[0_0_32px_rgba(16,185,129,0.12)]">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-mono text-emerald-200 uppercase tracking-wider">Payback Period</span>
+                    <i class="fa-solid fa-stopwatch text-emerald-300"></i>
+                </div>
+                <div class="text-3xl font-black text-white font-mono">
+                    약 0.6<span class="text-base text-emerald-300 ml-1">년</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-2 gradient-copy">
+                    약 7개월 내 초기 투자비 회수가 가능한 수준으로, 단기간 경제성 확보가 가능합니다.
+                </p>
+            </div>
+        </div>
+
+        <!-- Input / Output Breakdown -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-7 mb-8">
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/20">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider">Input Cost</span>
+                        <h4 class="text-lg font-bold text-white">초기 투자비 구성</h4>
+                    </div>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">카메라·조명</span>
+                        <strong class="font-mono text-emerald-300">500만원</strong>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">산업용 PC</span>
+                        <strong class="font-mono text-emerald-300">300만원</strong>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">로봇 통신·제어장치</span>
+                        <strong class="font-mono text-emerald-300">300만원</strong>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">SW 개발비</span>
+                        <strong class="font-mono text-emerald-300">1,200만원</strong>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-emerald-500/15 flex items-center justify-between">
+                    <span class="text-sm font-bold text-white">총 초기 투자비</span>
+                    <strong class="text-xl font-black font-mono text-emerald-300">2,300만원</strong>
+                </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/20">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider">Output Saving</span>
+                        <h4 class="text-lg font-bold text-white">연간 절감액 구성</h4>
+                    </div>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">수동 재티칭 공수 절감</span>
+                        <strong class="font-mono text-emerald-300">1,200만원/년</strong>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">위치 불량·재작업 감소</span>
+                        <strong class="font-mono text-emerald-300">2,000만원/년</strong>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">생산중단시간 감소</span>
+                        <strong class="font-mono text-emerald-300">800만원/년</strong>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-emerald-500/15 flex items-center justify-between">
+                    <span class="text-sm font-bold text-white">총 연간 절감액</span>
+                    <strong class="text-xl font-black font-mono text-emerald-300">4,000만원/년</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Payback Bar -->
+        <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25 bg-gradient-to-r from-slate-950/80 via-emerald-950/25 to-slate-950/80">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+                <div>
+                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider">Investment Recovery</span>
+                    <h4 class="text-lg font-bold text-white mt-1">투자 회수기간 산출</h4>
+                </div>
+                <div class="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-sm font-mono text-emerald-300">
+                    2,300만원 ÷ 4,000만원/년 = 약 0.6년
+                </div>
+            </div>
+
+            <div class="relative h-4 rounded-full bg-slate-900 border border-slate-800 overflow-hidden">
+                <div class="h-full w-[60%] bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 rounded-full"></div>
+            </div>
+
+            <div class="flex justify-between mt-2 text-[11px] font-mono text-slate-500">
+                <span>투자 시작</span>
+                <span class="text-emerald-300">약 7개월 · 손익분기점</span>
+                <span>1년</span>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact -->
     <section id="contact"
         class="py-16 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
@@ -2284,6 +2927,35 @@
 
         dashboardSections.forEach((section) => sectionObserver.observe(section));
 
+    </script>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reportSections = document.querySelectorAll(
+                '#overview, #problem, #safety, #process, #technology-stack, #pipeline, #yolo-training, #model-validation, #roi'
+            );
+
+            reportSections.forEach(section => {
+                section.querySelectorAll('p').forEach(p => {
+                    const plainText = p.textContent.replace(/\s+/g, ' ').trim();
+                    const isLongCopy = plainText.length >= 58;
+                    const isCardDescription = p.closest('.glass-panel, .glass-card');
+
+                    if (isLongCopy && isCardDescription && !p.closest('pre, code')) {
+                        p.classList.add('gradient-copy');
+                    }
+                });
+
+                section.querySelectorAll('li').forEach(li => {
+                    const plainText = li.textContent.replace(/\s+/g, ' ').trim();
+                    if (plainText.length >= 34 && !li.closest('pre, code')) {
+                        li.classList.add('gradient-copy');
+                    }
+                });
+            });
+        });
     </script>
 
 </body>
