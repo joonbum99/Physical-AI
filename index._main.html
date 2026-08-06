@@ -1564,7 +1564,7 @@
                         <span class="text-purple-400 font-bold">1.</span>
 
                         <span>
-                            검출 중심점과 Depth를 결합해 3D 좌표 산출
+                            검출 중심점과 3D 카메라 Depth를 결합해 X·Y·Z 상대좌표 산출
                         </span>
                     </li>
 
@@ -1580,7 +1580,7 @@
                         <span class="text-purple-400 font-bold">3.</span>
 
                         <span>
-                            CAD 대비 ΔX·ΔY·ΔZ·Δθ 오프셋 보정
+                            로봇 팔 기준점 대비 ΔX·ΔY·ΔZ·Δθ 상대 오프셋 보정
                         </span>
                     </li>
                 </ul>
@@ -1800,7 +1800,7 @@
                     </h4>
 
                     <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        Hand-Eye Calibration을 적용하여 카메라 좌표를
+                        Hand-Eye Calibration을 적용하여 카메라의 X·Y·Z 좌표를
                         Robot Base 좌표로 변환하고 제작 편차를 보정합니다.
                         <span class="block mt-2 text-purple-300"><strong>선정 근거:</strong> 검출 박스의 이미지 좌표만으로 로봇을 이동시킬 수 없으므로 Depth와 외부 파라미터를 결합해 실제 Robot Base 좌표로 변환합니다.</span>
                     </p>
@@ -2271,7 +2271,7 @@
             </h3>
 
             <p class="text-slate-400 text-sm mt-3">
-                위치 편차 발생 시 AI가 로봇 작업 좌표를 보정하는 과정을 확인합니다.
+                3D 카메라의 Depth 정보를 활용해 로봇 팔 기준점부터 타겟부위까지의 X·Y·Z 상대좌표와 회전각 θ 편차를 산출하고, AI가 작업 좌표를 자동 보정하는 과정을 확인합니다.
             </p>
         </div>
 
@@ -2338,6 +2338,26 @@
 
                         <div>
                             <div class="flex justify-between text-slate-300 font-mono mb-1">
+                                <span>Z축 편차 · Depth</span>
+
+                                <span id="val-dz"
+                                    class="text-cyan-400 font-bold">
+
+                                    +0.18mm
+                                </span>
+                            </div>
+
+                            <input type="range"
+                                id="slider-dz"
+                                min="-3"
+                                max="3"
+                                step="0.05"
+                                value="0.18"
+                                class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-slate-300 font-mono mb-1">
                                 <span>회전각 편차</span>
 
                                 <span id="val-dt"
@@ -2399,7 +2419,7 @@
                         <span id="res-offset"
                             class="text-cyan-300 font-bold">
 
-                            ΔX: -0.12 / ΔY: +0.08
+                            ΔX: -0.12 / ΔY: +0.08 / ΔZ: -0.18
                         </span>
                     </div>
 
@@ -2634,10 +2654,12 @@
 
         const sliderDx = document.getElementById('slider-dx');
         const sliderDy = document.getElementById('slider-dy');
+        const sliderDz = document.getElementById('slider-dz');
         const sliderDt = document.getElementById('slider-dt');
 
         const valueDx = document.getElementById('val-dx');
         const valueDy = document.getElementById('val-dy');
+        const valueDz = document.getElementById('val-dz');
         const valueDt = document.getElementById('val-dt');
 
         const resultLatency = document.getElementById('res-latency');
@@ -2650,6 +2672,7 @@
 
         let dx = Number(sliderDx.value);
         let dy = Number(sliderDy.value);
+        let dz = Number(sliderDz.value);
         let dt = Number(sliderDt.value);
 
         function formatSigned(value, unit = '') {
@@ -2748,10 +2771,12 @@
             const scale = 40;
             const detectionX = centerX + dx * scale;
             const detectionY = centerY - dy * scale;
+            const depthScale = Math.max(0.72, Math.min(1.35, 1 + dz * 0.10));
 
             ctx.save();
             ctx.translate(detectionX, detectionY);
             ctx.rotate(dt * Math.PI / 180);
+            ctx.scale(depthScale, depthScale);
 
             ctx.strokeStyle = 'rgba(129, 140, 248, 1)';
             ctx.lineWidth = 3;
@@ -2788,6 +2813,25 @@
                 detectionY + 28
             );
 
+            // Z축은 화면 깊이 방향이므로 원형 Depth 링과 수치로 시각화
+            ctx.strokeStyle = dz >= 0
+                ? 'rgba(34, 211, 238, 0.85)'
+                : 'rgba(94, 234, 212, 0.85)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.arc(detectionX, detectionY, 25 + Math.abs(dz) * 7, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = 'rgba(103, 232, 249, 1)';
+            ctx.font = '11px monospace';
+            ctx.fillText(
+                `Z ${formatSigned(dz, 'mm')}`,
+                detectionX + 18,
+                detectionY - 28
+            );
+
             ctx.strokeStyle = 'rgba(192, 132, 252, 0.7)';
             ctx.lineWidth = 1.5;
 
@@ -2800,18 +2844,21 @@
         function updateValues() {
             dx = Number(sliderDx.value);
             dy = Number(sliderDy.value);
+            dz = Number(sliderDz.value);
             dt = Number(sliderDt.value);
 
             valueDx.textContent = formatSigned(dx, 'mm');
             valueDy.textContent = formatSigned(dy, 'mm');
+            valueDz.textContent = formatSigned(dz, 'mm');
             valueDt.textContent = formatSigned(dt, '°');
 
             resultOffset.textContent =
-                `ΔX: ${formatSigned(-dx)} / ΔY: ${formatSigned(-dy)}`;
+                `ΔX: ${formatSigned(-dx)} / ΔY: ${formatSigned(-dy)} / ΔZ: ${formatSigned(-dz)}`;
 
             const residual = Math.sqrt(
                 Math.pow(dx, 2) +
-                Math.pow(dy, 2)
+                Math.pow(dy, 2) +
+                Math.pow(dz, 2)
             );
 
             if (residual <= 0.30) {
@@ -2841,6 +2888,7 @@
 
         sliderDx.addEventListener('input', updateValues);
         sliderDy.addEventListener('input', updateValues);
+        sliderDz.addEventListener('input', updateValues);
         sliderDt.addEventListener('input', updateValues);
 
         randomButton.addEventListener('click', () => {
@@ -2849,6 +2897,9 @@
 
             sliderDy.value =
                 (Math.random() * 4 - 2).toFixed(2);
+
+            sliderDz.value =
+                (Math.random() * 6 - 3).toFixed(2);
 
             sliderDt.value =
                 (Math.random() * 6 - 3).toFixed(2);
@@ -2873,6 +2924,7 @@
             setTimeout(() => {
                 sliderDx.value = '0.02';
                 sliderDy.value = '-0.01';
+                sliderDz.value = '0.02';
                 sliderDt.value = '0.05';
 
                 resultLatency.textContent =
