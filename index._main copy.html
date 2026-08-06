@@ -1467,7 +1467,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
+        <div class="grid grid-cols-1 gap-7">
             <div class="glass-panel p-6 rounded-2xl border border-emerald-500/20">
                 <h4 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-list-check text-emerald-400 mr-2"></i>초기 성능 판정 기준</h4>
                 <div class="space-y-3 text-xs">
@@ -1480,31 +1480,6 @@
                 <p class="text-[11px] text-slate-500 mt-4 leading-relaxed">위 값은 초기 개발 목표이며 실제 현장 적용값은 Test 데이터와 로봇 작업 실패 비용을 기준으로 재조정합니다. 특히 클래스별 Recall이 낮으면 전체 mAP가 높아도 적용하지 않습니다.</p>
             </div>
 
-            <div class="glass-panel p-6 rounded-2xl border border-cyan-500/20">
-                <h4 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-code text-cyan-400 mr-2"></i>YOLO26 검증 코드</h4>
-                <pre class="overflow-x-auto p-4 rounded-xl bg-slate-950 border border-slate-800 text-[11px] leading-relaxed text-slate-300"><code>from ultralytics import YOLO
-
-model = YOLO(
-    "/content/runs/ship_work_stage2/weights/best.pt"
-)
-
-metrics = model.val(
-    data=data_yaml,
-    split="val",
-    imgsz=1280,
-    batch=8,
-    conf=0.001,
-    iou=0.70,
-    plots=True,
-    save_json=True,
-    project="/content/runs",
-    name="ship_work_validation"
-)
-
-print("mAP50:", metrics.box.map50)
-print("mAP50-95:", metrics.box.map)</code></pre>
-                <p class="text-[11px] text-slate-400 mt-4 leading-relaxed"><code class="text-cyan-300">conf=0.001</code>은 PR Curve와 AP 계산에서 낮은 신뢰도 후보까지 포함하기 위한 검증값입니다. <code class="text-cyan-300">iou=0.70</code>은 중복 박스를 제거하는 NMS 기준이며, mAP의 IoU 평가 기준과는 다른 파라미터입니다.</p>
-            </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-7">
