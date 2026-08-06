@@ -75,75 +75,354 @@
                 opacity: 0.6;
             }
         }
+
+
+        /* =========================================================
+           HD현대삼호 Maritime AI Dashboard Layout
+           - 기존 보고서 내용은 유지하고 화면 양식만 대시보드형으로 변경
+           ========================================================= */
+        :root {
+            --sidebar-width: 240px;
+            --topbar-height: 64px;
+            --dashboard-bg: #0b1018;
+            --sidebar-bg: #131920;
+            --panel-bg: #111821;
+            --panel-bg-soft: #151c24;
+            --line-color: rgba(148, 163, 184, 0.12);
+            --mint: #00f5a0;
+            --cyan: #22d3ee;
+            --muted: #94a3b8;
+        }
+
+        html {
+            scroll-padding-top: calc(var(--topbar-height) + 20px);
+        }
+
+        body {
+            background: var(--dashboard-bg);
+            overflow-x: hidden;
+        }
+
+        .dashboard-sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            width: var(--sidebar-width);
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--line-color);
+        }
+
+        .dashboard-brand {
+            min-height: var(--topbar-height);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 18px;
+            border-bottom: 1px solid var(--line-color);
+        }
+
+        .dashboard-brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: #e2e8f0;
+            background: linear-gradient(145deg, #2a333d, #1b222b);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .dashboard-nav {
+            padding: 18px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dashboard-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 44px;
+            padding: 0 14px;
+            border-radius: 5px;
+            color: #b9c4cf;
+            font-size: 12px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            letter-spacing: 0.07em;
+            transition: 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .dashboard-nav a:hover,
+        .dashboard-nav a.active {
+            color: #07120f;
+            background: var(--mint);
+            box-shadow: 0 0 22px rgba(0, 245, 160, 0.15);
+        }
+
+        .dashboard-nav a:hover i,
+        .dashboard-nav a.active i {
+            color: #07120f;
+        }
+
+        .dashboard-nav i {
+            width: 17px;
+            color: #9fb4aa;
+            text-align: center;
+        }
+
+        .dashboard-sidebar-footer {
+            margin-top: auto;
+            padding: 14px 10px 18px;
+            border-top: 1px solid var(--line-color);
+        }
+
+        .dashboard-report-button {
+            width: 100%;
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            border-radius: 4px;
+            color: #06120e;
+            background: var(--mint);
+            font-size: 11px;
+            font-weight: 800;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            letter-spacing: 0.08em;
+        }
+
+        .dashboard-topbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: var(--sidebar-width);
+            height: var(--topbar-height);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            background: rgba(11, 16, 24, 0.96);
+            border-bottom: 1px solid var(--line-color);
+            backdrop-filter: blur(14px);
+        }
+
+        .dashboard-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 7px 13px;
+            border-radius: 999px;
+            color: #a7b8ae;
+            background: #141b22;
+            border: 1px solid rgba(148, 163, 184, 0.08);
+            font-size: 10px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+        }
+
+        .dashboard-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--mint);
+            box-shadow: 0 0 10px rgba(0, 245, 160, 0.7);
+        }
+
+        .dashboard-top-icons {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: #91a09a;
+        }
+
+        .dashboard-main {
+            margin-left: var(--sidebar-width);
+            padding-top: var(--topbar-height);
+            min-height: 100vh;
+        }
+
+        .dashboard-main > section,
+        .dashboard-main > footer {
+            max-width: none !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: clamp(28px, 4vw, 56px) !important;
+            padding-right: clamp(28px, 4vw, 56px) !important;
+        }
+
+        .dashboard-main #overview {
+            min-height: auto !important;
+            padding-top: 48px !important;
+            padding-bottom: 86px !important;
+            justify-content: flex-start !important;
+        }
+
+        .dashboard-main #overview h1 {
+            max-width: 1100px;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+        }
+
+        .dashboard-main #overview .gradient-text {
+            background: linear-gradient(90deg, var(--mint), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dashboard-main section:not(#overview) {
+            padding-top: 72px !important;
+            padding-bottom: 72px !important;
+            border-top-color: var(--line-color) !important;
+        }
+
+        .dashboard-main section > .text-center {
+            text-align: center;
+        }
+
+        .glass-panel,
+        .glass-card {
+            background: linear-gradient(145deg, rgba(21, 28, 36, 0.98), rgba(16, 22, 29, 0.98));
+            backdrop-filter: none;
+            border-color: rgba(148, 163, 184, 0.11);
+            box-shadow: none;
+            border-radius: 5px !important;
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 24px -12px rgba(0, 245, 160, 0.35);
+        }
+
+        .dashboard-main code,
+        .dashboard-main .font-mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .dashboard-main .rounded-2xl,
+        .dashboard-main .rounded-xl,
+        .dashboard-main .rounded-lg {
+            border-radius: 5px !important;
+        }
+
+        .dashboard-main .bg-gradient-to-r,
+        .dashboard-main .bg-gradient-to-b {
+            background-image: none !important;
+        }
+
+        .mobile-sidebar-button {
+            display: none;
+            width: 38px;
+            height: 38px;
+            place-items: center;
+            border: 1px solid var(--line-color);
+            border-radius: 5px;
+            color: #dbe7e2;
+            background: #151c24;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+            }
+
+            .dashboard-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .dashboard-topbar {
+                left: 0;
+                padding: 0 18px;
+            }
+
+            .dashboard-main {
+                margin-left: 0;
+            }
+
+            .mobile-sidebar-button {
+                display: grid;
+            }
+        }
+
     </style>
 </head>
 
 <body class="antialiased selection:bg-cyan-500 selection:text-slate-900">
-
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-slate-800/80">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-
-            <div class="flex items-center space-x-3">
-                <div
-                    class="w-9 h-9 bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-500 rounded-xl flex items-center justify-center font-black text-white shadow-lg shadow-cyan-500/20">
-
-                    <i class="fa-solid fa-robot text-sm"></i>
-                </div>
-
-                <div class="flex flex-col">
-                    <span class="font-bold text-lg tracking-wide text-white leading-tight">
-                        RoboOffset
-                        <span class="gradient-text">AI</span>
-                    </span>
-
-                    <span class="text-[10px] text-slate-400 font-mono tracking-widest uppercase">
-                        Physical AI Solutions
-                    </span>
-                </div>
+    <!-- Dashboard Sidebar -->
+    <aside id="dashboard-sidebar" class="dashboard-sidebar">
+        <div class="dashboard-brand">
+            <div class="dashboard-brand-icon">
+                <i class="fa-solid fa-sailboat"></i>
             </div>
-
-            <div class="hidden xl:flex space-x-4 text-xs font-medium text-slate-300">
-                <a href="#overview"
-                    class="hover:text-cyan-400 transition-colors">
-                    솔루션 개요
-                </a>
-
-                <a href="#problem"
-                    class="hover:text-cyan-400 transition-colors">
-                    현장 과제
-                </a>
-
-                <a href="#safety"
-                    class="hover:text-cyan-400 transition-colors">
-                    안전 & 인터록
-                </a>
-
-                <a href="#process"
-                    class="hover:text-cyan-400 transition-colors">
-                    작업별 프로세스
-                </a>
-
-                <a href="#technology-stack"
-                    class="hover:text-cyan-400 transition-colors">
-                    기술스택
-                </a>
-
-                <a href="#simulator"
-                    class="hover:text-cyan-400 transition-colors">
-                    실시간 시뮬레이터
-                </a>
-            </div>
-
-            <div class="flex items-center space-x-4">
-                <a href="#contact"
-                    class="px-4 py-2 text-xs font-semibold rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/25 transition-all transform hover:-translate-y-0.5">
-
-                    도입 상담 신청
-                </a>
+            <div>
+                <div class="text-[15px] font-extrabold text-white leading-tight">HD현대삼호</div>
+                <div class="text-[10px] text-slate-400 font-mono tracking-widest">Maritime AI Engine</div>
             </div>
         </div>
-    </nav>
+
+        <nav class="dashboard-nav">
+            <a href="#overview" class="active">
+                <i class="fa-solid fa-ship"></i>
+                <span>Fleet Overview</span>
+            </a>
+            <a href="#problem">
+                <i class="fa-solid fa-eye"></i>
+                <span>Vision Analysis</span>
+            </a>
+            <a href="#safety">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Safety Interlock</span>
+            </a>
+            <a href="#process">
+                <i class="fa-solid fa-robot"></i>
+                <span>Task Process</span>
+            </a>
+            <a href="#technology-stack">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Technology Stack</span>
+            </a>
+            <a href="#model-validation">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Metric Logs</span>
+            </a>
+            <a href="#simulator">
+                <i class="fa-solid fa-sliders"></i>
+                <span>System Health</span>
+            </a>
+        </nav>
+
+        <div class="dashboard-sidebar-footer">
+            <a href="#contact" class="dashboard-report-button">
+                <i class="fa-regular fa-file-lines"></i>
+                <span>Generate Report</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Dashboard Top Bar -->
+    <header class="dashboard-topbar">
+        <div class="flex items-center gap-3">
+            <button id="mobile-sidebar-button" class="mobile-sidebar-button" type="button" aria-label="메뉴 열기">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="dashboard-status">
+                <span class="dashboard-status-dot"></span>
+                <span>HD현대삼호 LNG운반선 기관실 블록 선행의장 PHYSICAL AI</span>
+            </div>
+        </div>
+
+        <div class="dashboard-top-icons">
+            <i class="fa-regular fa-bell"></i>
+            <i class="fa-regular fa-circle-user"></i>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
 
     <!-- Hero Section -->
     <section id="overview"
@@ -1704,6 +1983,8 @@
         </p>
     </footer>
 
+    </main>
+
     <script>
         const canvas = document.getElementById('calibrationCanvas');
         const ctx = canvas.getContext('2d');
@@ -1965,6 +2246,44 @@
 
         resizeCanvas();
         updateValues();
+    
+
+        // Dashboard mobile sidebar and active navigation
+        const dashboardSidebar = document.getElementById('dashboard-sidebar');
+        const mobileSidebarButton = document.getElementById('mobile-sidebar-button');
+        const dashboardLinks = document.querySelectorAll('.dashboard-nav a');
+
+        if (mobileSidebarButton && dashboardSidebar) {
+            mobileSidebarButton.addEventListener('click', () => {
+                dashboardSidebar.classList.toggle('open');
+            });
+        }
+
+        dashboardLinks.forEach((link) => {
+            link.addEventListener('click', () => {
+                dashboardLinks.forEach((item) => item.classList.remove('active'));
+                link.classList.add('active');
+                dashboardSidebar?.classList.remove('open');
+            });
+        });
+
+        const dashboardSections = [...dashboardLinks]
+            .map((link) => document.querySelector(link.getAttribute('href')))
+            .filter(Boolean);
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                const targetLink = document.querySelector(`.dashboard-nav a[href="#${entry.target.id}"]`);
+                if (targetLink) {
+                    dashboardLinks.forEach((item) => item.classList.remove('active'));
+                    targetLink.classList.add('active');
+                }
+            });
+        }, { rootMargin: '-30% 0px -60% 0px', threshold: 0.01 });
+
+        dashboardSections.forEach((section) => sectionObserver.observe(section));
+
     </script>
 
 </body>
