@@ -114,9 +114,9 @@
                     현장 과제
                 </a>
 
-                <a href="#pipeline"
+                <a href="#safety"
                     class="hover:text-cyan-400 transition-colors">
-                    전처리 파이프라인
+                    안전 & 인터록
                 </a>
 
                 <a href="#process"
@@ -124,14 +124,9 @@
                     작업별 프로세스
                 </a>
 
-                <a href="#yolo-training"
+                <a href="#technology-stack"
                     class="hover:text-cyan-400 transition-colors">
-                    AI 파인튜닝
-                </a>
-
-                <a href="#safety"
-                    class="hover:text-cyan-400 transition-colors">
-                    안전 & 인터록
+                    기술스택
                 </a>
 
                 <a href="#simulator"
@@ -274,6 +269,167 @@
                 <p class="text-[11px] text-slate-400 mt-1">
                     블록 제작편차 자동 수용 보정
                 </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Report Sequence: 현장 장애 요소 → 안전·인터록 → 작업별 분기 → 통합 기술스택 -->
+    <!-- Problem Section -->
+    <section id="problem"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
+                Shipbuilding Field Challenges
+            </h2>
+
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                조선소 선행의장 현장의 3대 장애 요소
+            </h3>
+
+            <p class="text-slate-400 text-sm mt-3">
+                기관실 블록 내부의 열악한 영상환경과 제작 편차를 극복합니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+
+            <!-- 영상환경 -->
+            <div
+                class="glass-panel p-6 rounded-2xl border border-red-500/20 bg-gradient-to-b from-red-950/10 to-transparent">
+
+                <div class="flex items-center space-x-3 mb-4">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
+
+                        <i class="fa-solid fa-lightbulb text-lg"></i>
+                    </div>
+
+                    <h4 class="text-lg font-bold text-red-300">
+                        ① 열악한 영상환경
+                    </h4>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>저조도 및 음영:</strong>
+                            복잡한 구조물에 의한 국부 그림자
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>금속 표면 반사:</strong>
+                            난반사와 고광량 핫스팟
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>낮은 색상 대비:</strong>
+                            숍프라이머와 의장품의 유사색
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 작업환경 -->
+            <div
+                class="glass-panel p-6 rounded-2xl border border-amber-500/20 bg-gradient-to-b from-amber-950/10 to-transparent">
+
+                <div class="flex items-center space-x-3 mb-4">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+
+                        <i class="fa-solid fa-fire-flame-curved text-lg"></i>
+                    </div>
+
+                    <h4 class="text-lg font-bold text-amber-300">
+                        ② 가혹한 작업환경
+                    </h4>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>아크광 및 흄:</strong>
+                            용접 작업 중 영상 포화 발생
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>분진 및 오염:</strong>
+                            보호창 오염으로 영상 품질 저하
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>구조물 가림:</strong>
+                            배관·공구·보강재에 의한 ROI 가림
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 좌표환경 -->
+            <div
+                class="glass-panel p-6 rounded-2xl border border-purple-500/20 bg-gradient-to-b from-purple-950/10 to-transparent">
+
+                <div class="flex items-center space-x-3 mb-4">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+
+                        <i class="fa-solid fa-drafting-compass text-lg"></i>
+                    </div>
+
+                    <h4 class="text-lg font-bold text-purple-300">
+                        ③ 복합 좌표 변형
+                    </h4>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>블록 제작 편차:</strong>
+                            용접 열변형과 조립 누적오차
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>Depth 데이터 결손:</strong>
+                            금속 반사부의 깊이정보 손실
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>로봇 진동:</strong>
+                            이동·정지 시 좌표 흔들림 발생
+                        </span>
+                    </li>
+                </ul>
             </div>
         </div>
     </section>
@@ -496,377 +652,6 @@
         </div>
     </section>
 
-    <!-- Preprocessing Pipeline -->
-    <section id="pipeline"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
-
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Data Preprocessing Pipeline
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                데이터 전처리 5단계 핵심 파이프라인
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3">
-                불량 프레임 차단부터 로봇 3D 좌표 최적화까지 단계적으로 처리합니다.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-12">
-
-            <!-- Stage 1 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-cyan-500/20 hover:border-cyan-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300">
-
-                            STAGE 01
-                        </span>
-
-                        <i class="fa-solid fa-camera-rotate text-cyan-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Geometry & Quality Gate
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        렌즈 왜곡을 보정하고 흐림, 과노출, 가림,
-                        Depth 결손 프레임을 재촬영 대상으로 분류합니다.
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-cyan-400 font-mono">
-
-                    Output: 정상 RGB-D
-                </div>
-            </div>
-
-            <!-- Stage 2 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-indigo-500/20 hover:border-indigo-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-500/20 text-indigo-300">
-
-                            STAGE 02
-                        </span>
-
-                        <i class="fa-solid fa-filter text-indigo-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Sensor Noise Clean-Up
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        Bilateral Filter로 철분진과 스패터 노이즈를 억제하면서
-                        볼트와 용접 비드의 경계는 보존합니다.
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-indigo-400 font-mono">
-
-                    Output: Clean RGB-D
-                </div>
-            </div>
-
-            <!-- Stage 3 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300">
-
-                            STAGE 03
-                        </span>
-
-                        <i class="fa-solid fa-sliders text-emerald-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Photometric Normalization
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        CLAHE를 적용해 저조도와 국부 그림자를 완화하고
-                        작업 대상과 금속 배경의 대비를 높입니다.
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-emerald-400 font-mono">
-
-                    Output: 대비 정규화 영상
-                </div>
-            </div>
-
-            <!-- Stage 4 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-amber-500/20 hover:border-amber-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300">
-
-                            STAGE 04
-                        </span>
-
-                        <i class="fa-solid fa-crop-simple text-amber-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Feature & ROI Enhancement
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        AprilTag와 CAD 예상좌표를 활용해 작업 대상 ROI를 추출하고
-                        주변 배관과 구조물의 영향을 줄입니다.
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-amber-400 font-mono">
-
-                    Output: 작업 대상 ROI
-                </div>
-            </div>
-
-            <!-- Stage 5 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-purple-500/20 hover:border-purple-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300">
-
-                            STAGE 05
-                        </span>
-
-                        <i class="fa-solid fa-cube text-purple-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Coordinate Optimization
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        Hand-Eye Calibration을 적용하여 카메라 좌표를
-                        Robot Base 좌표로 변환하고 제작 편차를 보정합니다.
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-purple-400 font-mono">
-
-                    Output: 보정 로봇 좌표
-                </div>
-            </div>
-        </div>
-
-        <div
-            class="glass-panel p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 flex flex-col md:flex-row items-center justify-between">
-
-            <div class="flex items-center space-x-4 mb-4 md:mb-0">
-                <div
-                    class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
-
-                    <i class="fa-solid fa-microchip"></i>
-                </div>
-
-                <div>
-                    <h4 class="text-base font-bold text-white">
-                        Eye-in-Hand RGB-D 온디바이스 연산
-                    </h4>
-
-                    <p class="text-xs text-slate-400">
-                        영상 취득 → 5단계 전처리 → 작업부 검출 → 3D 로봇 좌표 생성
-                    </p>
-                </div>
-            </div>
-
-            <a href="#simulator"
-                class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all">
-
-                시뮬레이터 확인
-                <i class="fa-solid fa-arrow-right ml-1"></i>
-            </a>
-        </div>
-    </section>
-
-    <!-- Problem Section -->
-    <section id="problem"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
-
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Shipbuilding Field Challenges
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                조선소 선행의장 현장의 3대 장애 요소
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3">
-                기관실 블록 내부의 열악한 영상환경과 제작 편차를 극복합니다.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-
-            <!-- 영상환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-red-500/20 bg-gradient-to-b from-red-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
-
-                        <i class="fa-solid fa-lightbulb text-lg"></i>
-                    </div>
-
-                    <h4 class="text-lg font-bold text-red-300">
-                        ① 열악한 영상환경
-                    </h4>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>저조도 및 음영:</strong>
-                            복잡한 구조물에 의한 국부 그림자
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>금속 표면 반사:</strong>
-                            난반사와 고광량 핫스팟
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>낮은 색상 대비:</strong>
-                            숍프라이머와 의장품의 유사색
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 작업환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-amber-500/20 bg-gradient-to-b from-amber-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
-
-                        <i class="fa-solid fa-fire-flame-curved text-lg"></i>
-                    </div>
-
-                    <h4 class="text-lg font-bold text-amber-300">
-                        ② 가혹한 작업환경
-                    </h4>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>아크광 및 흄:</strong>
-                            용접 작업 중 영상 포화 발생
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>분진 및 오염:</strong>
-                            보호창 오염으로 영상 품질 저하
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>구조물 가림:</strong>
-                            배관·공구·보강재에 의한 ROI 가림
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 좌표환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-purple-500/20 bg-gradient-to-b from-purple-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
-
-                        <i class="fa-solid fa-drafting-compass text-lg"></i>
-                    </div>
-
-                    <h4 class="text-lg font-bold text-purple-300">
-                        ③ 복합 좌표 변형
-                    </h4>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>블록 제작 편차:</strong>
-                            용접 열변형과 조립 누적오차
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>Depth 데이터 결손:</strong>
-                            금속 반사부의 깊이정보 손실
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>로봇 진동:</strong>
-                            이동·정지 시 좌표 흔들림 발생
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
     <!-- Task Process Section -->
     <section id="process"
         class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
@@ -1036,6 +821,262 @@
         </div>
     </section>
 
+    <!-- Technology Stack Overview -->
+    <section id="technology-stack"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-4xl mx-auto mb-14">
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
+                Integrated Technology Stack
+            </h2>
+
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                통합 기술스택
+            </h3>
+
+            <p class="text-slate-400 text-sm mt-4 leading-relaxed">
+                선박 기관실의 저조도·금속 반사·분진·제작 편차를 영상 전처리로 완화하고,
+                YOLO26n을 2단계로 파인튜닝한 뒤 IoU·mAP·Precision·Recall로 성능을 검증합니다.
+                각 기술과 파라미터는 단순 적용이 아니라 현장 영상의 작은 작업부, 제한된 GPU 자원,
+                로봇 좌표 활용 시 요구되는 위치 정밀도를 기준으로 선정했습니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <a href="#pipeline" class="glass-panel p-6 rounded-2xl border border-cyan-500/25 hover:border-cyan-400/70 transition-all">
+                <span class="text-[10px] font-mono text-cyan-400">STACK 01</span>
+                <h4 class="text-lg font-bold text-white mt-2">전처리 PIPELINE</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">불량 프레임 차단, 노이즈 억제, 명암 정규화, ROI 추출, 좌표 변환의 5단계 구성</p>
+            </a>
+            <a href="#yolo-training" class="glass-panel p-6 rounded-2xl border border-indigo-500/25 hover:border-indigo-400/70 transition-all">
+                <span class="text-[10px] font-mono text-indigo-400">STACK 02</span>
+                <h4 class="text-lg font-bold text-white mt-2">YOLO26 파인튜닝</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">고해상도 입력과 단계적 동결 해제로 3개 작업 클래스를 안정적으로 전이학습</p>
+            </a>
+            <a href="#model-validation" class="glass-panel p-6 rounded-2xl border border-emerald-500/25 hover:border-emerald-400/70 transition-all">
+                <span class="text-[10px] font-mono text-emerald-400">STACK 03</span>
+                <h4 class="text-lg font-bold text-white mt-2">학습검증</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">IoU 0.50·0.75와 mAP50·mAP50-95를 함께 확인해 검출 여부와 위치 정밀도를 동시 검증</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Preprocessing Pipeline -->
+    <section id="pipeline"
+        class="py-16 px-6 max-w-7xl mx-auto">
+
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
+                Data Preprocessing Pipeline
+            </h2>
+
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                데이터 전처리 5단계 핵심 파이프라인
+            </h3>
+
+            <p class="text-slate-400 text-sm mt-3">
+                불량 프레임 차단부터 로봇 3D 좌표 최적화까지 단계적으로 처리합니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-12">
+
+            <!-- Stage 1 -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-cyan-500/20 hover:border-cyan-400/60 transition-all flex flex-col justify-between">
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300">
+
+                            STAGE 01
+                        </span>
+
+                        <i class="fa-solid fa-camera-rotate text-cyan-400 text-sm"></i>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-white mb-2">
+                        Geometry & Quality Gate
+                    </h4>
+
+                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
+                        렌즈 왜곡을 보정하고 흐림, 과노출, 가림,
+                        Depth 결손 프레임을 재촬영 대상으로 분류합니다.
+                        <span class="block mt-2 text-cyan-300"><strong>선정 근거:</strong> 입력 품질이 낮은 프레임을 그대로 사용하면 오검출뿐 아니라 잘못된 3D 좌표가 생성되므로 AI 추론 전에 차단합니다.</span>
+                    </p>
+                </div>
+
+                <div
+                    class="pt-3 border-t border-slate-800 text-[10px] text-cyan-400 font-mono">
+
+                    Output: 정상 RGB-D
+                </div>
+            </div>
+
+            <!-- Stage 2 -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-indigo-500/20 hover:border-indigo-400/60 transition-all flex flex-col justify-between">
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-500/20 text-indigo-300">
+
+                            STAGE 02
+                        </span>
+
+                        <i class="fa-solid fa-filter text-indigo-400 text-sm"></i>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-white mb-2">
+                        Sensor Noise Clean-Up
+                    </h4>
+
+                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
+                        Bilateral Filter로 철분진과 스패터 노이즈를 억제하면서
+                        볼트와 용접 비드의 경계는 보존합니다.
+                        <span class="block mt-2 text-indigo-300"><strong>선정 근거:</strong> Gaussian Filter보다 경계 보존성이 높아 작은 볼트 윤곽과 얇은 용접선을 흐리지 않으면서 표면 노이즈를 완화할 수 있습니다.</span>
+                    </p>
+                </div>
+
+                <div
+                    class="pt-3 border-t border-slate-800 text-[10px] text-indigo-400 font-mono">
+
+                    Output: Clean RGB-D
+                </div>
+            </div>
+
+            <!-- Stage 3 -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-400/60 transition-all flex flex-col justify-between">
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300">
+
+                            STAGE 03
+                        </span>
+
+                        <i class="fa-solid fa-sliders text-emerald-400 text-sm"></i>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-white mb-2">
+                        Photometric Normalization
+                    </h4>
+
+                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
+                        CLAHE를 적용해 저조도와 국부 그림자를 완화하고
+                        작업 대상과 금속 배경의 대비를 높입니다.
+                        <span class="block mt-2 text-emerald-300"><strong>선정 근거:</strong> 전체 밝기를 일괄 증가시키면 금속 반사부가 포화되므로, 국부 영역별 대비를 조절하는 CLAHE가 기관실 음영 환경에 적합합니다.</span>
+                    </p>
+                </div>
+
+                <div
+                    class="pt-3 border-t border-slate-800 text-[10px] text-emerald-400 font-mono">
+
+                    Output: 대비 정규화 영상
+                </div>
+            </div>
+
+            <!-- Stage 4 -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-amber-500/20 hover:border-amber-400/60 transition-all flex flex-col justify-between">
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300">
+
+                            STAGE 04
+                        </span>
+
+                        <i class="fa-solid fa-crop-simple text-amber-400 text-sm"></i>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-white mb-2">
+                        Feature & ROI Enhancement
+                    </h4>
+
+                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
+                        AprilTag와 CAD 예상좌표를 활용해 작업 대상 ROI를 추출하고
+                        주변 배관과 구조물의 영향을 줄입니다.
+                        <span class="block mt-2 text-amber-300"><strong>선정 근거:</strong> 전체 프레임에는 유사한 볼트·배관이 많으므로 예상 작업영역으로 탐색 범위를 제한해 오검출과 연산량을 동시에 줄입니다.</span>
+                    </p>
+                </div>
+
+                <div
+                    class="pt-3 border-t border-slate-800 text-[10px] text-amber-400 font-mono">
+
+                    Output: 작업 대상 ROI
+                </div>
+            </div>
+
+            <!-- Stage 5 -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-purple-500/20 hover:border-purple-400/60 transition-all flex flex-col justify-between">
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300">
+
+                            STAGE 05
+                        </span>
+
+                        <i class="fa-solid fa-cube text-purple-400 text-sm"></i>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-white mb-2">
+                        Coordinate Optimization
+                    </h4>
+
+                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
+                        Hand-Eye Calibration을 적용하여 카메라 좌표를
+                        Robot Base 좌표로 변환하고 제작 편차를 보정합니다.
+                        <span class="block mt-2 text-purple-300"><strong>선정 근거:</strong> 검출 박스의 이미지 좌표만으로 로봇을 이동시킬 수 없으므로 Depth와 외부 파라미터를 결합해 실제 Robot Base 좌표로 변환합니다.</span>
+                    </p>
+                </div>
+
+                <div
+                    class="pt-3 border-t border-slate-800 text-[10px] text-purple-400 font-mono">
+
+                    Output: 보정 로봇 좌표
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="glass-panel p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 flex flex-col md:flex-row items-center justify-between">
+
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <div
+                    class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
+
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+
+                <div>
+                    <h4 class="text-base font-bold text-white">
+                        Eye-in-Hand RGB-D 온디바이스 연산
+                    </h4>
+
+                    <p class="text-xs text-slate-400">
+                        영상 취득 → 5단계 전처리 → 작업부 검출 → 3D 로봇 좌표 생성
+                    </p>
+                </div>
+            </div>
+
+            <a href="#simulator"
+                class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all">
+
+                시뮬레이터 확인
+                <i class="fa-solid fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+    </section>
+
     <!-- YOLO26n Fine-Tuning Section -->
     <section id="yolo-training"
         class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
@@ -1139,174 +1180,26 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
 
             <!-- Core Parameters -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-indigo-500/20">
-
+            <div class="glass-panel p-6 rounded-2xl border border-indigo-500/20">
                 <div class="flex items-center gap-3 mb-5">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400">
-
+                    <div class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400">
                         <i class="fa-solid fa-sliders"></i>
                     </div>
-
                     <div>
-                        <span class="text-[10px] font-mono text-indigo-400 uppercase tracking-wider">
-                            Core Parameters
-                        </span>
-
-                        <h3 class="text-lg font-bold text-white">
-                            핵심 학습 파라미터
-                        </h3>
+                        <span class="text-[10px] font-mono text-indigo-400 uppercase tracking-wider">Parameters & Rationale</span>
+                        <h3 class="text-lg font-bold text-white">핵심 학습 파라미터와 선정 근거</h3>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Model
-                        </span>
-
-                        <strong class="font-mono text-cyan-300">
-                            yolo26n.pt
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Image Size
-                        </span>
-
-                        <strong class="font-mono text-cyan-300">
-                            1280
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Batch
-                        </span>
-
-                        <strong class="font-mono text-cyan-300">
-                            8
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Epochs
-                        </span>
-
-                        <strong class="font-mono text-indigo-300">
-                            300
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Patience
-                        </span>
-
-                        <strong class="font-mono text-indigo-300">
-                            20
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Optimizer
-                        </span>
-
-                        <strong class="font-mono text-indigo-300">
-                            AdamW
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Learning Rate
-                        </span>
-
-                        <strong class="font-mono text-purple-300">
-                            0.001
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Scale
-                        </span>
-
-                        <strong class="font-mono text-purple-300">
-                            0.5
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Mosaic
-                        </span>
-
-                        <strong class="font-mono text-purple-300">
-                            0.5
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Cache
-                        </span>
-
-                        <strong class="font-mono text-emerald-300">
-                            disk
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            AMP
-                        </span>
-
-                        <strong class="font-mono text-emerald-300">
-                            True
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Multi Scale
-                        </span>
-
-                        <strong class="font-mono text-emerald-300">
-                            False
-                        </strong>
-                    </div>
-                </div>
-
-                <div
-                    class="mt-4 p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
-
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        <strong class="text-indigo-300">
-                            1280 고해상도
-                        </strong>로 작은 볼트와 커넥터의 형상 정보를 보존하며,
-
-                        <strong class="text-indigo-300">
-                            AdamW·lr0=0.001
-                        </strong>로 사전학습 특징을 안정적으로 미세조정합니다.
-                    </p>
+                <div class="space-y-3 text-xs">
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-cyan-300">model=yolo26n.pt</strong><span class="text-slate-500">Nano</span></div><p class="text-slate-400 mt-1">산업용 PC의 실시간 추론 부담을 줄이고, 소규모 산업 데이터에서 대형 모델보다 과적합 위험을 낮추기 위해 선정했습니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-cyan-300">imgsz=1280</strong><span class="text-slate-500">고해상도</span></div><p class="text-slate-400 mt-1">선박 전체 영상에서 작은 볼트·커넥터가 차지하는 픽셀이 적으므로 640보다 형상과 얇은 용접 경계를 더 많이 보존합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-cyan-300">batch=8</strong><span class="text-slate-500">VRAM 균형</span></div><p class="text-slate-400 mt-1">1280 입력의 메모리 사용량을 고려해 Colab급 GPU에서 OOM을 줄이면서 Gradient 안정성을 확보하는 절충값입니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-indigo-300">epochs=300 · patience=20</strong><span class="text-slate-500">충분한 적응 + 조기종료</span></div><p class="text-slate-400 mt-1">COCO와 금속 선박 영상의 도메인 차이를 학습할 상한은 확보하되, 20 Epoch 동안 개선이 없으면 과적합과 불필요한 연산을 차단합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-indigo-300">optimizer=AdamW · lr0=0.001</strong><span class="text-slate-500">안정적 미세조정</span></div><p class="text-slate-400 mt-1">소규모 전이학습의 빠른 수렴과 가중치 감쇠를 활용하며, 낮은 학습률로 기존 윤곽 특징이 급격히 무너지는 것을 방지합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-purple-300">scale=0.5 · mosaic=0.5</strong><span class="text-slate-500">중간 강도 증강</span></div><p class="text-slate-400 mt-1">작업거리와 배경 다양성을 학습하되, mosaic=1.0에서 발생할 수 있는 비현실적인 선박 장면과 작은 객체 소실을 피합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-emerald-300">cache=disk · amp=True</strong><span class="text-slate-500">자원 최적화</span></div><p class="text-slate-400 mt-1">고해상도 데이터를 RAM 대신 디스크에 캐시해 메모리 부족을 줄이고, 혼합 정밀도로 VRAM과 학습시간을 절감합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-emerald-300">multi_scale=False</strong><span class="text-slate-500">입력 일관성</span></div><p class="text-slate-400 mt-1">운영 카메라 해상도가 고정될 예정이므로 배치마다 입력 크기를 바꾸지 않고 작은 객체의 픽셀 조건과 VRAM 사용량을 일정하게 유지합니다.</p></div>
                 </div>
             </div>
 
@@ -1537,6 +1430,88 @@
 
                 OUTPUT · best.pt
             </span>
+        </div>
+    </section>
+
+    <!-- Model Validation Section -->
+    <section id="model-validation"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-4xl mx-auto mb-14">
+            <h2 class="text-xs font-mono text-emerald-400 tracking-widest uppercase mb-2">YOLO26 Model Validation</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">IoU · mAP 기반 학습검증</h3>
+            <p class="text-slate-400 text-sm mt-3 leading-relaxed">
+                전체 mAP 한 개만으로 모델을 판단하지 않고, 예측 박스의 위치 정밀도와 클래스별 오검출·미검출을 분리해 검증합니다.
+                로봇이 검출 중심점을 실제 작업 좌표에 활용하므로 일반 객체 인식보다 높은 IoU 구간의 성능을 반드시 함께 확인합니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25">
+                <span class="text-[10px] font-mono text-cyan-400">DATA SPLIT</span>
+                <h4 class="text-lg font-bold text-white mt-2">영상 단위 데이터 분리</h4>
+                <p class="text-xs text-slate-400 mt-3 leading-relaxed">Train 70%, Validation 20%, Test 10%를 권장합니다. 동일 영상의 인접 프레임이 서로 다른 세트에 섞이면 배경과 대상이 거의 같아 성능이 과대평가되므로 반드시 원본 영상 단위로 분리합니다.</p>
+                <div class="mt-4 p-3 rounded-xl bg-cyan-500/10 text-xs text-cyan-200">선정 근거 · 실제 신규 블록과 촬영조건에 대한 일반화 성능을 검증하기 위함</div>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border border-indigo-500/25">
+                <span class="text-[10px] font-mono text-indigo-400">LOCALIZATION</span>
+                <h4 class="text-lg font-bold text-white mt-2">IoU 0.50 · 0.75 이중 검증</h4>
+                <p class="text-xs text-slate-400 mt-3 leading-relaxed"><strong class="text-indigo-300">IoU 0.50</strong>은 작업 대상을 전반적으로 찾는 능력을, <strong class="text-indigo-300">IoU 0.75</strong>는 볼트 머리·용접 경계·케이블 단자에 박스가 정밀하게 맞는지를 평가합니다.</p>
+                <div class="mt-4 p-3 rounded-xl bg-indigo-500/10 text-xs text-indigo-200">선정 근거 · 검출 성공과 로봇 좌표용 위치 정밀도는 서로 다른 성능이므로 분리 평가</div>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border border-purple-500/25">
+                <span class="text-[10px] font-mono text-purple-400">ACCURACY</span>
+                <h4 class="text-lg font-bold text-white mt-2">mAP50 · mAP50-95 병행</h4>
+                <p class="text-xs text-slate-400 mt-3 leading-relaxed"><strong class="text-purple-300">mAP50</strong>은 기본 검출 능력, <strong class="text-purple-300">mAP50-95</strong>는 IoU 0.50~0.95를 평균해 정밀한 위치 일치까지 반영합니다. 세 클래스의 AP도 별도로 확인합니다.</p>
+                <div class="mt-4 p-3 rounded-xl bg-purple-500/10 text-xs text-purple-200">선정 근거 · 쉬운 IoU 조건만 사용할 때 발생하는 성능 과대평가 방지</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/20">
+                <h4 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-list-check text-emerald-400 mr-2"></i>초기 성능 판정 기준</h4>
+                <div class="space-y-3 text-xs">
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">전체 mAP50</span><strong class="font-mono text-emerald-300">≥ 0.85</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">전체 mAP50-95</span><strong class="font-mono text-emerald-300">≥ 0.60</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">클래스별 AP50</span><strong class="font-mono text-emerald-300">≥ 0.80</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">Precision</span><strong class="font-mono text-cyan-300">≥ 0.85</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">Recall</span><strong class="font-mono text-cyan-300">≥ 0.80</strong></div>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-4 leading-relaxed">위 값은 초기 개발 목표이며 실제 현장 적용값은 Test 데이터와 로봇 작업 실패 비용을 기준으로 재조정합니다. 특히 클래스별 Recall이 낮으면 전체 mAP가 높아도 적용하지 않습니다.</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-cyan-500/20">
+                <h4 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-code text-cyan-400 mr-2"></i>YOLO26 검증 코드</h4>
+                <pre class="overflow-x-auto p-4 rounded-xl bg-slate-950 border border-slate-800 text-[11px] leading-relaxed text-slate-300"><code>from ultralytics import YOLO
+
+model = YOLO(
+    "/content/runs/ship_work_stage2/weights/best.pt"
+)
+
+metrics = model.val(
+    data=data_yaml,
+    split="val",
+    imgsz=1280,
+    batch=8,
+    conf=0.001,
+    iou=0.70,
+    plots=True,
+    save_json=True,
+    project="/content/runs",
+    name="ship_work_validation"
+)
+
+print("mAP50:", metrics.box.map50)
+print("mAP50-95:", metrics.box.map)</code></pre>
+                <p class="text-[11px] text-slate-400 mt-4 leading-relaxed"><code class="text-cyan-300">conf=0.001</code>은 PR Curve와 AP 계산에서 낮은 신뢰도 후보까지 포함하기 위한 검증값입니다. <code class="text-cyan-300">iou=0.70</code>은 중복 박스를 제거하는 NMS 기준이며, mAP의 IoU 평가 기준과는 다른 파라미터입니다.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-7">
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-cyan-300 text-sm">PR Curve</strong><p class="text-[11px] text-slate-400 mt-2">신뢰도 변화에 따른 Precision·Recall 균형과 클래스별 임계값 선정</p></div>
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-indigo-300 text-sm">F1 Curve</strong><p class="text-[11px] text-slate-400 mt-2">Precision과 Recall을 함께 고려해 운영 conf 후보값 결정</p></div>
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-purple-300 text-sm">Confusion Matrix</strong><p class="text-[11px] text-slate-400 mt-2">용접부·케이블 접속부 혼동과 배경 오검출 원인 확인</p></div>
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-emerald-300 text-sm">Test 영상 검증</strong><p class="text-[11px] text-slate-400 mt-2">미사용 영상에서 박스 흔들림·누락·연속 프레임 일관성 최종 확인</p></div>
         </div>
     </section>
 
@@ -2020,4 +1995,3 @@
 </body>
 
 </html>
-```
