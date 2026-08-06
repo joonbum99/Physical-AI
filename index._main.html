@@ -75,80 +75,842 @@
                 opacity: 0.6;
             }
         }
+
+
+        /* =========================================================
+           HD현대삼호 Maritime AI Dashboard Layout
+           - 기존 보고서 내용은 유지하고 화면 양식만 대시보드형으로 변경
+           ========================================================= */
+        :root {
+            --sidebar-width: 240px;
+            --topbar-height: 64px;
+            --dashboard-bg: #0b1018;
+            --sidebar-bg: #131920;
+            --panel-bg: #111821;
+            --panel-bg-soft: #151c24;
+            --line-color: rgba(148, 163, 184, 0.12);
+            --mint: #00f5a0;
+            --cyan: #22d3ee;
+            --muted: #94a3b8;
+        }
+
+        html {
+            scroll-padding-top: calc(var(--topbar-height) + 20px);
+        }
+
+        body {
+            background: var(--dashboard-bg);
+            overflow-x: hidden;
+        }
+
+        .dashboard-sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            width: var(--sidebar-width);
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--line-color);
+        }
+
+        .dashboard-brand {
+            min-height: var(--topbar-height);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 18px;
+            border-bottom: 1px solid var(--line-color);
+        }
+
+        .dashboard-brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: #e2e8f0;
+            background: linear-gradient(145deg, #2a333d, #1b222b);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .dashboard-nav {
+            padding: 18px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dashboard-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 44px;
+            padding: 0 14px;
+            border-radius: 5px;
+            color: #b9c4cf;
+            font-size: 12px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            letter-spacing: 0.07em;
+            transition: 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .dashboard-nav a:hover,
+        .dashboard-nav a.active {
+            color: #07120f;
+            background: var(--mint);
+            box-shadow: 0 0 22px rgba(0, 245, 160, 0.15);
+        }
+
+        .dashboard-nav a:hover i,
+        .dashboard-nav a.active i {
+            color: #07120f;
+        }
+
+        .dashboard-nav i {
+            width: 17px;
+            color: #9fb4aa;
+            text-align: center;
+        }
+
+        .dashboard-sidebar-footer {
+            margin-top: auto;
+            padding: 14px 10px 18px;
+            border-top: 1px solid var(--line-color);
+        }
+
+        .dashboard-report-button {
+            width: 100%;
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            border-radius: 4px;
+            color: #06120e;
+            background: var(--mint);
+            font-size: 11px;
+            font-weight: 800;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            letter-spacing: 0.08em;
+        }
+
+        .dashboard-topbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: var(--sidebar-width);
+            height: var(--topbar-height);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            background: rgba(11, 16, 24, 0.96);
+            border-bottom: 1px solid var(--line-color);
+            backdrop-filter: blur(14px);
+        }
+
+        .dashboard-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 7px 13px;
+            border-radius: 999px;
+            color: #a7b8ae;
+            background: #141b22;
+            border: 1px solid rgba(148, 163, 184, 0.08);
+            font-size: 10px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+        }
+
+        .dashboard-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--mint);
+            box-shadow: 0 0 10px rgba(0, 245, 160, 0.7);
+        }
+
+        .dashboard-top-icons {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: #91a09a;
+        }
+
+        .dashboard-main {
+            margin-left: var(--sidebar-width);
+            padding-top: var(--topbar-height);
+            min-height: 100vh;
+        }
+
+        .dashboard-main > section,
+        .dashboard-main > footer {
+            max-width: none !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: clamp(28px, 4vw, 56px) !important;
+            padding-right: clamp(28px, 4vw, 56px) !important;
+        }
+
+        .dashboard-main #overview {
+            min-height: auto !important;
+            padding-top: 48px !important;
+            padding-bottom: 86px !important;
+            justify-content: flex-start !important;
+        }
+
+        .dashboard-main #overview h1 {
+            max-width: 1100px;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+        }
+
+        .dashboard-main #overview .gradient-text {
+            background: linear-gradient(90deg, var(--mint), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dashboard-main section:not(#overview) {
+            padding-top: 72px !important;
+            padding-bottom: 72px !important;
+            border-top-color: var(--line-color) !important;
+        }
+
+        .dashboard-main section > .text-center {
+            text-align: center;
+        }
+
+        .glass-panel,
+        .glass-card {
+            background: linear-gradient(145deg, rgba(21, 28, 36, 0.98), rgba(16, 22, 29, 0.98));
+            backdrop-filter: none;
+            border-color: rgba(148, 163, 184, 0.11);
+            box-shadow: none;
+            border-radius: 5px !important;
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 24px -12px rgba(0, 245, 160, 0.35);
+        }
+
+        .dashboard-main code,
+        .dashboard-main .font-mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .dashboard-main .rounded-2xl,
+        .dashboard-main .rounded-xl,
+        .dashboard-main .rounded-lg {
+            border-radius: 5px !important;
+        }
+
+        .dashboard-main .bg-gradient-to-r,
+        .dashboard-main .bg-gradient-to-b {
+            background-image: none !important;
+        }
+
+        .mobile-sidebar-button {
+            display: none;
+            width: 38px;
+            height: 38px;
+            place-items: center;
+            border: 1px solid var(--line-color);
+            border-radius: 5px;
+            color: #dbe7e2;
+            background: #151c24;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+            }
+
+            .dashboard-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .dashboard-topbar {
+                left: 0;
+                padding: 0 18px;
+            }
+
+            .dashboard-main {
+                margin-left: 0;
+            }
+
+            .mobile-sidebar-button {
+                display: grid;
+            }
+        }
+
+
+        /* =========================================================
+           ATTACHED IMAGE COLOR THEME OVERRIDE
+           내용 및 구조는 유지하고 색상·표면·타이포그래피만 변경
+           ========================================================= */
+        :root {
+            --sidebar-width: 177px;
+            --topbar-height: 52px;
+            --dashboard-bg: #0d1117;
+            --sidebar-bg: #171b21;
+            --topbar-bg: #0f141b;
+            --panel-bg: #151a20;
+            --panel-bg-soft: #181e25;
+            --panel-deep: #10151c;
+            --line-color: #242b33;
+            --line-soft: rgba(148, 163, 184, 0.10);
+            --mint: #00eea8;
+            --mint-strong: #00f5a9;
+            --mint-soft: rgba(0, 238, 168, 0.12);
+            --cyan: #22d3c5;
+            --white: #f3f6f4;
+            --text: #d5ddd9;
+            --muted: #8d9a95;
+            --muted-dark: #66736e;
+        }
+
+        html, body {
+            background: var(--dashboard-bg) !important;
+            color: var(--text) !important;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', system-ui, -apple-system, sans-serif !important;
+        }
+
+        .dashboard-sidebar {
+            width: var(--sidebar-width) !important;
+            background: var(--sidebar-bg) !important;
+            border-right: 1px solid #20262d !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-brand {
+            min-height: var(--topbar-height) !important;
+            height: var(--topbar-height) !important;
+            padding: 0 12px !important;
+            gap: 9px !important;
+            border-bottom: 1px solid #20262d !important;
+        }
+
+        .dashboard-brand-icon {
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 3px !important;
+            color: #dfe8e3 !important;
+            background: #252b31 !important;
+            border: 1px solid #30373e !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-brand .font-bold,
+        .dashboard-brand strong {
+            color: #f1f5f2 !important;
+        }
+
+        .dashboard-brand .text-slate-400,
+        .dashboard-brand .text-\[10px\] {
+            color: #a8b2ad !important;
+        }
+
+        .dashboard-nav {
+            padding: 11px 7px !important;
+            gap: 4px !important;
+        }
+
+        .dashboard-nav a {
+            min-height: 35px !important;
+            padding: 0 11px !important;
+            gap: 9px !important;
+            border-radius: 3px !important;
+            color: #a9b4ae !important;
+            font-size: 9px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.10em !important;
+            background: transparent !important;
+            border: 1px solid transparent !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-nav a i {
+            width: 15px !important;
+            color: #a4b4ab !important;
+            font-size: 13px !important;
+        }
+
+        .dashboard-nav a:hover,
+        .dashboard-nav a.active {
+            color: #052118 !important;
+            background: var(--mint) !important;
+            border-color: var(--mint) !important;
+            box-shadow: 0 0 14px rgba(0, 238, 168, 0.12) !important;
+        }
+
+        .dashboard-nav a:hover i,
+        .dashboard-nav a.active i {
+            color: #062219 !important;
+        }
+
+        .dashboard-sidebar-footer {
+            padding: 11px 7px 8px !important;
+            border-top: 1px solid #20262d !important;
+        }
+
+        .dashboard-report-button {
+            min-height: 31px !important;
+            border-radius: 3px !important;
+            color: #052118 !important;
+            background: var(--mint) !important;
+            font-size: 8px !important;
+            letter-spacing: 0.12em !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-topbar {
+            left: var(--sidebar-width) !important;
+            height: var(--topbar-height) !important;
+            padding: 0 28px !important;
+            background: var(--topbar-bg) !important;
+            border-bottom: 1px solid #20262d !important;
+            backdrop-filter: none !important;
+        }
+
+        .dashboard-status {
+            padding: 5px 10px !important;
+            gap: 7px !important;
+            color: #91a19a !important;
+            background: #171d23 !important;
+            border: 1px solid #20272e !important;
+            font-size: 8px !important;
+            letter-spacing: 0.10em !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-status-dot {
+            width: 6px !important;
+            height: 6px !important;
+            background: var(--mint) !important;
+            box-shadow: 0 0 7px rgba(0, 238, 168, 0.70) !important;
+        }
+
+        .dashboard-top-icons {
+            gap: 16px !important;
+            color: #8f9d97 !important;
+            font-size: 13px !important;
+        }
+
+        .dashboard-main {
+            margin-left: var(--sidebar-width) !important;
+            padding-top: var(--topbar-height) !important;
+            background: var(--dashboard-bg) !important;
+        }
+
+        .dashboard-main > section,
+        .dashboard-main > footer {
+            padding-left: 28px !important;
+            padding-right: 28px !important;
+        }
+
+        .dashboard-main #overview {
+            padding-top: 31px !important;
+            padding-bottom: 70px !important;
+        }
+
+        .dashboard-main #overview h1 {
+            color: var(--white) !important;
+            font-size: clamp(2rem, 3.5vw, 3.05rem) !important;
+            line-height: 1.18 !important;
+            letter-spacing: -0.035em !important;
+        }
+
+        .dashboard-main #overview .gradient-text,
+        .gradient-text {
+            background: none !important;
+            -webkit-text-fill-color: var(--mint) !important;
+            color: var(--mint) !important;
+        }
+
+        .dashboard-main #overview p {
+            color: #c4ceca !important;
+            font-size: 13px !important;
+            line-height: 1.75 !important;
+        }
+
+        .dashboard-main section:not(#overview) {
+            padding-top: 62px !important;
+            padding-bottom: 62px !important;
+            border-top: 1px solid #171d23 !important;
+        }
+
+        .dashboard-main section > .text-center h2 {
+            color: #9ac5d6 !important;
+            font-size: 9px !important;
+            letter-spacing: 0.12em !important;
+        }
+
+        .dashboard-main section > .text-center h3 {
+            color: var(--white) !important;
+            font-size: clamp(1.65rem, 3vw, 2.25rem) !important;
+            letter-spacing: -0.025em !important;
+        }
+
+        .dashboard-main section > .text-center p {
+            color: #9da9a4 !important;
+        }
+
+        .glass-panel,
+        .glass-card {
+            background: var(--panel-bg) !important;
+            border: 1px solid #252c33 !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.015) !important;
+            backdrop-filter: none !important;
+            border-radius: 4px !important;
+        }
+
+        .glass-panel:hover,
+        .glass-card:hover {
+            border-color: #313a42 !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .glow-effect {
+            box-shadow: none !important;
+        }
+
+        .dashboard-main .bg-slate-900\/60,
+        .dashboard-main .bg-slate-900\/50,
+        .dashboard-main .bg-slate-900\/40,
+        .dashboard-main .bg-slate-800\/90,
+        .dashboard-main .bg-slate-800\/60,
+        .dashboard-main .bg-slate-800\/50 {
+            background: var(--panel-deep) !important;
+        }
+
+        .dashboard-main .border-slate-800,
+        .dashboard-main .border-slate-700\/80,
+        .dashboard-main .border-slate-800\/80 {
+            border-color: #252c33 !important;
+        }
+
+        .dashboard-main .text-white,
+        .dashboard-main h1,
+        .dashboard-main h3,
+        .dashboard-main h4 {
+            color: var(--white) !important;
+        }
+
+        .dashboard-main .text-slate-300 {
+            color: #c5cfca !important;
+        }
+
+        .dashboard-main .text-slate-400 {
+            color: #929f99 !important;
+        }
+
+        .dashboard-main .text-slate-500 {
+            color: #6f7b76 !important;
+        }
+
+        /* 청록 계열은 첨부 이미지의 민트 포인트로 통일 */
+        .dashboard-main .text-cyan-300,
+        .dashboard-main .text-cyan-400,
+        .dashboard-main .text-emerald-300,
+        .dashboard-main .text-emerald-400,
+        .dashboard-main .text-indigo-300,
+        .dashboard-main .text-indigo-400,
+        .dashboard-main .text-purple-300,
+        .dashboard-main .text-purple-400 {
+            color: var(--mint) !important;
+        }
+
+        .dashboard-main .bg-cyan-500\/10,
+        .dashboard-main .bg-cyan-500\/15,
+        .dashboard-main .bg-cyan-500\/20,
+        .dashboard-main .bg-emerald-500\/10,
+        .dashboard-main .bg-emerald-500\/15,
+        .dashboard-main .bg-emerald-500\/20,
+        .dashboard-main .bg-indigo-500\/10,
+        .dashboard-main .bg-indigo-500\/15,
+        .dashboard-main .bg-indigo-500\/20,
+        .dashboard-main .bg-purple-500\/10,
+        .dashboard-main .bg-purple-500\/15,
+        .dashboard-main .bg-purple-500\/20 {
+            background: var(--mint-soft) !important;
+        }
+
+        .dashboard-main .border-cyan-500\/20,
+        .dashboard-main .border-cyan-500\/25,
+        .dashboard-main .border-cyan-400\/50,
+        .dashboard-main .border-cyan-400\/60,
+        .dashboard-main .border-emerald-500\/20,
+        .dashboard-main .border-emerald-500\/25,
+        .dashboard-main .border-indigo-500\/20,
+        .dashboard-main .border-indigo-500\/25,
+        .dashboard-main .border-purple-500\/20,
+        .dashboard-main .border-purple-500\/25 {
+            border-color: rgba(0, 238, 168, 0.25) !important;
+        }
+
+        .dashboard-main .bg-gradient-to-r,
+        .dashboard-main .bg-gradient-to-b,
+        .dashboard-main .bg-gradient-to-tr {
+            background-image: none !important;
+        }
+
+        .dashboard-main .rounded-full,
+        .dashboard-main .rounded-2xl,
+        .dashboard-main .rounded-xl,
+        .dashboard-main .rounded-lg {
+            border-radius: 4px !important;
+        }
+
+        .dashboard-main .shadow-lg,
+        .dashboard-main [class*="shadow-"] {
+            box-shadow: none !important;
+        }
+
+        .dashboard-main .border-l-cyan-400,
+        .dashboard-main .border-l-indigo-400,
+        .dashboard-main .border-l-emerald-400 {
+            border-left-color: var(--mint) !important;
+        }
+
+        .dashboard-main .border-l-purple-400 {
+            border-left-color: #7537ca !important;
+        }
+
+        .dashboard-main button,
+        .dashboard-main a[class*="bg-indigo"],
+        .dashboard-main a[class*="bg-cyan"],
+        .dashboard-main a[class*="bg-emerald"] {
+            border-radius: 3px !important;
+        }
+
+        .dashboard-main button[class*="bg-indigo"],
+        .dashboard-main button[class*="bg-cyan"],
+        .dashboard-main button[class*="bg-emerald"],
+        .dashboard-main a[class*="bg-indigo"],
+        .dashboard-main a[class*="bg-cyan"],
+        .dashboard-main a[class*="bg-emerald"] {
+            background: var(--mint) !important;
+            color: #062119 !important;
+            border-color: var(--mint) !important;
+        }
+
+        canvas {
+            filter: saturate(0.75) hue-rotate(115deg) !important;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-topbar { left: 0 !important; }
+            .dashboard-main { margin-left: 0 !important; }
+        }
+
     </style>
+
+
+    <!-- Unified Maritime AI palette + gradient description treatment -->
+    <style>
+        :root {
+            --marine-bg: #0b1017;
+            --marine-panel: rgba(18, 27, 36, 0.92);
+            --marine-panel-2: rgba(14, 24, 33, 0.96);
+            --marine-border: rgba(30, 230, 177, 0.22);
+            --marine-border-strong: rgba(31, 235, 184, 0.48);
+            --marine-accent: #18e6ad;
+            --marine-accent-2: #20c9d7;
+            --marine-accent-soft: rgba(24, 230, 173, 0.09);
+            --marine-text-soft: #aebbc2;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 78% 8%, rgba(24, 230, 173, 0.055), transparent 30%),
+                radial-gradient(circle at 30% 72%, rgba(32, 201, 215, 0.04), transparent 34%),
+                var(--marine-bg) !important;
+        }
+
+        /* 박스 색상을 청록·딥네이비 계열로 통일 */
+        .glass-panel,
+        .glass-card,
+        section [class*="bg-red-"],
+        section [class*="bg-orange-"],
+        section [class*="bg-amber-"],
+        section [class*="bg-yellow-"],
+        section [class*="bg-purple-"],
+        section [class*="bg-indigo-"],
+        section [class*="bg-blue-"],
+        section [class*="bg-emerald-"] {
+            background-color: var(--marine-panel) !important;
+            background-image: linear-gradient(145deg, rgba(24, 230, 173, 0.045), rgba(11, 16, 23, 0.18)) !important;
+            border-color: var(--marine-border) !important;
+        }
+
+        section .glass-panel:hover,
+        section .glass-card:hover {
+            border-color: var(--marine-border-strong) !important;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(24, 230, 173, 0.05) inset;
+        }
+
+        /* 서로 다른 색의 상단 테두리도 동일한 계열로 정리 */
+        section [class*="border-l-"],
+        section [class*="border-t-"] {
+            border-left-color: var(--marine-accent-2) !important;
+            border-top-color: var(--marine-accent) !important;
+        }
+
+        /* 아이콘 배경과 배지 색상 통일 */
+        section [class*="rounded-xl"][class*="bg-"]:has(i),
+        section [class*="rounded-lg"][class*="bg-"]:has(i),
+        section [class*="rounded-full"][class*="bg-"]:has(i) {
+            background: linear-gradient(135deg, rgba(24, 230, 173, 0.16), rgba(32, 201, 215, 0.08)) !important;
+            color: var(--marine-accent) !important;
+            border-color: rgba(24, 230, 173, 0.24) !important;
+        }
+
+        /* 긴 설명과 단계별 설명에 은은한 색 그라데이션 적용 */
+        .gradient-copy {
+            position: relative;
+            display: block;
+            padding: 0.78rem 0.9rem 0.78rem 1rem !important;
+            margin-top: 0.5rem;
+            border-left: 2px solid rgba(24, 230, 173, 0.65);
+            border-radius: 0 0.7rem 0.7rem 0;
+            background:
+                linear-gradient(90deg, rgba(24, 230, 173, 0.105) 0%, rgba(32, 201, 215, 0.055) 48%, rgba(11, 16, 23, 0) 100%) !important;
+            color: #c4d0d5 !important;
+        }
+
+        .gradient-copy strong,
+        .gradient-copy code {
+            color: #5ff2c8 !important;
+        }
+
+        /* 단계형 카드의 설명은 좌→우로 흐르는 동일 계열 강조 */
+        #pipeline .glass-panel p,
+        #yolo-training .glass-panel p,
+        #model-validation .glass-panel p,
+        #process .glass-panel li,
+        #safety .glass-panel li,
+        #problem .glass-panel li {
+            background-image: linear-gradient(90deg, rgba(24, 230, 173, 0.075), rgba(32, 201, 215, 0.028), transparent) !important;
+            border-radius: 0.55rem;
+        }
+
+        #process .glass-panel li,
+        #safety .glass-panel li,
+        #problem .glass-panel li {
+            padding: 0.55rem 0.65rem;
+        }
+
+        /* 제목·핵심 수치도 청록 계열로 통일하되 가독성 유지 */
+        section h2,
+        section .font-mono[class*="text-"] {
+            color: #63efc9 !important;
+        }
+
+        section h3,
+        section h4 {
+            text-shadow: 0 0 18px rgba(24, 230, 173, 0.045);
+        }
+
+        /* 진행선, 버튼, 활성 메뉴 */
+        a[class*="bg-gradient"],
+        button[class*="bg-gradient"],
+        .nav-link.active,
+        [aria-current="page"] {
+            background-image: linear-gradient(90deg, #18e6ad, #20c9d7) !important;
+            color: #06110f !important;
+        }
+
+        /* 모바일에서도 그라데이션 설명의 여백을 과도하게 차지하지 않도록 조정 */
+        @media (max-width: 768px) {
+            .gradient-copy {
+                padding: 0.65rem 0.7rem 0.65rem 0.82rem !important;
+            }
+        }
+    </style>
+
 </head>
 
 <body class="antialiased selection:bg-cyan-500 selection:text-slate-900">
-
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-slate-800/80">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-
-            <div class="flex items-center space-x-3">
-                <div
-                    class="w-9 h-9 bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-500 rounded-xl flex items-center justify-center font-black text-white shadow-lg shadow-cyan-500/20">
-
-                    <i class="fa-solid fa-robot text-sm"></i>
-                </div>
-
-                <div class="flex flex-col">
-                    <span class="font-bold text-lg tracking-wide text-white leading-tight">
-                        RoboOffset
-                        <span class="gradient-text">AI</span>
-                    </span>
-
-                    <span class="text-[10px] text-slate-400 font-mono tracking-widest uppercase">
-                        Physical AI Solutions
-                    </span>
-                </div>
+    <!-- Dashboard Sidebar -->
+    <aside id="dashboard-sidebar" class="dashboard-sidebar">
+        <div class="dashboard-brand">
+            <div class="dashboard-brand-icon">
+                <i class="fa-solid fa-sailboat"></i>
             </div>
-
-            <div class="hidden xl:flex space-x-4 text-xs font-medium text-slate-300">
-                <a href="#overview"
-                    class="hover:text-cyan-400 transition-colors">
-                    솔루션 개요
-                </a>
-
-                <a href="#problem"
-                    class="hover:text-cyan-400 transition-colors">
-                    현장 과제
-                </a>
-
-                <a href="#pipeline"
-                    class="hover:text-cyan-400 transition-colors">
-                    전처리 파이프라인
-                </a>
-
-                <a href="#process"
-                    class="hover:text-cyan-400 transition-colors">
-                    작업별 프로세스
-                </a>
-
-                <a href="#yolo-training"
-                    class="hover:text-cyan-400 transition-colors">
-                    AI 파인튜닝
-                </a>
-
-                <a href="#safety"
-                    class="hover:text-cyan-400 transition-colors">
-                    안전 & 인터록
-                </a>
-
-                <a href="#simulator"
-                    class="hover:text-cyan-400 transition-colors">
-                    실시간 시뮬레이터
-                </a>
-            </div>
-
-            <div class="flex items-center space-x-4">
-                <a href="#contact"
-                    class="px-4 py-2 text-xs font-semibold rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/25 transition-all transform hover:-translate-y-0.5">
-
-                    도입 상담 신청
-                </a>
+            <div>
+                <div class="text-[15px] font-extrabold text-white leading-tight">HD현대삼호</div>
+                <div class="text-[10px] text-slate-400 font-mono tracking-widest">Maritime AI Engine</div>
             </div>
         </div>
-    </nav>
+
+        <nav class="dashboard-nav">
+            <a href="#overview" class="active">
+                <i class="fa-solid fa-ship"></i>
+                <span>Fleet Overview</span>
+            </a>
+            <a href="#problem">
+                <i class="fa-solid fa-eye"></i>
+                <span>Vision Analysis</span>
+            </a>
+            <a href="#safety">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Safety Interlock</span>
+            </a>
+            <a href="#process">
+                <i class="fa-solid fa-robot"></i>
+                <span>Task Process</span>
+            </a>
+            <a href="#technology-stack">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Technology Stack</span>
+            </a>
+            <a href="#model-validation">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Metric Logs</span>
+            </a>
+            <a href="#simulator">
+                <i class="fa-solid fa-sliders"></i>
+                <span>System Health</span>
+            </a>
+        </nav>
+
+        <div class="dashboard-sidebar-footer">
+            <a href="#contact" class="dashboard-report-button">
+                <i class="fa-regular fa-file-lines"></i>
+                <span>Generate Report</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Dashboard Top Bar -->
+    <header class="dashboard-topbar">
+        <div class="flex items-center gap-3">
+            <button id="mobile-sidebar-button" class="mobile-sidebar-button" type="button" aria-label="메뉴 열기">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="dashboard-status">
+                <span class="dashboard-status-dot"></span>
+                <span>HD현대삼호 LNG운반선 기관실 블록 선행의장 PHYSICAL AI</span>
+            </div>
+        </div>
+
+        <div class="dashboard-top-icons">
+            <i class="fa-regular fa-bell"></i>
+            <i class="fa-regular fa-circle-user"></i>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
 
     <!-- Hero Section -->
     <section id="overview"
@@ -274,6 +1036,167 @@
                 <p class="text-[11px] text-slate-400 mt-1">
                     블록 제작편차 자동 수용 보정
                 </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Report Sequence: 현장 장애 요소 → 안전·인터록 → 작업별 분기 → 통합 기술스택 -->
+    <!-- Problem Section -->
+    <section id="problem"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
+                Shipbuilding Field Challenges
+            </h2>
+
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                조선소 선행의장 현장의 3대 장애 요소
+            </h3>
+
+            <p class="text-slate-400 text-sm mt-3">
+                기관실 블록 내부의 열악한 영상환경과 제작 편차를 극복합니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+
+            <!-- 영상환경 -->
+            <div
+                class="glass-panel p-6 rounded-2xl border border-red-500/20 bg-gradient-to-b from-red-950/10 to-transparent">
+
+                <div class="flex items-center space-x-3 mb-4">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
+
+                        <i class="fa-solid fa-lightbulb text-lg"></i>
+                    </div>
+
+                    <h4 class="text-lg font-bold text-red-300">
+                        ① 열악한 영상환경
+                    </h4>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>저조도 및 음영:</strong>
+                            복잡한 구조물에 의한 국부 그림자
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>금속 표면 반사:</strong>
+                            난반사와 고광량 핫스팟
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>낮은 색상 대비:</strong>
+                            숍프라이머와 의장품의 유사색
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 작업환경 -->
+            <div
+                class="glass-panel p-6 rounded-2xl border border-amber-500/20 bg-gradient-to-b from-amber-950/10 to-transparent">
+
+                <div class="flex items-center space-x-3 mb-4">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+
+                        <i class="fa-solid fa-fire-flame-curved text-lg"></i>
+                    </div>
+
+                    <h4 class="text-lg font-bold text-amber-300">
+                        ② 가혹한 작업환경
+                    </h4>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>아크광 및 흄:</strong>
+                            용접 작업 중 영상 포화 발생
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>분진 및 오염:</strong>
+                            보호창 오염으로 영상 품질 저하
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>구조물 가림:</strong>
+                            배관·공구·보강재에 의한 ROI 가림
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 좌표환경 -->
+            <div
+                class="glass-panel p-6 rounded-2xl border border-purple-500/20 bg-gradient-to-b from-purple-950/10 to-transparent">
+
+                <div class="flex items-center space-x-3 mb-4">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+
+                        <i class="fa-solid fa-drafting-compass text-lg"></i>
+                    </div>
+
+                    <h4 class="text-lg font-bold text-purple-300">
+                        ③ 복합 좌표 변형
+                    </h4>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>블록 제작 편차:</strong>
+                            용접 열변형과 조립 누적오차
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>Depth 데이터 결손:</strong>
+                            금속 반사부의 깊이정보 손실
+                        </span>
+                    </li>
+
+                    <li class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
+
+                        <span>
+                            <strong>로봇 진동:</strong>
+                            이동·정지 시 좌표 흔들림 발생
+                        </span>
+                    </li>
+                </ul>
             </div>
         </div>
     </section>
@@ -496,377 +1419,6 @@
         </div>
     </section>
 
-    <!-- Preprocessing Pipeline -->
-    <section id="pipeline"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
-
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Data Preprocessing Pipeline
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                데이터 전처리 5단계 핵심 파이프라인
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3">
-                불량 프레임 차단부터 로봇 3D 좌표 최적화까지 단계적으로 처리합니다.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-12">
-
-            <!-- Stage 1 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-cyan-500/20 hover:border-cyan-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300">
-
-                            STAGE 01
-                        </span>
-
-                        <i class="fa-solid fa-camera-rotate text-cyan-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Geometry & Quality Gate
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        렌즈 왜곡을 보정하고 흐림, 과노출, 가림,
-                        Depth 결손 프레임을 재촬영 대상으로 분류합니다.
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-cyan-400 font-mono">
-
-                    Output: 정상 RGB-D
-                </div>
-            </div>
-
-            <!-- Stage 2 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-indigo-500/20 hover:border-indigo-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-500/20 text-indigo-300">
-
-                            STAGE 02
-                        </span>
-
-                        <i class="fa-solid fa-filter text-indigo-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Sensor Noise Clean-Up
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        Bilateral Filter로 철분진과 스패터 노이즈를 억제하면서
-                        볼트와 용접 비드의 경계는 보존합니다.
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-indigo-400 font-mono">
-
-                    Output: Clean RGB-D
-                </div>
-            </div>
-
-            <!-- Stage 3 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300">
-
-                            STAGE 03
-                        </span>
-
-                        <i class="fa-solid fa-sliders text-emerald-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Photometric Normalization
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        CLAHE를 적용해 저조도와 국부 그림자를 완화하고
-                        작업 대상과 금속 배경의 대비를 높입니다.
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-emerald-400 font-mono">
-
-                    Output: 대비 정규화 영상
-                </div>
-            </div>
-
-            <!-- Stage 4 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-amber-500/20 hover:border-amber-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300">
-
-                            STAGE 04
-                        </span>
-
-                        <i class="fa-solid fa-crop-simple text-amber-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Feature & ROI Enhancement
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        AprilTag와 CAD 예상좌표를 활용해 작업 대상 ROI를 추출하고
-                        주변 배관과 구조물의 영향을 줄입니다.
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-amber-400 font-mono">
-
-                    Output: 작업 대상 ROI
-                </div>
-            </div>
-
-            <!-- Stage 5 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-purple-500/20 hover:border-purple-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300">
-
-                            STAGE 05
-                        </span>
-
-                        <i class="fa-solid fa-cube text-purple-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Coordinate Optimization
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        Hand-Eye Calibration을 적용하여 카메라 좌표를
-                        Robot Base 좌표로 변환하고 제작 편차를 보정합니다.
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-purple-400 font-mono">
-
-                    Output: 보정 로봇 좌표
-                </div>
-            </div>
-        </div>
-
-        <div
-            class="glass-panel p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 flex flex-col md:flex-row items-center justify-between">
-
-            <div class="flex items-center space-x-4 mb-4 md:mb-0">
-                <div
-                    class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
-
-                    <i class="fa-solid fa-microchip"></i>
-                </div>
-
-                <div>
-                    <h4 class="text-base font-bold text-white">
-                        Eye-in-Hand RGB-D 온디바이스 연산
-                    </h4>
-
-                    <p class="text-xs text-slate-400">
-                        영상 취득 → 5단계 전처리 → 작업부 검출 → 3D 로봇 좌표 생성
-                    </p>
-                </div>
-            </div>
-
-            <a href="#simulator"
-                class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all">
-
-                시뮬레이터 확인
-                <i class="fa-solid fa-arrow-right ml-1"></i>
-            </a>
-        </div>
-    </section>
-
-    <!-- Problem Section -->
-    <section id="problem"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
-
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Shipbuilding Field Challenges
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                조선소 선행의장 현장의 3대 장애 요소
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3">
-                기관실 블록 내부의 열악한 영상환경과 제작 편차를 극복합니다.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-
-            <!-- 영상환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-red-500/20 bg-gradient-to-b from-red-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
-
-                        <i class="fa-solid fa-lightbulb text-lg"></i>
-                    </div>
-
-                    <h4 class="text-lg font-bold text-red-300">
-                        ① 열악한 영상환경
-                    </h4>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>저조도 및 음영:</strong>
-                            복잡한 구조물에 의한 국부 그림자
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>금속 표면 반사:</strong>
-                            난반사와 고광량 핫스팟
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>낮은 색상 대비:</strong>
-                            숍프라이머와 의장품의 유사색
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 작업환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-amber-500/20 bg-gradient-to-b from-amber-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
-
-                        <i class="fa-solid fa-fire-flame-curved text-lg"></i>
-                    </div>
-
-                    <h4 class="text-lg font-bold text-amber-300">
-                        ② 가혹한 작업환경
-                    </h4>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>아크광 및 흄:</strong>
-                            용접 작업 중 영상 포화 발생
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>분진 및 오염:</strong>
-                            보호창 오염으로 영상 품질 저하
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>구조물 가림:</strong>
-                            배관·공구·보강재에 의한 ROI 가림
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 좌표환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-purple-500/20 bg-gradient-to-b from-purple-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
-
-                        <i class="fa-solid fa-drafting-compass text-lg"></i>
-                    </div>
-
-                    <h4 class="text-lg font-bold text-purple-300">
-                        ③ 복합 좌표 변형
-                    </h4>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>블록 제작 편차:</strong>
-                            용접 열변형과 조립 누적오차
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>Depth 데이터 결손:</strong>
-                            금속 반사부의 깊이정보 손실
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>로봇 진동:</strong>
-                            이동·정지 시 좌표 흔들림 발생
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
     <!-- Task Process Section -->
     <section id="process"
         class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
@@ -1036,6 +1588,262 @@
         </div>
     </section>
 
+    <!-- Technology Stack Overview -->
+    <section id="technology-stack"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-4xl mx-auto mb-14">
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
+                Integrated Technology Stack
+            </h2>
+
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                통합 기술스택
+            </h3>
+
+            <p class="text-slate-400 text-sm mt-4 leading-relaxed">
+                선박 기관실의 저조도·금속 반사·분진·제작 편차를 영상 전처리로 완화하고,
+                YOLO26n을 2단계로 파인튜닝한 뒤 IoU·mAP·Precision·Recall로 성능을 검증합니다.
+                각 기술과 파라미터는 단순 적용이 아니라 현장 영상의 작은 작업부, 제한된 GPU 자원,
+                로봇 좌표 활용 시 요구되는 위치 정밀도를 기준으로 선정했습니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <a href="#pipeline" class="glass-panel p-6 rounded-2xl border border-cyan-500/25 hover:border-cyan-400/70 transition-all">
+                <span class="text-[10px] font-mono text-cyan-400">STACK 01</span>
+                <h4 class="text-lg font-bold text-white mt-2">전처리 PIPELINE</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">불량 프레임 차단, 노이즈 억제, 명암 정규화, ROI 추출, 좌표 변환의 5단계 구성</p>
+            </a>
+            <a href="#yolo-training" class="glass-panel p-6 rounded-2xl border border-indigo-500/25 hover:border-indigo-400/70 transition-all">
+                <span class="text-[10px] font-mono text-indigo-400">STACK 02</span>
+                <h4 class="text-lg font-bold text-white mt-2">YOLO26 파인튜닝</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">고해상도 입력과 단계적 동결 해제로 3개 작업 클래스를 안정적으로 전이학습</p>
+            </a>
+            <a href="#model-validation" class="glass-panel p-6 rounded-2xl border border-emerald-500/25 hover:border-emerald-400/70 transition-all">
+                <span class="text-[10px] font-mono text-emerald-400">STACK 03</span>
+                <h4 class="text-lg font-bold text-white mt-2">학습검증</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">IoU 0.50·0.75와 mAP50·mAP50-95를 함께 확인해 검출 여부와 위치 정밀도를 동시 검증</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Preprocessing Pipeline -->
+    <section id="pipeline"
+        class="py-16 px-6 max-w-7xl mx-auto">
+
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
+                Data Preprocessing Pipeline
+            </h2>
+
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                데이터 전처리 5단계 핵심 파이프라인
+            </h3>
+
+            <p class="text-slate-400 text-sm mt-3">
+                불량 프레임 차단부터 로봇 3D 좌표 최적화까지 단계적으로 처리합니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-12">
+
+            <!-- Stage 1 -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-cyan-500/20 hover:border-cyan-400/60 transition-all flex flex-col justify-between">
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300">
+
+                            STAGE 01
+                        </span>
+
+                        <i class="fa-solid fa-camera-rotate text-cyan-400 text-sm"></i>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-white mb-2">
+                        Geometry & Quality Gate
+                    </h4>
+
+                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
+                        렌즈 왜곡을 보정하고 흐림, 과노출, 가림,
+                        Depth 결손 프레임을 재촬영 대상으로 분류합니다.
+                        <span class="block mt-2 text-cyan-300"><strong>선정 근거:</strong> 입력 품질이 낮은 프레임을 그대로 사용하면 오검출뿐 아니라 잘못된 3D 좌표가 생성되므로 AI 추론 전에 차단합니다.</span>
+                    </p>
+                </div>
+
+                <div
+                    class="pt-3 border-t border-slate-800 text-[10px] text-cyan-400 font-mono">
+
+                    Output: 정상 RGB-D
+                </div>
+            </div>
+
+            <!-- Stage 2 -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-indigo-500/20 hover:border-indigo-400/60 transition-all flex flex-col justify-between">
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-500/20 text-indigo-300">
+
+                            STAGE 02
+                        </span>
+
+                        <i class="fa-solid fa-filter text-indigo-400 text-sm"></i>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-white mb-2">
+                        Sensor Noise Clean-Up
+                    </h4>
+
+                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
+                        Bilateral Filter로 철분진과 스패터 노이즈를 억제하면서
+                        볼트와 용접 비드의 경계는 보존합니다.
+                        <span class="block mt-2 text-indigo-300"><strong>선정 근거:</strong> Gaussian Filter보다 경계 보존성이 높아 작은 볼트 윤곽과 얇은 용접선을 흐리지 않으면서 표면 노이즈를 완화할 수 있습니다.</span>
+                    </p>
+                </div>
+
+                <div
+                    class="pt-3 border-t border-slate-800 text-[10px] text-indigo-400 font-mono">
+
+                    Output: Clean RGB-D
+                </div>
+            </div>
+
+            <!-- Stage 3 -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-400/60 transition-all flex flex-col justify-between">
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300">
+
+                            STAGE 03
+                        </span>
+
+                        <i class="fa-solid fa-sliders text-emerald-400 text-sm"></i>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-white mb-2">
+                        Photometric Normalization
+                    </h4>
+
+                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
+                        CLAHE를 적용해 저조도와 국부 그림자를 완화하고
+                        작업 대상과 금속 배경의 대비를 높입니다.
+                        <span class="block mt-2 text-emerald-300"><strong>선정 근거:</strong> 전체 밝기를 일괄 증가시키면 금속 반사부가 포화되므로, 국부 영역별 대비를 조절하는 CLAHE가 기관실 음영 환경에 적합합니다.</span>
+                    </p>
+                </div>
+
+                <div
+                    class="pt-3 border-t border-slate-800 text-[10px] text-emerald-400 font-mono">
+
+                    Output: 대비 정규화 영상
+                </div>
+            </div>
+
+            <!-- Stage 4 -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-amber-500/20 hover:border-amber-400/60 transition-all flex flex-col justify-between">
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300">
+
+                            STAGE 04
+                        </span>
+
+                        <i class="fa-solid fa-crop-simple text-amber-400 text-sm"></i>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-white mb-2">
+                        Feature & ROI Enhancement
+                    </h4>
+
+                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
+                        AprilTag와 CAD 예상좌표를 활용해 작업 대상 ROI를 추출하고
+                        주변 배관과 구조물의 영향을 줄입니다.
+                        <span class="block mt-2 text-amber-300"><strong>선정 근거:</strong> 전체 프레임에는 유사한 볼트·배관이 많으므로 예상 작업영역으로 탐색 범위를 제한해 오검출과 연산량을 동시에 줄입니다.</span>
+                    </p>
+                </div>
+
+                <div
+                    class="pt-3 border-t border-slate-800 text-[10px] text-amber-400 font-mono">
+
+                    Output: 작업 대상 ROI
+                </div>
+            </div>
+
+            <!-- Stage 5 -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-purple-500/20 hover:border-purple-400/60 transition-all flex flex-col justify-between">
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300">
+
+                            STAGE 05
+                        </span>
+
+                        <i class="fa-solid fa-cube text-purple-400 text-sm"></i>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-white mb-2">
+                        Coordinate Optimization
+                    </h4>
+
+                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
+                        Hand-Eye Calibration을 적용하여 카메라 좌표를
+                        Robot Base 좌표로 변환하고 제작 편차를 보정합니다.
+                        <span class="block mt-2 text-purple-300"><strong>선정 근거:</strong> 검출 박스의 이미지 좌표만으로 로봇을 이동시킬 수 없으므로 Depth와 외부 파라미터를 결합해 실제 Robot Base 좌표로 변환합니다.</span>
+                    </p>
+                </div>
+
+                <div
+                    class="pt-3 border-t border-slate-800 text-[10px] text-purple-400 font-mono">
+
+                    Output: 보정 로봇 좌표
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="glass-panel p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 flex flex-col md:flex-row items-center justify-between">
+
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <div
+                    class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
+
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+
+                <div>
+                    <h4 class="text-base font-bold text-white">
+                        Eye-in-Hand RGB-D 온디바이스 연산
+                    </h4>
+
+                    <p class="text-xs text-slate-400">
+                        영상 취득 → 5단계 전처리 → 작업부 검출 → 3D 로봇 좌표 생성
+                    </p>
+                </div>
+            </div>
+
+            <a href="#simulator"
+                class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all">
+
+                시뮬레이터 확인
+                <i class="fa-solid fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+    </section>
+
     <!-- YOLO26n Fine-Tuning Section -->
     <section id="yolo-training"
         class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
@@ -1139,174 +1947,26 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
 
             <!-- Core Parameters -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-indigo-500/20">
-
+            <div class="glass-panel p-6 rounded-2xl border border-indigo-500/20">
                 <div class="flex items-center gap-3 mb-5">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400">
-
+                    <div class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400">
                         <i class="fa-solid fa-sliders"></i>
                     </div>
-
                     <div>
-                        <span class="text-[10px] font-mono text-indigo-400 uppercase tracking-wider">
-                            Core Parameters
-                        </span>
-
-                        <h3 class="text-lg font-bold text-white">
-                            핵심 학습 파라미터
-                        </h3>
+                        <span class="text-[10px] font-mono text-indigo-400 uppercase tracking-wider">Parameters & Rationale</span>
+                        <h3 class="text-lg font-bold text-white">핵심 학습 파라미터와 선정 근거</h3>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Model
-                        </span>
-
-                        <strong class="font-mono text-cyan-300">
-                            yolo26n.pt
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Image Size
-                        </span>
-
-                        <strong class="font-mono text-cyan-300">
-                            1280
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Batch
-                        </span>
-
-                        <strong class="font-mono text-cyan-300">
-                            8
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Epochs
-                        </span>
-
-                        <strong class="font-mono text-indigo-300">
-                            300
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Patience
-                        </span>
-
-                        <strong class="font-mono text-indigo-300">
-                            20
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Optimizer
-                        </span>
-
-                        <strong class="font-mono text-indigo-300">
-                            AdamW
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Learning Rate
-                        </span>
-
-                        <strong class="font-mono text-purple-300">
-                            0.001
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Scale
-                        </span>
-
-                        <strong class="font-mono text-purple-300">
-                            0.5
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Mosaic
-                        </span>
-
-                        <strong class="font-mono text-purple-300">
-                            0.5
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Cache
-                        </span>
-
-                        <strong class="font-mono text-emerald-300">
-                            disk
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            AMP
-                        </span>
-
-                        <strong class="font-mono text-emerald-300">
-                            True
-                        </strong>
-                    </div>
-
-                    <div
-                        class="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <span class="block text-slate-500 mb-1">
-                            Multi Scale
-                        </span>
-
-                        <strong class="font-mono text-emerald-300">
-                            False
-                        </strong>
-                    </div>
-                </div>
-
-                <div
-                    class="mt-4 p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
-
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        <strong class="text-indigo-300">
-                            1280 고해상도
-                        </strong>로 작은 볼트와 커넥터의 형상 정보를 보존하며,
-
-                        <strong class="text-indigo-300">
-                            AdamW·lr0=0.001
-                        </strong>로 사전학습 특징을 안정적으로 미세조정합니다.
-                    </p>
+                <div class="space-y-3 text-xs">
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-cyan-300">model=yolo26n.pt</strong><span class="text-slate-500">Nano</span></div><p class="text-slate-400 mt-1">산업용 PC의 실시간 추론 부담을 줄이고, 소규모 산업 데이터에서 대형 모델보다 과적합 위험을 낮추기 위해 선정했습니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-cyan-300">imgsz=1280</strong><span class="text-slate-500">고해상도</span></div><p class="text-slate-400 mt-1">선박 전체 영상에서 작은 볼트·커넥터가 차지하는 픽셀이 적으므로 640보다 형상과 얇은 용접 경계를 더 많이 보존합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-cyan-300">batch=8</strong><span class="text-slate-500">VRAM 균형</span></div><p class="text-slate-400 mt-1">1280 입력의 메모리 사용량을 고려해 Colab급 GPU에서 OOM을 줄이면서 Gradient 안정성을 확보하는 절충값입니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-indigo-300">epochs=300 · patience=20</strong><span class="text-slate-500">충분한 적응 + 조기종료</span></div><p class="text-slate-400 mt-1">COCO와 금속 선박 영상의 도메인 차이를 학습할 상한은 확보하되, 20 Epoch 동안 개선이 없으면 과적합과 불필요한 연산을 차단합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-indigo-300">optimizer=AdamW · lr0=0.001</strong><span class="text-slate-500">안정적 미세조정</span></div><p class="text-slate-400 mt-1">소규모 전이학습의 빠른 수렴과 가중치 감쇠를 활용하며, 낮은 학습률로 기존 윤곽 특징이 급격히 무너지는 것을 방지합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-purple-300">scale=0.5 · mosaic=0.5</strong><span class="text-slate-500">중간 강도 증강</span></div><p class="text-slate-400 mt-1">작업거리와 배경 다양성을 학습하되, mosaic=1.0에서 발생할 수 있는 비현실적인 선박 장면과 작은 객체 소실을 피합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-emerald-300">cache=disk · amp=True</strong><span class="text-slate-500">자원 최적화</span></div><p class="text-slate-400 mt-1">고해상도 데이터를 RAM 대신 디스크에 캐시해 메모리 부족을 줄이고, 혼합 정밀도로 VRAM과 학습시간을 절감합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-emerald-300">multi_scale=False</strong><span class="text-slate-500">입력 일관성</span></div><p class="text-slate-400 mt-1">운영 카메라 해상도가 고정될 예정이므로 배치마다 입력 크기를 바꾸지 않고 작은 객체의 픽셀 조건과 VRAM 사용량을 일정하게 유지합니다.</p></div>
                 </div>
             </div>
 
@@ -1540,6 +2200,63 @@
         </div>
     </section>
 
+    <!-- Model Validation Section -->
+    <section id="model-validation"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-4xl mx-auto mb-14">
+            <h2 class="text-xs font-mono text-emerald-400 tracking-widest uppercase mb-2">YOLO26 Model Validation</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">IoU · mAP 기반 학습검증</h3>
+            <p class="text-slate-400 text-sm mt-3 leading-relaxed">
+                전체 mAP 한 개만으로 모델을 판단하지 않고, 예측 박스의 위치 정밀도와 클래스별 오검출·미검출을 분리해 검증합니다.
+                로봇이 검출 중심점을 실제 작업 좌표에 활용하므로 일반 객체 인식보다 높은 IoU 구간의 성능을 반드시 함께 확인합니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25">
+                <span class="text-[10px] font-mono text-cyan-400">DATA SPLIT</span>
+                <h4 class="text-lg font-bold text-white mt-2">영상 단위 데이터 분리</h4>
+                <p class="text-xs text-slate-400 mt-3 leading-relaxed">Train 70%, Validation 20%, Test 10%를 권장합니다. 동일 영상의 인접 프레임이 서로 다른 세트에 섞이면 배경과 대상이 거의 같아 성능이 과대평가되므로 반드시 원본 영상 단위로 분리합니다.</p>
+                <div class="mt-4 p-3 rounded-xl bg-cyan-500/10 text-xs text-cyan-200">선정 근거 · 실제 신규 블록과 촬영조건에 대한 일반화 성능을 검증하기 위함</div>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border border-indigo-500/25">
+                <span class="text-[10px] font-mono text-indigo-400">LOCALIZATION</span>
+                <h4 class="text-lg font-bold text-white mt-2">IoU 0.50 · 0.75 이중 검증</h4>
+                <p class="text-xs text-slate-400 mt-3 leading-relaxed"><strong class="text-indigo-300">IoU 0.50</strong>은 작업 대상을 전반적으로 찾는 능력을, <strong class="text-indigo-300">IoU 0.75</strong>는 볼트 머리·용접 경계·케이블 단자에 박스가 정밀하게 맞는지를 평가합니다.</p>
+                <div class="mt-4 p-3 rounded-xl bg-indigo-500/10 text-xs text-indigo-200">선정 근거 · 검출 성공과 로봇 좌표용 위치 정밀도는 서로 다른 성능이므로 분리 평가</div>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border border-purple-500/25">
+                <span class="text-[10px] font-mono text-purple-400">ACCURACY</span>
+                <h4 class="text-lg font-bold text-white mt-2">mAP50 · mAP50-95 병행</h4>
+                <p class="text-xs text-slate-400 mt-3 leading-relaxed"><strong class="text-purple-300">mAP50</strong>은 기본 검출 능력, <strong class="text-purple-300">mAP50-95</strong>는 IoU 0.50~0.95를 평균해 정밀한 위치 일치까지 반영합니다. 세 클래스의 AP도 별도로 확인합니다.</p>
+                <div class="mt-4 p-3 rounded-xl bg-purple-500/10 text-xs text-purple-200">선정 근거 · 쉬운 IoU 조건만 사용할 때 발생하는 성능 과대평가 방지</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-7">
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/20">
+                <h4 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-list-check text-emerald-400 mr-2"></i>초기 성능 판정 기준</h4>
+                <div class="space-y-3 text-xs">
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">전체 mAP50</span><strong class="font-mono text-emerald-300">≥ 0.85</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">전체 mAP50-95</span><strong class="font-mono text-emerald-300">≥ 0.60</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">클래스별 AP50</span><strong class="font-mono text-emerald-300">≥ 0.80</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">Precision</span><strong class="font-mono text-cyan-300">≥ 0.85</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">Recall</span><strong class="font-mono text-cyan-300">≥ 0.80</strong></div>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-4 leading-relaxed">위 값은 초기 개발 목표이며 실제 현장 적용값은 Test 데이터와 로봇 작업 실패 비용을 기준으로 재조정합니다. 특히 클래스별 Recall이 낮으면 전체 mAP가 높아도 적용하지 않습니다.</p>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-7">
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-cyan-300 text-sm">PR Curve</strong><p class="text-[11px] text-slate-400 mt-2">신뢰도 변화에 따른 Precision·Recall 균형과 클래스별 임계값 선정</p></div>
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-indigo-300 text-sm">F1 Curve</strong><p class="text-[11px] text-slate-400 mt-2">Precision과 Recall을 함께 고려해 운영 conf 후보값 결정</p></div>
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-purple-300 text-sm">Confusion Matrix</strong><p class="text-[11px] text-slate-400 mt-2">용접부·케이블 접속부 혼동과 배경 오검출 원인 확인</p></div>
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-emerald-300 text-sm">Test 영상 검증</strong><p class="text-[11px] text-slate-400 mt-2">미사용 영상에서 박스 흔들림·누락·연속 프레임 일관성 최종 확인</p></div>
+        </div>
+    </section>
+
     <!-- Simulator Section -->
     <section id="simulator"
         class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
@@ -1723,6 +2440,161 @@
         </div>
     </section>
 
+    <!-- ROI Section -->
+    <section id="roi"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-xs font-mono text-emerald-400 tracking-widest uppercase mb-2">
+                Return on Investment
+            </h2>
+
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                ⑥ ROI · 투자비 대비 연간 절감효과
+            </h3>
+
+            <p class="text-slate-400 text-sm mt-3 gradient-copy">
+                초기 투자비와 연간 절감액을 동일한 기준으로 비교하여 시스템의 경제성을 정량화합니다.
+            </p>
+        </div>
+
+        <!-- ROI Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/35 via-slate-950/55 to-slate-950/80">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-mono text-emerald-300 uppercase tracking-wider">Initial Investment</span>
+                    <i class="fa-solid fa-coins text-emerald-400"></i>
+                </div>
+                <div class="text-3xl font-black text-white font-mono">
+                    2,300<span class="text-base text-emerald-300 ml-1">만원</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-2 gradient-copy">
+                    카메라·조명, 산업용 PC, 로봇 통신·제어장치, SW 개발비를 포함한 총 초기 투자비입니다.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/35 via-slate-950/55 to-slate-950/80">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-mono text-emerald-300 uppercase tracking-wider">Annual Saving</span>
+                    <i class="fa-solid fa-chart-line text-emerald-400"></i>
+                </div>
+                <div class="text-3xl font-black text-white font-mono">
+                    4,000<span class="text-base text-emerald-300 ml-1">만원/년</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-2 gradient-copy">
+                    재티칭 공수, 위치 불량·재작업, 생산중단시간 감소 효과를 합산한 연간 절감액입니다.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-400/40 bg-gradient-to-br from-emerald-900/45 via-emerald-950/35 to-slate-950/80 shadow-[0_0_32px_rgba(16,185,129,0.12)]">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-mono text-emerald-200 uppercase tracking-wider">Payback Period</span>
+                    <i class="fa-solid fa-stopwatch text-emerald-300"></i>
+                </div>
+                <div class="text-3xl font-black text-white font-mono">
+                    약 0.6<span class="text-base text-emerald-300 ml-1">년</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-2 gradient-copy">
+                    약 7개월 내 초기 투자비 회수가 가능한 수준으로, 단기간 경제성 확보가 가능합니다.
+                </p>
+            </div>
+        </div>
+
+        <!-- Input / Output Breakdown -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-7 mb-8">
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/20">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider">Input Cost</span>
+                        <h4 class="text-lg font-bold text-white">초기 투자비 구성</h4>
+                    </div>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">카메라·조명</span>
+                        <strong class="font-mono text-emerald-300">500만원</strong>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">산업용 PC</span>
+                        <strong class="font-mono text-emerald-300">300만원</strong>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">로봇 통신·제어장치</span>
+                        <strong class="font-mono text-emerald-300">300만원</strong>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">SW 개발비</span>
+                        <strong class="font-mono text-emerald-300">1,200만원</strong>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-emerald-500/15 flex items-center justify-between">
+                    <span class="text-sm font-bold text-white">총 초기 투자비</span>
+                    <strong class="text-xl font-black font-mono text-emerald-300">2,300만원</strong>
+                </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/20">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider">Output Saving</span>
+                        <h4 class="text-lg font-bold text-white">연간 절감액 구성</h4>
+                    </div>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">수동 재티칭 공수 절감</span>
+                        <strong class="font-mono text-emerald-300">1,200만원/년</strong>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">위치 불량·재작업 감소</span>
+                        <strong class="font-mono text-emerald-300">2,000만원/년</strong>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
+                        <span class="text-slate-300">생산중단시간 감소</span>
+                        <strong class="font-mono text-emerald-300">800만원/년</strong>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-emerald-500/15 flex items-center justify-between">
+                    <span class="text-sm font-bold text-white">총 연간 절감액</span>
+                    <strong class="text-xl font-black font-mono text-emerald-300">4,000만원/년</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Payback Bar -->
+        <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25 bg-gradient-to-r from-slate-950/80 via-emerald-950/25 to-slate-950/80">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+                <div>
+                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider">Investment Recovery</span>
+                    <h4 class="text-lg font-bold text-white mt-1">투자 회수기간 산출</h4>
+                </div>
+                <div class="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-sm font-mono text-emerald-300">
+                    2,300만원 ÷ 4,000만원/년 = 약 0.6년
+                </div>
+            </div>
+
+            <div class="relative h-4 rounded-full bg-slate-900 border border-slate-800 overflow-hidden">
+                <div class="h-full w-[60%] bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 rounded-full"></div>
+            </div>
+
+            <div class="flex justify-between mt-2 text-[11px] font-mono text-slate-500">
+                <span>투자 시작</span>
+                <span class="text-emerald-300">약 7개월 · 손익분기점</span>
+                <span>1년</span>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact -->
     <section id="contact"
         class="py-16 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
@@ -1753,6 +2625,8 @@
             © 2026 Physical AI Robotics Inc. All rights reserved.
         </p>
     </footer>
+
+    </main>
 
     <script>
         const canvas = document.getElementById('calibrationCanvas');
@@ -2015,9 +2889,75 @@
 
         resizeCanvas();
         updateValues();
+    
+
+        // Dashboard mobile sidebar and active navigation
+        const dashboardSidebar = document.getElementById('dashboard-sidebar');
+        const mobileSidebarButton = document.getElementById('mobile-sidebar-button');
+        const dashboardLinks = document.querySelectorAll('.dashboard-nav a');
+
+        if (mobileSidebarButton && dashboardSidebar) {
+            mobileSidebarButton.addEventListener('click', () => {
+                dashboardSidebar.classList.toggle('open');
+            });
+        }
+
+        dashboardLinks.forEach((link) => {
+            link.addEventListener('click', () => {
+                dashboardLinks.forEach((item) => item.classList.remove('active'));
+                link.classList.add('active');
+                dashboardSidebar?.classList.remove('open');
+            });
+        });
+
+        const dashboardSections = [...dashboardLinks]
+            .map((link) => document.querySelector(link.getAttribute('href')))
+            .filter(Boolean);
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                const targetLink = document.querySelector(`.dashboard-nav a[href="#${entry.target.id}"]`);
+                if (targetLink) {
+                    dashboardLinks.forEach((item) => item.classList.remove('active'));
+                    targetLink.classList.add('active');
+                }
+            });
+        }, { rootMargin: '-30% 0px -60% 0px', threshold: 0.01 });
+
+        dashboardSections.forEach((section) => sectionObserver.observe(section));
+
+    </script>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reportSections = document.querySelectorAll(
+                '#overview, #problem, #safety, #process, #technology-stack, #pipeline, #yolo-training, #model-validation, #roi'
+            );
+
+            reportSections.forEach(section => {
+                section.querySelectorAll('p').forEach(p => {
+                    const plainText = p.textContent.replace(/\s+/g, ' ').trim();
+                    const isLongCopy = plainText.length >= 58;
+                    const isCardDescription = p.closest('.glass-panel, .glass-card');
+
+                    if (isLongCopy && isCardDescription && !p.closest('pre, code')) {
+                        p.classList.add('gradient-copy');
+                    }
+                });
+
+                section.querySelectorAll('li').forEach(li => {
+                    const plainText = li.textContent.replace(/\s+/g, ' ').trim();
+                    if (plainText.length >= 34 && !li.closest('pre, code')) {
+                        li.classList.add('gradient-copy');
+                    }
+                });
+            });
+        });
     </script>
 
 </body>
 
 </html>
-```
