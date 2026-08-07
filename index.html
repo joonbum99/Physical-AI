@@ -878,6 +878,12 @@
                 <i class="fa-solid fa-chart-column"></i>
                 <span>Metric Logs</span>
             </a>
+
+            <a href="#embedding-rag">
+                <i class="fa-solid fa-database"></i>
+                <span>Embedding & RAG</span>
+            </a>
+
             <a href="#simulator">
                 <i class="fa-solid fa-sliders"></i>
                 <span>System Health</span>
@@ -1625,6 +1631,15 @@
                 <h4 class="text-lg font-bold text-white mt-2">학습검증</h4>
                 <p class="text-xs text-slate-400 mt-2 leading-relaxed">IoU 0.50·0.75와 mAP50·mAP50-95를 함께 확인해 검출 여부와 위치 정밀도를 동시 검증</p>
             </a>
+        
+            <a href="#embedding-rag" class="glass-panel p-6 rounded-2xl border border-emerald-500/25 hover:border-emerald-400/70 transition-all">
+                <span class="text-[10px] font-mono text-emerald-400">STACK 04</span>
+                <h4 class="text-lg font-bold text-white mt-2">Embedding & RAG</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                    사내 생산·품질·설비·기술문서를 벡터화하여 유사도 기반 검색과 권한형 RAG 질의를 지원
+                </p>
+            </a>
+
         </div>
     </section>
 
@@ -2258,7 +2273,105 @@
     </section>
 
     <!-- Simulator Section -->
-    <section id="simulator"
+    
+    <!-- Embedding & RAG Section -->
+    <section id="embedding-rag"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-4xl mx-auto mb-12">
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
+                Secure Enterprise Knowledge Retrieval
+            </h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                Embedding & RAG 기반 사내 지식 검색 시스템
+            </h3>
+            <p class="text-slate-400 text-sm mt-4 leading-relaxed">
+                의장작업별 <strong>생산실적·불량이력·설비 알람·기술문서</strong>를 사내 데이터베이스에 통합하고,
+                Embedding 기반 유사도 검색을 적용합니다. 모든 데이터와 AI 처리는
+                <strong>사내망 또는 폐쇄망 환경</strong>에서 수행하여 생산·설비 정보의 외부 유출을 방지하고,
+                필요한 현장 정보를 신속하게 검색·활용합니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+
+            <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white">① MES 생산진도 검색</h4>
+                </div>
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li>사내 MES와 연계하여 선박별·의장작업별 작업계획 및 생산실적을 내부 DB에 저장</li>
+                    <li>자연어 검색을 통해 <strong>일일 계획 대비 진행률, 미완료 작업, 작업 위치</strong> 조회</li>
+                    <li>생산계획·실적 데이터는 외부 서버로 전송하지 않고 사내 시스템 내에서 처리</li>
+                </ul>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-images"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white">② AI 비전 불량사례 검색</h4>
+                </div>
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li>비전 AI가 검출한 <strong>체결·접속·용접 불량 이미지와 판정 결과</strong>를 사내 DB에 축적</li>
+                    <li>Embedding 유사도 검색을 통해 <strong>과거 유사 불량 이미지·발생조건·조치이력</strong> 제공</li>
+                    <li>작업 이미지 및 품질정보는 사내 저장소에서만 관리하여 제품·공정정보 보호</li>
+                </ul>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-indigo-500/25">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white">③ PLC·HMI 인터록/알람 이력 검색</h4>
+                </div>
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li>PLC·HMI의 <strong>알람 코드, 인터록 조건, 발생시각, 설비상태 및 조치이력</strong>을 내부 DB에 기록</li>
+                    <li>현재 발생한 이상과 유사한 과거 사례를 검색하여 <strong>예상 원인 및 기존 조치사례</strong> 제공</li>
+                    <li>설비 제어망과 AI 검색망을 분리하고 필요한 데이터만 승인된 인터페이스로 연계</li>
+                </ul>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-purple-500/25">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white">④ 로봇 작업표준·기술문서 검색</h4>
+                </div>
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li>협동로봇 <strong>점검·교체 표준서, 내부 구조도/CAD, 유지보수 매뉴얼, 안전기준</strong>을 사내 지식DB로 구축</li>
+                    <li>RAG를 통해 질문과 관련된 내부 문서만 검색하여 <strong>점검절차·도면·안전사항</strong> 제공</li>
+                    <li>사용자 권한에 따라 열람 가능한 문서를 제한하여 기밀 기술자료의 무단 접근 방지</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25">
+            <div class="flex items-center gap-3 mb-5">
+                <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white">보안 적용 원칙</h4>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-300">
+                <div>• <strong>On-Premise / Private Cloud</strong> 기반 AI·Vector DB 구축</div>
+                <div>• 생산·품질·설비 데이터의 <strong>외부 API 전송 차단</strong></div>
+                <div>• 사내 계정 기반 <strong>RBAC 권한관리 및 문서별 접근통제</strong></div>
+                <div>• 검색·열람·AI 질의에 대한 <strong>Audit Log 기록</strong></div>
+                <div>• MES·PLC·로봇 제어망과 AI 서비스망의 <strong>네트워크 분리</strong></div>
+                <div>• 원본 문서 기반 <strong>RAG 구조</strong> 적용으로 임의 생성 최소화</div>
+            </div>
+        </div>
+    </section>
+
+
+<section id="simulator"
         class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
 
         <div class="text-center max-w-3xl mx-auto mb-12">
@@ -2424,22 +2537,12 @@
                     </div>
 
                     <div class="flex justify-between text-slate-400">
-                        <span>3D 상대거리</span>
-
-                        <span id="res-distance"
-                            class="text-cyan-300 font-bold">
-
-                            0.23mm
-                        </span>
-                    </div>
-
-                    <div class="flex justify-between text-slate-400">
                         <span>잔여 오차</span>
 
                         <span id="res-residual"
                             class="text-emerald-400 font-bold">
 
-                            0.23mm · PASS
+                            0.02mm · PASS
                         </span>
                     </div>
                 </div>
@@ -2451,7 +2554,7 @@
 
                 <div class="flex items-center justify-between mb-4">
                     <h4 class="text-sm font-bold text-slate-200">
-                        목표 좌표와 검출 좌표 3D 비교
+                        목표 좌표와 검출 좌표 비교
                     </h4>
 
                     <span class="text-xs text-slate-400 font-mono">
@@ -2674,7 +2777,6 @@
 
         const resultLatency = document.getElementById('res-latency');
         const resultOffset = document.getElementById('res-offset');
-        const resultDistance = document.getElementById('res-distance');
         const resultResidual = document.getElementById('res-residual');
 
         const statusBadge = document.getElementById('status-badge');
@@ -2730,185 +2832,126 @@
 
             ctx.clearRect(0, 0, width, height);
 
-            // 첨부 보고서의 짙은 Navy / Teal 계열 배경 유지
-            ctx.fillStyle = 'rgba(8, 20, 25, 0.98)';
+            ctx.fillStyle = 'rgba(2, 6, 23, 0.95)';
             ctx.fillRect(0, 0, width, height);
 
-            const originX = width * 0.43;
-            const originY = height * 0.58;
-            const axisLength = Math.min(width, height) * 0.28;
+            const centerX = width / 2;
+            const centerY = height / 2;
 
-            // 3D 좌표를 2D Canvas에 등각 투영하기 위한 함수
-            // X: 우측, Y: 상단, Z: 우측 아래(Depth) 방향으로 표시
-            const project = (x, y, z) => ({
-                x: originX + x - z * 0.62,
-                y: originY - y + z * 0.42
-            });
+            ctx.strokeStyle = 'rgba(71, 85, 105, 0.35)';
+            ctx.lineWidth = 1;
 
-            const drawLine = (a, b, color, widthPx = 1, dash = []) => {
-                ctx.save();
-                ctx.strokeStyle = color;
-                ctx.lineWidth = widthPx;
-                ctx.setLineDash(dash);
+            for (let x = 0; x <= width; x += 30) {
                 ctx.beginPath();
-                ctx.moveTo(a.x, a.y);
-                ctx.lineTo(b.x, b.y);
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
                 ctx.stroke();
-                ctx.restore();
-            };
-
-            const drawPoint = (p, radius, color, stroke = null) => {
-                ctx.save();
-                ctx.fillStyle = color;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-                ctx.fill();
-                if (stroke) {
-                    ctx.strokeStyle = stroke;
-                    ctx.lineWidth = 1.5;
-                    ctx.stroke();
-                }
-                ctx.restore();
-            };
-
-            // 3D 기준축: 얇은 실선으로 표현
-            const origin = { x: originX, y: originY };
-            const xEnd = project(axisLength, 0, 0);
-            const yEnd = project(0, axisLength, 0);
-            const zEnd = project(0, 0, axisLength);
-
-            drawLine(origin, xEnd, 'rgba(34, 211, 238, 0.70)', 1);
-            drawLine(origin, yEnd, 'rgba(45, 212, 191, 0.70)', 1);
-            drawLine(origin, zEnd, 'rgba(103, 232, 249, 0.70)', 1);
-
-            // 축 음영 가이드: 실선이되 매우 얇고 낮은 명도로 표시
-            for (let i = 1; i <= 4; i++) {
-                const t = axisLength * i / 4;
-                const px = project(t, 0, 0);
-                const py = project(0, t, 0);
-                const pz = project(0, 0, t);
-
-                drawLine(px, project(t, 0, axisLength * 0.70), 'rgba(30, 64, 67, 0.28)', 0.7);
-                drawLine(py, project(0, t, axisLength * 0.70), 'rgba(30, 64, 67, 0.24)', 0.7);
-                drawLine(pz, project(axisLength * 0.70, 0, t), 'rgba(30, 64, 67, 0.20)', 0.7);
             }
 
-            ctx.font = '11px monospace';
-            ctx.fillStyle = 'rgba(34, 211, 238, 0.95)';
-            ctx.fillText('X', xEnd.x + 8, xEnd.y + 3);
-            ctx.fillStyle = 'rgba(45, 212, 191, 0.95)';
-            ctx.fillText('Y', yEnd.x - 3, yEnd.y - 8);
-            ctx.fillStyle = 'rgba(103, 232, 249, 0.95)';
-            ctx.fillText('Z · DEPTH', zEnd.x - 2, zEnd.y + 16);
+            for (let y = 0; y <= height; y += 30) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
 
-            // 슬라이더 수치를 화면 스케일로 확대
-            const scale = Math.min(width, height) * 0.13;
-            const sx = dx * scale;
-            const sy = dy * scale;
-            const sz = dz * scale;
+            const toleranceRadius = 55;
 
-            const pX = project(sx, 0, 0);
-            const pXY = project(sx, sy, 0);
-            const detection = project(sx, sy, sz);
-
-            // 각 좌표 성분을 분리하여 시각화: X → Y → Z 순서
-            drawLine(origin, pX, 'rgba(34, 211, 238, 0.95)', 1.2);
-            drawLine(pX, pXY, 'rgba(45, 212, 191, 0.95)', 1.2);
-            drawLine(pXY, detection, 'rgba(103, 232, 249, 0.95)', 1.2);
-
-            // 원점에서 타겟까지의 실제 3D 거리 벡터
-            drawLine(origin, detection, 'rgba(167, 139, 250, 0.90)', 1.5);
-
-            // 허용 공차를 3D 공간의 타원으로 표현
-            ctx.save();
-            ctx.strokeStyle = 'rgba(52, 211, 153, 0.38)';
-            ctx.lineWidth = 1;
-            ctx.setLineDash([5, 5]);
-            ctx.beginPath();
-            ctx.ellipse(origin.x, origin.y, 48, 25, -0.15, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.ellipse(origin.x, origin.y, 25, 48, 0.35, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.restore();
-
-            // TARGET 기준점
-            drawCrosshair(origin.x, origin.y, 10, 'rgba(52, 211, 153, 1)', 2);
-            drawPoint(origin, 3.5, 'rgba(52, 211, 153, 1)');
-            ctx.fillStyle = 'rgba(52, 211, 153, 1)';
-            ctx.fillText('ROBOT BASE / TARGET', origin.x + 13, origin.y - 13);
-
-            // DETECTION 타겟: 회전각 θ를 사각형 회전으로 표현
-            ctx.save();
-            ctx.translate(detection.x, detection.y);
-            ctx.rotate(dt * Math.PI / 180);
-            ctx.strokeStyle = 'rgba(216, 180, 254, 1)';
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
             ctx.lineWidth = 2;
-            ctx.strokeRect(-13, -13, 26, 26);
-            ctx.restore();
-            drawCrosshair(detection.x, detection.y, 8, 'rgba(216, 180, 254, 1)', 1.5);
-            drawPoint(detection, 3.5, 'rgba(216, 180, 254, 1)');
+            ctx.setLineDash([6, 6]);
 
-            // 좌표 편차 라벨
-            ctx.font = '11px monospace';
-            ctx.fillStyle = 'rgba(34, 211, 238, 1)';
-            ctx.fillText(`ΔX ${formatSigned(dx, 'mm')}`, (origin.x + pX.x) / 2 - 22, (origin.y + pX.y) / 2 - 8);
+            ctx.beginPath();
+            ctx.arc(
+                centerX,
+                centerY,
+                toleranceRadius,
+                0,
+                Math.PI * 2
+            );
+            ctx.stroke();
 
-            ctx.fillStyle = 'rgba(45, 212, 191, 1)';
-            ctx.fillText(`ΔY ${formatSigned(dy, 'mm')}`, (pX.x + pXY.x) / 2 + 8, (pX.y + pXY.y) / 2);
+            ctx.setLineDash([]);
 
-            ctx.fillStyle = 'rgba(103, 232, 249, 1)';
-            ctx.fillText(`ΔZ ${formatSigned(dz, 'mm')}`, (pXY.x + detection.x) / 2 + 8, (pXY.y + detection.y) / 2 + 6);
-
-            ctx.fillStyle = 'rgba(216, 180, 254, 1)';
-            ctx.fillText(`θ ${formatSigned(dt, '°')}`, detection.x + 18, detection.y - 18);
-            ctx.fillText('DETECTION', detection.x + 18, detection.y + 18);
-
-            // 3D 유클리드 거리: √(X² + Y² + Z²)
-            const distance = Math.sqrt(
-                Math.pow(dx, 2) +
-                Math.pow(dy, 2) +
-                Math.pow(dz, 2)
+            drawCrosshair(
+                centerX,
+                centerY,
+                15,
+                'rgba(52, 211, 153, 1)',
+                3
             );
 
-            const midX = (origin.x + detection.x) / 2;
-            const midY = (origin.y + detection.y) / 2;
-            const labelText = `DIST = √(X²+Y²+Z²) = ${distance.toFixed(2)}mm`;
+            const scale = 40;
+            const detectionX = centerX + dx * scale;
+            const detectionY = centerY - dy * scale;
+            const depthScale = Math.max(0.72, Math.min(1.35, 1 + dz * 0.10));
 
-            ctx.font = 'bold 11px monospace';
-            const labelWidth = ctx.measureText(labelText).width + 18;
-            ctx.fillStyle = 'rgba(8, 30, 32, 0.92)';
-            ctx.strokeStyle = 'rgba(20, 184, 166, 0.55)';
-            ctx.lineWidth = 1;
+            ctx.save();
+            ctx.translate(detectionX, detectionY);
+            ctx.rotate(dt * Math.PI / 180);
+            ctx.scale(depthScale, depthScale);
+
+            ctx.strokeStyle = 'rgba(129, 140, 248, 1)';
+            ctx.lineWidth = 3;
+
+            ctx.strokeRect(
+                -18,
+                -18,
+                36,
+                36
+            );
+
+            ctx.restore();
+
+            drawCrosshair(
+                detectionX,
+                detectionY,
+                12,
+                'rgba(129, 140, 248, 1)',
+                2
+            );
+
+            ctx.fillStyle = 'rgba(52, 211, 153, 1)';
+            ctx.font = '12px monospace';
+            ctx.fillText(
+                'TARGET',
+                centerX + 18,
+                centerY - 18
+            );
+
+            ctx.fillStyle = 'rgba(129, 140, 248, 1)';
+            ctx.fillText(
+                'DETECTION',
+                detectionX + 18,
+                detectionY + 28
+            );
+
+            // Z축은 화면 깊이 방향이므로 원형 Depth 링과 수치로 시각화
+            ctx.strokeStyle = dz >= 0
+                ? 'rgba(34, 211, 238, 0.85)'
+                : 'rgba(94, 234, 212, 0.85)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
             ctx.beginPath();
-            ctx.roundRect(midX - labelWidth / 2, midY + 14, labelWidth, 26, 6);
-            ctx.fill();
+            ctx.arc(detectionX, detectionY, 25 + Math.abs(dz) * 7, 0, Math.PI * 2);
             ctx.stroke();
-            ctx.fillStyle = 'rgba(153, 246, 228, 1)';
-            ctx.fillText(labelText, midX - labelWidth / 2 + 9, midY + 31);
+            ctx.setLineDash([]);
 
-            // 우측 상단 실시간 수치 패널
-            const panelX = width - 196;
-            const panelY = 18;
-            ctx.fillStyle = 'rgba(8, 27, 32, 0.92)';
-            ctx.strokeStyle = 'rgba(20, 184, 166, 0.38)';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.roundRect(panelX, panelY, 178, 94, 8);
-            ctx.fill();
-            ctx.stroke();
-
-            ctx.font = '10px monospace';
-            ctx.fillStyle = 'rgba(148, 163, 184, 1)';
-            ctx.fillText('3D RELATIVE OFFSET', panelX + 12, panelY + 18);
-            ctx.fillStyle = 'rgba(34, 211, 238, 1)';
-            ctx.fillText(`X  ${formatSigned(dx, 'mm')}`, panelX + 12, panelY + 37);
-            ctx.fillStyle = 'rgba(45, 212, 191, 1)';
-            ctx.fillText(`Y  ${formatSigned(dy, 'mm')}`, panelX + 12, panelY + 53);
             ctx.fillStyle = 'rgba(103, 232, 249, 1)';
-            ctx.fillText(`Z  ${formatSigned(dz, 'mm')}`, panelX + 12, panelY + 69);
-            ctx.fillStyle = 'rgba(216, 180, 254, 1)';
-            ctx.fillText(`D  ${distance.toFixed(2)}mm`, panelX + 12, panelY + 85);
+            ctx.font = '11px monospace';
+            ctx.fillText(
+                `Z ${formatSigned(dz, 'mm')}`,
+                detectionX + 18,
+                detectionY - 28
+            );
+
+            ctx.strokeStyle = 'rgba(192, 132, 252, 0.7)';
+            ctx.lineWidth = 1.5;
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(detectionX, detectionY);
+            ctx.stroke();
         }
 
         function updateValues() {
@@ -2930,8 +2973,6 @@
                 Math.pow(dy, 2) +
                 Math.pow(dz, 2)
             );
-
-            resultDistance.textContent = `${residual.toFixed(2)}mm`;
 
             if (residual <= 0.30) {
                 statusBadge.textContent = '정상 가동';
