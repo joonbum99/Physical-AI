@@ -1564,7 +1564,7 @@
                         <span class="text-purple-400 font-bold">1.</span>
 
                         <span>
-                            검출 중심점과 Depth를 결합해 3D 좌표 산출
+                            검출 중심점과 3D 카메라 Depth를 결합해 X·Y·Z 상대좌표 산출
                         </span>
                     </li>
 
@@ -1580,7 +1580,7 @@
                         <span class="text-purple-400 font-bold">3.</span>
 
                         <span>
-                            CAD 대비 ΔX·ΔY·ΔZ·Δθ 오프셋 보정
+                            로봇 팔 기준점 대비 ΔX·ΔY·ΔZ·Δθ 상대 오프셋 보정
                         </span>
                     </li>
                 </ul>
@@ -1800,7 +1800,7 @@
                     </h4>
 
                     <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        Hand-Eye Calibration을 적용하여 카메라 좌표를
+                        Hand-Eye Calibration을 적용하여 카메라의 X·Y·Z 좌표를
                         Robot Base 좌표로 변환하고 제작 편차를 보정합니다.
                         <span class="block mt-2 text-purple-300"><strong>선정 근거:</strong> 검출 박스의 이미지 좌표만으로 로봇을 이동시킬 수 없으므로 Depth와 외부 파라미터를 결합해 실제 Robot Base 좌표로 변환합니다.</span>
                     </p>
@@ -2271,7 +2271,7 @@
             </h3>
 
             <p class="text-slate-400 text-sm mt-3">
-                위치 편차 발생 시 AI가 로봇 작업 좌표를 보정하는 과정을 확인합니다.
+                3D 카메라의 Depth 정보를 활용해 로봇 팔 기준점부터 타겟부위까지의 X·Y·Z 상대좌표와 회전각 θ 편차를 산출하고, AI가 작업 좌표를 자동 보정하는 과정을 확인합니다.
             </p>
         </div>
 
@@ -2338,6 +2338,26 @@
 
                         <div>
                             <div class="flex justify-between text-slate-300 font-mono mb-1">
+                                <span>Z축 편차 · Depth</span>
+
+                                <span id="val-dz"
+                                    class="text-cyan-400 font-bold">
+
+                                    +0.18mm
+                                </span>
+                            </div>
+
+                            <input type="range"
+                                id="slider-dz"
+                                min="-3"
+                                max="3"
+                                step="0.05"
+                                value="0.18"
+                                class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-slate-300 font-mono mb-1">
                                 <span>회전각 편차</span>
 
                                 <span id="val-dt"
@@ -2399,7 +2419,17 @@
                         <span id="res-offset"
                             class="text-cyan-300 font-bold">
 
-                            ΔX: -0.12 / ΔY: +0.08
+                            ΔX: -0.12 / ΔY: +0.08 / ΔZ: -0.18
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between text-slate-400">
+                        <span>3D 상대거리</span>
+
+                        <span id="res-distance"
+                            class="text-cyan-300 font-bold">
+
+                            0.23mm
                         </span>
                     </div>
 
@@ -2409,7 +2439,7 @@
                         <span id="res-residual"
                             class="text-emerald-400 font-bold">
 
-                            0.02mm · PASS
+                            0.23mm · PASS
                         </span>
                     </div>
                 </div>
@@ -2421,7 +2451,7 @@
 
                 <div class="flex items-center justify-between mb-4">
                     <h4 class="text-sm font-bold text-slate-200">
-                        목표 좌표와 검출 좌표 비교
+                        목표 좌표와 검출 좌표 3D 비교
                     </h4>
 
                     <span class="text-xs text-slate-400 font-mono">
@@ -2634,14 +2664,17 @@
 
         const sliderDx = document.getElementById('slider-dx');
         const sliderDy = document.getElementById('slider-dy');
+        const sliderDz = document.getElementById('slider-dz');
         const sliderDt = document.getElementById('slider-dt');
 
         const valueDx = document.getElementById('val-dx');
         const valueDy = document.getElementById('val-dy');
+        const valueDz = document.getElementById('val-dz');
         const valueDt = document.getElementById('val-dt');
 
         const resultLatency = document.getElementById('res-latency');
         const resultOffset = document.getElementById('res-offset');
+        const resultDistance = document.getElementById('res-distance');
         const resultResidual = document.getElementById('res-residual');
 
         const statusBadge = document.getElementById('status-badge');
@@ -2650,6 +2683,7 @@
 
         let dx = Number(sliderDx.value);
         let dy = Number(sliderDy.value);
+        let dz = Number(sliderDz.value);
         let dt = Number(sliderDt.value);
 
         function formatSigned(value, unit = '') {
@@ -2696,123 +2730,208 @@
 
             ctx.clearRect(0, 0, width, height);
 
-            ctx.fillStyle = 'rgba(2, 6, 23, 0.95)';
+            // 첨부 보고서의 짙은 Navy / Teal 계열 배경 유지
+            ctx.fillStyle = 'rgba(8, 20, 25, 0.98)';
             ctx.fillRect(0, 0, width, height);
 
-            const centerX = width / 2;
-            const centerY = height / 2;
+            const originX = width * 0.43;
+            const originY = height * 0.58;
+            const axisLength = Math.min(width, height) * 0.28;
 
-            ctx.strokeStyle = 'rgba(71, 85, 105, 0.35)';
-            ctx.lineWidth = 1;
+            // 3D 좌표를 2D Canvas에 등각 투영하기 위한 함수
+            // X: 우측, Y: 상단, Z: 우측 아래(Depth) 방향으로 표시
+            const project = (x, y, z) => ({
+                x: originX + x - z * 0.62,
+                y: originY - y + z * 0.42
+            });
 
-            for (let x = 0; x <= width; x += 30) {
+            const drawLine = (a, b, color, widthPx = 1, dash = []) => {
+                ctx.save();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = widthPx;
+                ctx.setLineDash(dash);
                 ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
                 ctx.stroke();
+                ctx.restore();
+            };
+
+            const drawPoint = (p, radius, color, stroke = null) => {
+                ctx.save();
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+                ctx.fill();
+                if (stroke) {
+                    ctx.strokeStyle = stroke;
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                }
+                ctx.restore();
+            };
+
+            // 3D 기준축: 얇은 실선으로 표현
+            const origin = { x: originX, y: originY };
+            const xEnd = project(axisLength, 0, 0);
+            const yEnd = project(0, axisLength, 0);
+            const zEnd = project(0, 0, axisLength);
+
+            drawLine(origin, xEnd, 'rgba(34, 211, 238, 0.70)', 1);
+            drawLine(origin, yEnd, 'rgba(45, 212, 191, 0.70)', 1);
+            drawLine(origin, zEnd, 'rgba(103, 232, 249, 0.70)', 1);
+
+            // 축 음영 가이드: 실선이되 매우 얇고 낮은 명도로 표시
+            for (let i = 1; i <= 4; i++) {
+                const t = axisLength * i / 4;
+                const px = project(t, 0, 0);
+                const py = project(0, t, 0);
+                const pz = project(0, 0, t);
+
+                drawLine(px, project(t, 0, axisLength * 0.70), 'rgba(30, 64, 67, 0.28)', 0.7);
+                drawLine(py, project(0, t, axisLength * 0.70), 'rgba(30, 64, 67, 0.24)', 0.7);
+                drawLine(pz, project(axisLength * 0.70, 0, t), 'rgba(30, 64, 67, 0.20)', 0.7);
             }
 
-            for (let y = 0; y <= height; y += 30) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(width, y);
-                ctx.stroke();
-            }
+            ctx.font = '11px monospace';
+            ctx.fillStyle = 'rgba(34, 211, 238, 0.95)';
+            ctx.fillText('X', xEnd.x + 8, xEnd.y + 3);
+            ctx.fillStyle = 'rgba(45, 212, 191, 0.95)';
+            ctx.fillText('Y', yEnd.x - 3, yEnd.y - 8);
+            ctx.fillStyle = 'rgba(103, 232, 249, 0.95)';
+            ctx.fillText('Z · DEPTH', zEnd.x - 2, zEnd.y + 16);
 
-            const toleranceRadius = 55;
+            // 슬라이더 수치를 화면 스케일로 확대
+            const scale = Math.min(width, height) * 0.13;
+            const sx = dx * scale;
+            const sy = dy * scale;
+            const sz = dz * scale;
 
-            ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
-            ctx.lineWidth = 2;
-            ctx.setLineDash([6, 6]);
+            const pX = project(sx, 0, 0);
+            const pXY = project(sx, sy, 0);
+            const detection = project(sx, sy, sz);
 
-            ctx.beginPath();
-            ctx.arc(
-                centerX,
-                centerY,
-                toleranceRadius,
-                0,
-                Math.PI * 2
-            );
-            ctx.stroke();
+            // 각 좌표 성분을 분리하여 시각화: X → Y → Z 순서
+            drawLine(origin, pX, 'rgba(34, 211, 238, 0.95)', 1.2);
+            drawLine(pX, pXY, 'rgba(45, 212, 191, 0.95)', 1.2);
+            drawLine(pXY, detection, 'rgba(103, 232, 249, 0.95)', 1.2);
 
-            ctx.setLineDash([]);
+            // 원점에서 타겟까지의 실제 3D 거리 벡터
+            drawLine(origin, detection, 'rgba(167, 139, 250, 0.90)', 1.5);
 
-            drawCrosshair(
-                centerX,
-                centerY,
-                15,
-                'rgba(52, 211, 153, 1)',
-                3
-            );
-
-            const scale = 40;
-            const detectionX = centerX + dx * scale;
-            const detectionY = centerY - dy * scale;
-
+            // 허용 공차를 3D 공간의 타원으로 표현
             ctx.save();
-            ctx.translate(detectionX, detectionY);
-            ctx.rotate(dt * Math.PI / 180);
-
-            ctx.strokeStyle = 'rgba(129, 140, 248, 1)';
-            ctx.lineWidth = 3;
-
-            ctx.strokeRect(
-                -18,
-                -18,
-                36,
-                36
-            );
-
+            ctx.strokeStyle = 'rgba(52, 211, 153, 0.38)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.ellipse(origin.x, origin.y, 48, 25, -0.15, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.ellipse(origin.x, origin.y, 25, 48, 0.35, 0, Math.PI * 2);
+            ctx.stroke();
             ctx.restore();
 
-            drawCrosshair(
-                detectionX,
-                detectionY,
-                12,
-                'rgba(129, 140, 248, 1)',
-                2
-            );
-
+            // TARGET 기준점
+            drawCrosshair(origin.x, origin.y, 10, 'rgba(52, 211, 153, 1)', 2);
+            drawPoint(origin, 3.5, 'rgba(52, 211, 153, 1)');
             ctx.fillStyle = 'rgba(52, 211, 153, 1)';
-            ctx.font = '12px monospace';
-            ctx.fillText(
-                'TARGET',
-                centerX + 18,
-                centerY - 18
+            ctx.fillText('ROBOT BASE / TARGET', origin.x + 13, origin.y - 13);
+
+            // DETECTION 타겟: 회전각 θ를 사각형 회전으로 표현
+            ctx.save();
+            ctx.translate(detection.x, detection.y);
+            ctx.rotate(dt * Math.PI / 180);
+            ctx.strokeStyle = 'rgba(216, 180, 254, 1)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-13, -13, 26, 26);
+            ctx.restore();
+            drawCrosshair(detection.x, detection.y, 8, 'rgba(216, 180, 254, 1)', 1.5);
+            drawPoint(detection, 3.5, 'rgba(216, 180, 254, 1)');
+
+            // 좌표 편차 라벨
+            ctx.font = '11px monospace';
+            ctx.fillStyle = 'rgba(34, 211, 238, 1)';
+            ctx.fillText(`ΔX ${formatSigned(dx, 'mm')}`, (origin.x + pX.x) / 2 - 22, (origin.y + pX.y) / 2 - 8);
+
+            ctx.fillStyle = 'rgba(45, 212, 191, 1)';
+            ctx.fillText(`ΔY ${formatSigned(dy, 'mm')}`, (pX.x + pXY.x) / 2 + 8, (pX.y + pXY.y) / 2);
+
+            ctx.fillStyle = 'rgba(103, 232, 249, 1)';
+            ctx.fillText(`ΔZ ${formatSigned(dz, 'mm')}`, (pXY.x + detection.x) / 2 + 8, (pXY.y + detection.y) / 2 + 6);
+
+            ctx.fillStyle = 'rgba(216, 180, 254, 1)';
+            ctx.fillText(`θ ${formatSigned(dt, '°')}`, detection.x + 18, detection.y - 18);
+            ctx.fillText('DETECTION', detection.x + 18, detection.y + 18);
+
+            // 3D 유클리드 거리: √(X² + Y² + Z²)
+            const distance = Math.sqrt(
+                Math.pow(dx, 2) +
+                Math.pow(dy, 2) +
+                Math.pow(dz, 2)
             );
 
-            ctx.fillStyle = 'rgba(129, 140, 248, 1)';
-            ctx.fillText(
-                'DETECTION',
-                detectionX + 18,
-                detectionY + 28
-            );
+            const midX = (origin.x + detection.x) / 2;
+            const midY = (origin.y + detection.y) / 2;
+            const labelText = `DIST = √(X²+Y²+Z²) = ${distance.toFixed(2)}mm`;
 
-            ctx.strokeStyle = 'rgba(192, 132, 252, 0.7)';
-            ctx.lineWidth = 1.5;
-
+            ctx.font = 'bold 11px monospace';
+            const labelWidth = ctx.measureText(labelText).width + 18;
+            ctx.fillStyle = 'rgba(8, 30, 32, 0.92)';
+            ctx.strokeStyle = 'rgba(20, 184, 166, 0.55)';
+            ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.moveTo(centerX, centerY);
-            ctx.lineTo(detectionX, detectionY);
+            ctx.roundRect(midX - labelWidth / 2, midY + 14, labelWidth, 26, 6);
+            ctx.fill();
             ctx.stroke();
+            ctx.fillStyle = 'rgba(153, 246, 228, 1)';
+            ctx.fillText(labelText, midX - labelWidth / 2 + 9, midY + 31);
+
+            // 우측 상단 실시간 수치 패널
+            const panelX = width - 196;
+            const panelY = 18;
+            ctx.fillStyle = 'rgba(8, 27, 32, 0.92)';
+            ctx.strokeStyle = 'rgba(20, 184, 166, 0.38)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.roundRect(panelX, panelY, 178, 94, 8);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.font = '10px monospace';
+            ctx.fillStyle = 'rgba(148, 163, 184, 1)';
+            ctx.fillText('3D RELATIVE OFFSET', panelX + 12, panelY + 18);
+            ctx.fillStyle = 'rgba(34, 211, 238, 1)';
+            ctx.fillText(`X  ${formatSigned(dx, 'mm')}`, panelX + 12, panelY + 37);
+            ctx.fillStyle = 'rgba(45, 212, 191, 1)';
+            ctx.fillText(`Y  ${formatSigned(dy, 'mm')}`, panelX + 12, panelY + 53);
+            ctx.fillStyle = 'rgba(103, 232, 249, 1)';
+            ctx.fillText(`Z  ${formatSigned(dz, 'mm')}`, panelX + 12, panelY + 69);
+            ctx.fillStyle = 'rgba(216, 180, 254, 1)';
+            ctx.fillText(`D  ${distance.toFixed(2)}mm`, panelX + 12, panelY + 85);
         }
 
         function updateValues() {
             dx = Number(sliderDx.value);
             dy = Number(sliderDy.value);
+            dz = Number(sliderDz.value);
             dt = Number(sliderDt.value);
 
             valueDx.textContent = formatSigned(dx, 'mm');
             valueDy.textContent = formatSigned(dy, 'mm');
+            valueDz.textContent = formatSigned(dz, 'mm');
             valueDt.textContent = formatSigned(dt, '°');
 
             resultOffset.textContent =
-                `ΔX: ${formatSigned(-dx)} / ΔY: ${formatSigned(-dy)}`;
+                `ΔX: ${formatSigned(-dx)} / ΔY: ${formatSigned(-dy)} / ΔZ: ${formatSigned(-dz)}`;
 
             const residual = Math.sqrt(
                 Math.pow(dx, 2) +
-                Math.pow(dy, 2)
+                Math.pow(dy, 2) +
+                Math.pow(dz, 2)
             );
+
+            resultDistance.textContent = `${residual.toFixed(2)}mm`;
 
             if (residual <= 0.30) {
                 statusBadge.textContent = '정상 가동';
@@ -2841,6 +2960,7 @@
 
         sliderDx.addEventListener('input', updateValues);
         sliderDy.addEventListener('input', updateValues);
+        sliderDz.addEventListener('input', updateValues);
         sliderDt.addEventListener('input', updateValues);
 
         randomButton.addEventListener('click', () => {
@@ -2849,6 +2969,9 @@
 
             sliderDy.value =
                 (Math.random() * 4 - 2).toFixed(2);
+
+            sliderDz.value =
+                (Math.random() * 6 - 3).toFixed(2);
 
             sliderDt.value =
                 (Math.random() * 6 - 3).toFixed(2);
@@ -2873,6 +2996,7 @@
             setTimeout(() => {
                 sliderDx.value = '0.02';
                 sliderDy.value = '-0.01';
+                sliderDz.value = '0.02';
                 sliderDt.value = '0.05';
 
                 resultLatency.textContent =
