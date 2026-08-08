@@ -1210,6 +1210,68 @@
 .fa-chart-line::before{content:"⌁";}
 .fa-circle-check::before{content:"✓";}
 </style>
+
+<style id="responsive-layout-fix">
+/* =========================================================
+   RESPONSIVE LAYOUT FIX
+   오프라인 Tailwind 대체 CSS에서 빠졌던 responsive span/flex utilities 보강
+   내용/색상/기능은 변경하지 않음
+   ========================================================= */
+
+/* Grid/Flex 내부 요소가 콘텐츠 길이 때문에 칼럼을 밀어내지 않도록 설정 */
+.dashboard-main .grid > *,
+.dashboard-main .flex > * {
+    min-width: 0;
+}
+
+/* 태블릿 이상 */
+@media (min-width: 768px) {
+    .md\:flex-row { flex-direction: row !important; }
+}
+
+/* 노트북/데스크톱 */
+@media (min-width: 1024px) {
+    .lg\:col-span-4 { grid-column: span 4 / span 4 !important; }
+    .lg\:col-span-5 { grid-column: span 5 / span 5 !important; }
+    .lg\:col-span-7 { grid-column: span 7 / span 7 !important; }
+    .lg\:flex-row { flex-direction: row !important; }
+    .lg\:items-end { align-items: flex-end !important; }
+}
+
+/* 대형 데스크톱 */
+@media (min-width: 1280px) {
+    .xl\:col-span-2 { grid-column: span 2 / span 2 !important; }
+    .xl\:col-span-3 { grid-column: span 3 / span 3 !important; }
+}
+
+/* 넓은 화면에서 보고서가 좌측에 몰리지 않도록 전체 사용 가능 폭을 활용 */
+@media (min-width: 1280px) {
+    .dashboard-main > section,
+    .dashboard-main > footer {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* 모바일/작은 태블릿에서는 한 열로 안전하게 정렬 */
+@media (max-width: 767px) {
+    .dashboard-main > section,
+    .dashboard-main > footer {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    .dashboard-main .grid {
+        min-width: 0;
+    }
+
+    .dashboard-main canvas,
+    .dashboard-main svg {
+        max-width: 100%;
+    }
+}
+</style>
+
 </head>
 
 <body class="antialiased selection:bg-cyan-500 selection:text-slate-900">
