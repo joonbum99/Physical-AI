@@ -2,22 +2,13 @@
 <html lang="ko" class="scroll-smooth">
 
 <head>
+    <!-- OFFLINE STANDALONE BUILD: no external images, CDN scripts, CSS, fonts, or HTTP requests -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
         Physical AI | HD현대삼호 선박 작업구역 YOLO26n 검출 & 6축 로봇 좌표 자동보정 시스템
     </title>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         body {
@@ -45,6 +36,7 @@
                 #818cf8 50%,
                 #c084fc 100%
             );
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -271,6 +263,7 @@
 
         .dashboard-main #overview .gradient-text {
             background: linear-gradient(90deg, var(--mint), var(--cyan));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -838,6 +831,385 @@
         }
     </style>
 
+
+<style id="visual-report-upgrade">
+    .dashboard-main section p,
+    .dashboard-main section li {
+        font-size: 14px !important;
+        line-height: 1.78 !important;
+    }
+    .dashboard-main section h3 { letter-spacing: -0.02em !important; }
+    .dashboard-main .section-guide {
+        display: grid;
+        gap: 8px;
+        color: #c9d5d0;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+    .dashboard-main .section-guide span {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .dashboard-main .section-guide i { color: var(--marine-accent); margin-top: 4px; }
+    .viz-3d-wrap {
+        position: relative;
+        min-height: 170px;
+        border-radius: 16px;
+        border: 1px solid rgba(56, 189, 248, 0.16);
+        background: linear-gradient(180deg, rgba(10,14,22,0.35), rgba(8,12,18,0.65));
+        overflow: hidden;
+    }
+    .viz-3d-wrap svg { width: 100%; height: 100%; display: block; }
+    .mini-badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 6px 10px; border-radius: 999px;
+        font-size: 11px; font-weight: 700; letter-spacing: .04em;
+        border: 1px solid rgba(148,163,184,.18);
+        background: rgba(2,6,23,.45); color: #c8d1cf;
+    }
+    .data-chip {
+        display: inline-flex; align-items: center; gap: 7px;
+        padding: 8px 12px; border-radius: 10px; font-size: 12px;
+        background: rgba(2,6,23,.50); border: 1px solid rgba(148,163,184,.12);
+        color: #c6d3d0;
+    }
+    .mes-map-panel { background: linear-gradient(145deg, rgba(12,19,28,.98), rgba(17,26,36,.98)); }
+    .mes-domain-button.active {
+        border-color: rgba(24,230,173,.55) !important;
+        background: rgba(24,230,173,.10) !important;
+        color: #f0fff8 !important;
+        box-shadow: 0 0 0 1px rgba(24,230,173,.10) inset;
+    }
+    .mes-step-select {
+        width: 100%; background: rgba(2,6,23,.68); color: #e2e8f0;
+        border: 1px solid rgba(71,85,105,.75); border-radius: 10px;
+        padding: 12px 14px; font-size: 13px; outline: none;
+    }
+    .mes-step-select:focus { border-color: rgba(34,211,238,.8); }
+    .meshint {
+        font-size: 12px; color: #91a09a; line-height: 1.65;
+    }
+    .svg-label {
+        fill: #dce8e4; font-size: 10px; font-family: ui-monospace, monospace; letter-spacing: .06em;
+    }
+    .svg-small { fill: #91a09a; font-size: 8px; font-family: ui-monospace, monospace; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+    .payback-note {
+        font-size: 12px; color: #b8c4c0; line-height: 1.7;
+    }
+</style>
+
+
+<style id="photo-upgrade-style">
+.photo-card-img {width:100%; height:220px; object-fit:cover; border-radius:16px; border:1px solid rgba(255,255,255,.08);}
+.photo-card-wrap {position:relative;}
+.photo-badges {position:absolute; left:14px; top:14px; display:flex; gap:8px; flex-wrap:wrap;}
+.photo-badge {padding:6px 10px; border-radius:999px; background:rgba(2,6,23,.68); color:#eef7f3; border:1px solid rgba(255,255,255,.12); font-size:11px; font-weight:700; letter-spacing:.04em;}
+.photo-caption-box {position:absolute; left:14px; right:14px; bottom:14px; padding:10px 12px; border-radius:14px; background:linear-gradient(180deg, rgba(2,6,23,.12), rgba(2,6,23,.82)); border:1px solid rgba(255,255,255,.08);}
+.photo-caption-box .title {display:block; font-size:13px; font-weight:700; color:#f8fafc;}
+.photo-caption-box .sub {display:block; margin-top:4px; font-size:11px; color:#d3ddd9;}
+.photo-grid-note {font-size:13px; color:#b9c5c0; line-height:1.7;}
+.mes-scene {position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,.08); min-height:400px; background:#081019;}
+.mes-scene > img {position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(0.95) brightness(0.48) contrast(1.03);}
+.mes-scene-overlay {position:relative; z-index:2; padding:18px; min-height:400px; background:linear-gradient(180deg, rgba(7,14,21,.15), rgba(7,14,21,.35) 30%, rgba(7,14,21,.78) 100%);}
+.mes-zone {position:absolute; border:2px solid rgba(46, 211, 183, .9); background:rgba(46, 211, 183, .10); border-radius:12px; box-shadow:0 0 0 1px rgba(46, 211, 183, .15) inset;}
+.mes-zone .zone-label {position:absolute; top:-14px; left:8px; padding:4px 8px; border-radius:999px; background:rgba(5,12,18,.88); color:#ebfffb; font-size:11px; font-weight:700; border:1px solid rgba(46, 211, 183, .35);}
+.mes-node {position:absolute; padding:6px 9px; border-radius:10px; background:rgba(5,12,18,.86); color:#edf7f4; font-size:11px; font-weight:700; border:1px solid rgba(255,255,255,.13); white-space:nowrap;}
+.mes-node.green {border-color:rgba(34,197,94,.52);} .mes-node.red {border-color:rgba(239,68,68,.52);} .mes-node.cyan {border-color:rgba(34,211,238,.52);} .mes-node.amber {border-color:rgba(245,158,11,.52);} .mes-node.purple {border-color:rgba(168,85,247,.52);} 
+.metric-kpi {padding:12px 14px; border-radius:14px; border:1px solid rgba(255,255,255,.08); background:rgba(2,6,23,.35);} 
+.maint-input {width:100%; background:rgba(2,6,23,.68); color:#fff; border:1px solid rgba(71,85,105,.8); border-radius:12px; padding:13px 14px; font-size:18px; font-weight:700; outline:none;}
+.maint-input:focus {border-color:rgba(34,211,238,.9);} 
+.calc-line {display:flex; justify-content:space-between; gap:12px; padding:11px 12px; border-radius:12px; background:rgba(2,6,23,.38); border:1px solid rgba(255,255,255,.06); font-size:14px;}
+.calc-line strong {font-family: ui-monospace, SFMono-Regular, monospace;}
+.no-left-right .meshint b {font-weight:700; color:#eef7f3;}
+</style>
+
+<style id="offline-utility-css">
+.-translate-y-1\/2{transform:translateY(-50%);}
+.-z-10{z-index:-10;}
+.absolute{position:absolute;}
+.accent-cyan-400{accent-color:#22d3ee;}
+.animate-ping{animation:offlinePing 1.4s cubic-bezier(0,0,.2,1) infinite;}
+.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+.bg-amber-500\/20{background-color:rgba(245,158,11,0.2);}
+.bg-cyan-400{background-color:#22d3ee;}
+.bg-cyan-500\/10{background-color:rgba(6,182,212,0.1);}
+.bg-cyan-500\/15{background-color:rgba(6,182,212,0.15);}
+.bg-cyan-500\/20{background-color:rgba(6,182,212,0.2);}
+.bg-emerald-500\/10{background-color:rgba(16,185,129,0.1);}
+.bg-emerald-500\/15{background-color:rgba(16,185,129,0.15);}
+.bg-emerald-500\/20{background-color:rgba(16,185,129,0.2);}
+.bg-indigo-500\/10{background-color:rgba(99,102,241,0.1);}
+.bg-indigo-500\/15{background-color:rgba(99,102,241,0.15);}
+.bg-indigo-500\/20{background-color:rgba(99,102,241,0.2);}
+.bg-orange-500\/20{background-color:rgba(249,115,22,0.2);}
+.bg-purple-500\/10{background-color:rgba(168,85,247,0.1);}
+.bg-purple-500\/15{background-color:rgba(168,85,247,0.15);}
+.bg-purple-500\/20{background-color:rgba(168,85,247,0.2);}
+.bg-red-500\/20{background-color:rgba(239,68,68,0.2);}
+.bg-slate-800{background-color:#1e293b;}
+.bg-slate-800\/90{background-color:rgba(30,41,59,0.9);}
+.bg-slate-900\/50{background-color:rgba(15,23,42,0.5);}
+.bg-slate-900\/60{background-color:rgba(15,23,42,0.6);}
+.bg-slate-950\/50{background-color:rgba(2,6,23,0.5);}
+.bg-slate-950\/55{background-color:rgba(2,6,23,0.55);}
+.bg-slate-950\/60{background-color:rgba(2,6,23,0.6);}
+.bg-slate-950\/70{background-color:rgba(2,6,23,0.7);}
+.block{display:block;}
+.blur-3xl{filter:blur(64px);}
+.border{border-width:1px;border-style:solid;}
+.border-amber-500\/20{border-color:rgba(245,158,11,0.2);}
+.border-amber-500\/25{border-color:rgba(245,158,11,0.25);}
+.border-amber-500\/30{border-color:rgba(245,158,11,0.3);}
+.border-cyan-500\/20{border-color:rgba(6,182,212,0.2);}
+.border-cyan-500\/25{border-color:rgba(6,182,212,0.25);}
+.border-cyan-500\/30{border-color:rgba(6,182,212,0.3);}
+.border-emerald-500\/20{border-color:rgba(16,185,129,0.2);}
+.border-emerald-500\/25{border-color:rgba(16,185,129,0.25);}
+.border-emerald-500\/30{border-color:rgba(16,185,129,0.3);}
+.border-indigo-500\/20{border-color:rgba(99,102,241,0.2);}
+.border-indigo-500\/25{border-color:rgba(99,102,241,0.25);}
+.border-l-4{border-left-width:4px;border-left-style:solid;}
+.border-l-cyan-400{border-left-color:#22d3ee;}
+.border-l-emerald-400{border-left-color:#34d399;}
+.border-l-indigo-400{border-left-color:#818cf8;}
+.border-l-purple-400{border-left-color:#c084fc;}
+.border-orange-500\/30{border-color:rgba(249,115,22,0.3);}
+.border-purple-500\/20{border-color:rgba(168,85,247,0.2);}
+.border-purple-500\/25{border-color:rgba(168,85,247,0.25);}
+.border-red-500\/20{border-color:rgba(239,68,68,0.2);}
+.border-red-500\/40{border-color:rgba(239,68,68,0.4);}
+.border-slate-700{border-color:#334155;}
+.border-slate-700\/80{border-color:rgba(51,65,85,0.8);}
+.border-slate-800{border-color:#1e293b;}
+.border-slate-800\/80{border-color:rgba(30,41,59,0.8);}
+.border-slate-900{border-color:#0f172a;}
+.border-t{border-top-width:1px;border-top-style:solid;}
+.bottom-10{bottom:2.5rem;}
+.cursor-pointer{cursor:pointer;}
+.flex{display:flex;}
+.flex-1{flex:1 1 0%;}
+.flex-col{flex-direction:column;}
+.flex-wrap{flex-wrap:wrap;}
+.font-black{font-weight:900;}
+.font-bold{font-weight:700;}
+.font-extrabold{font-weight:800;}
+.font-light{font-weight:300;}
+.font-medium{font-weight:500;}
+.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;}
+.font-normal{font-weight:400;}
+.font-semibold{font-weight:600;}
+.gap-2{gap:0.5rem;}
+.gap-3{gap:0.75rem;}
+.gap-4{gap:1rem;}
+.gap-5{gap:1.25rem;}
+.gap-6{gap:1.5rem;}
+.gap-7{gap:1.75rem;}
+.gap-8{gap:2rem;}
+.grid{display:grid;}
+.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr));}
+.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+.h-10{height:2.5rem;}
+.h-11{height:2.75rem;}
+.h-2{height:0.5rem;}
+.h-7{height:1.75rem;}
+.h-72{height:18rem;}
+.h-9{height:2.25rem;}
+.h-96{height:24rem;}
+.h-full{height:100%;}
+.inline-flex{display:inline-flex;}
+.items-center{align-items:center;}
+.items-start{align-items:flex-start;}
+.justify-between{justify-content:space-between;}
+.justify-center{justify-content:center;}
+.leading-relaxed{line-height:1.625;}
+.leading-tight{line-height:1.25;}
+.left-10{left:2.5rem;}
+.left-4{left:1rem;}
+.max-w-2xl{max-width:42rem;}
+.max-w-3xl{max-width:48rem;}
+.max-w-4xl{max-width:56rem;}
+.max-w-7xl{max-width:80rem;}
+.mb-1{margin-bottom:0.25rem;}
+.mb-10{margin-bottom:2.5rem;}
+.mb-12{margin-bottom:3rem;}
+.mb-14{margin-bottom:3.5rem;}
+.mb-16{margin-bottom:4rem;}
+.mb-2{margin-bottom:0.5rem;}
+.mb-3{margin-bottom:0.75rem;}
+.mb-4{margin-bottom:1rem;}
+.mb-5{margin-bottom:1.25rem;}
+.mb-6{margin-bottom:1.5rem;}
+.mb-8{margin-bottom:2rem;}
+.min-h-screen{min-height:100vh;}
+.ml-1{margin-left:0.25rem;}
+.mr-2{margin-right:0.5rem;}
+.mt-0\.5{margin-top:0.125rem;}
+.mt-1{margin-top:0.25rem;}
+.mt-2{margin-top:0.5rem;}
+.mt-3{margin-top:0.75rem;}
+.mt-4{margin-top:1rem;}
+.mt-6{margin-top:1.5rem;}
+.mt-7{margin-top:1.75rem;}
+.mx-auto{margin-left:auto;margin-right:auto;}
+.outline-none{outline:none;}
+.overflow-hidden{overflow:hidden;}
+.p-2{padding:0.5rem;}
+.p-3{padding:0.75rem;}
+.p-4{padding:1rem;}
+.p-5{padding:1.25rem;}
+.p-6{padding:1.5rem;}
+.p-8{padding:2rem;}
+.pb-20{padding-bottom:5rem;}
+.pl-11{padding-left:2.75rem;}
+.pr-4{padding-right:1rem;}
+.pt-32{padding-top:8rem;}
+.pt-4{padding-top:1rem;}
+.px-2{padding-inline:0.5rem;}
+.px-2\.5{padding-inline:0.625rem;}
+.px-3{padding-inline:0.75rem;}
+.px-3\.5{padding-inline:0.875rem;}
+.px-4{padding-inline:1rem;}
+.px-5{padding-inline:1.25rem;}
+.px-6{padding-inline:1.5rem;}
+.py-1{padding-block:0.25rem;}
+.py-1\.5{padding-block:0.375rem;}
+.py-16{padding-block:4rem;}
+.py-2\.5{padding-block:0.625rem;}
+.py-20{padding-block:5rem;}
+.py-3{padding-block:0.75rem;}
+.py-8{padding-block:2rem;}
+.relative{position:relative;}
+.right-10{right:2.5rem;}
+.rounded{border-radius:.25rem;}
+.rounded-2xl{border-radius:1rem;}
+.rounded-full{border-radius:9999px;}
+.rounded-lg{border-radius:.5rem;}
+.rounded-md{border-radius:.375rem;}
+.rounded-xl{border-radius:.75rem;}
+.selection\:bg-cyan-500{background-color:#06b6d4;}
+.selection\:text-slate-900{color:#0f172a;}
+.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.22);}
+.shrink-0{flex-shrink:0;}
+.space-x-2{column-gap:0.5rem;}
+.space-x-3{column-gap:0.75rem;}
+.space-y-2{row-gap:0.5rem;display:flex;flex-direction:column;}
+.space-y-3{row-gap:0.75rem;display:flex;flex-direction:column;}
+.space-y-4{row-gap:1rem;display:flex;flex-direction:column;}
+.text-2xl{font-size:1.5rem;}
+.text-3xl{font-size:1.875rem;}
+.text-4xl{font-size:2.25rem;}
+.text-\[10px\]{font-size:10px;}
+.text-\[11px\]{font-size:11px;}
+.text-\[12px\]{font-size:12px;}
+.text-\[15px\]{font-size:15px;}
+.text-amber-300{color:#fcd34d;}
+.text-amber-400{color:#fbbf24;}
+.text-amber-400\/80{color:rgba(251,191,36,0.8);}
+.text-base{font-size:1rem;}
+.text-center{text-align:center;}
+.text-cyan-200{color:#a5f3fc;}
+.text-cyan-300{color:#67e8f9;}
+.text-cyan-400{color:#22d3ee;}
+.text-emerald-300{color:#6ee7b7;}
+.text-emerald-400{color:#34d399;}
+.text-indigo-200{color:#c7d2fe;}
+.text-indigo-300{color:#a5b4fc;}
+.text-indigo-400{color:#818cf8;}
+.text-left{text-align:left;}
+.text-lg{font-size:1.125rem;}
+.text-orange-300{color:#fdba74;}
+.text-orange-400{color:#fb923c;}
+.text-orange-400\/80{color:rgba(251,146,60,0.8);}
+.text-purple-200{color:#e9d5ff;}
+.text-purple-300{color:#d8b4fe;}
+.text-purple-400{color:#c084fc;}
+.text-red-300{color:#fca5a5;}
+.text-red-400{color:#f87171;}
+.text-red-400\/80{color:rgba(248,113,113,0.8);}
+.text-right{text-align:right;}
+.text-slate-200{color:#e2e8f0;}
+.text-slate-300{color:#cbd5e1;}
+.text-slate-400{color:#94a3b8;}
+.text-slate-500{color:#64748b;}
+.text-sm{font-size:0.875rem;}
+.text-white{color:#ffffff;}
+.text-xl{font-size:1.25rem;}
+.text-xs{font-size:0.75rem;}
+.top-1\/2{top:50%;}
+.top-1\/4{top:25%;}
+.tracking-tight{letter-spacing:-.025em;}
+.tracking-wider{letter-spacing:.05em;}
+.tracking-widest{letter-spacing:.1em;}
+.transition-all{transition:all .2s ease;}
+.uppercase{text-transform:uppercase;}
+.w-10{width:2.5rem;}
+.w-11{width:2.75rem;}
+.w-2{width:0.5rem;}
+.w-7{width:1.75rem;}
+.w-9{width:2.25rem;}
+.w-96{width:24rem;}
+.w-fit{width:fit-content;}
+.w-full{width:100%;}
+.focus\:border-cyan-400:focus{border-color:#22d3ee;}
+.hover\:bg-cyan-500\/30:hover{background-color:rgba(6,182,212,0.3);}
+.hover\:bg-slate-700:hover{background-color:#334155;}
+.hover\:border-cyan-400\/70:hover{border-color:rgba(34,211,238,0.7);}
+.hover\:border-emerald-400\/70:hover{border-color:rgba(52,211,153,0.7);}
+.hover\:border-indigo-400\/70:hover{border-color:rgba(129,140,248,0.7);}
+.hover\:border-l-cyan-300:hover{border-left-color:#67e8f9;}
+.hover\:border-l-emerald-300:hover{border-left-color:#6ee7b7;}
+.hover\:border-l-indigo-300:hover{border-left-color:#a5b4fc;}
+.hover\:border-l-purple-300:hover{border-left-color:#d8b4fe;}
+@keyframes offlinePing{75%,100%{transform:scale(2);opacity:0;}}
+@media(min-width:768px){.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr));}.md\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr));}.md\:h-96{height:24rem;}.md\:items-center{align-items:center;}.md\:justify-between{justify-content:space-between;}.md\:text-4xl{font-size:2.25rem;}.md\:text-5xl{font-size:3rem;}.md\:text-lg{font-size:1.125rem;}}
+@media(min-width:1024px){.lg\:grid-cols-12{grid-template-columns:repeat(12,minmax(0,1fr));}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}.lg\:items-center{align-items:center;}.lg\:justify-between{justify-content:space-between;}}
+@media(min-width:1280px){.xl\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}.xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr));}.xl\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr));}}
+.fa-solid,.fa-regular{display:inline-flex;align-items:center;justify-content:center;font-style:normal;line-height:1;width:1.1em;}
+.fa-sailboat::before{content:"⛵";}
+.fa-ship::before{content:"⚓";}
+.fa-eye::before{content:"◉";}
+.fa-shield-halved::before{content:"◈";}
+.fa-robot::before{content:"▣";}
+.fa-layer-group::before{content:"▤";}
+.fa-chart-column::before{content:"▥";}
+.fa-database::before{content:"▦";}
+.fa-sliders::before{content:"≛";}
+.fa-file-lines::before{content:"▧";}
+.fa-bars::before{content:"☰";}
+.fa-bell::before{content:"●";}
+.fa-circle-user::before{content:"◉";}
+.fa-lightbulb::before{content:"✦";}
+.fa-fire-flame-curved::before{content:"♨";}
+.fa-drafting-compass::before{content:"⌖";}
+.fa-rotate-right::before{content:"↻";}
+.fa-user-gear::before{content:"⚙";}
+.fa-hand::before{content:"■";}
+.fa-wrench::before{content:"⚒";}
+.fa-crosshairs::before{content:"⌖";}
+.fa-camera-rotate::before{content:"◉";}
+.fa-sun::before{content:"☼";}
+.fa-filter::before{content:"▽";}
+.fa-object-group::before{content:"▱";}
+.fa-location-crosshairs::before{content:"⌾";}
+.fa-images::before{content:"▧";}
+.fa-book-open::before{content:"▥";}
+.fa-magnifying-glass::before{content:"⌕";}
+.fa-diagram-project::before{content:"⌘";}
+.fa-dice::before{content:"◆";}
+.fa-wand-magic-sparkles::before{content:"✧";}
+.fa-envelope::before{content:"✉";}
+.fa-circle-dot::before{content:"•";}
+.fa-list-check::before{content:"✓";}
+.fa-gauge-high::before{content:"◔";}
+.fa-plug::before{content:"⌁";}
+.fa-arrows-to-circle::before{content:"⊙";}
+.fa-screwdriver-wrench::before{content:"⚒";}
+.fa-magnifying-glass-plus::before{content:"⌕";}
+.fa-chart-line::before{content:"⌁";}
+.fa-circle-check::before{content:"✓";}
+</style>
 </head>
 
 <body class="antialiased selection:bg-cyan-500 selection:text-slate-900">
@@ -881,7 +1253,7 @@
 
             <a href="#embedding-rag">
                 <i class="fa-solid fa-database"></i>
-                <span>Embedding & RAG</span>
+                <span>MES DB + RAG</span>
             </a>
 
             <a href="#simulator">
@@ -1048,164 +1420,19 @@
 
     <!-- Report Sequence: 현장 장애 요소 → 안전·인터록 → 작업별 분기 → 통합 기술스택 -->
     <!-- Problem Section -->
-    <section id="problem"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+    
 
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Shipbuilding Field Challenges
-            </h2>
 
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                조선소 선행의장 현장의 3대 장애 요소
-            </h3>
+<section id="problem" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80 report-visual-upgraded">
+  <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Shipbuilding Field Challenges</h2><h3 class="text-4xl md:text-5xl font-bold text-white">조선소 선행의장 현장의 3대 장애 요소</h3><div class="section-guide mt-4 text-left max-w-2xl mx-auto"><span><i class="fa-solid fa-circle-dot"></i><span>외부 사진 대신 항목별 현장 특성을 반영한 독립형 3D 도식으로 구성했습니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>기관실 환경, 용접 작업, 좌표 편차가 서로 다른 구조로 보이도록 표현했습니다.</span></span></div></div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+    <div class="glass-panel p-6 rounded-2xl border border-red-500/20"><div class="flex items-center gap-3 mb-4"><div class="w-11 h-11 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400"><i class="fa-solid fa-lightbulb"></i></div><div><h4 class="text-xl font-bold text-red-300">① 열악한 영상환경</h4><span class="text-[11px] font-mono text-red-400">LOW LIGHT · SHADOW · GLARE</span></div></div><div class="photo-card-wrap mb-5"><svg viewBox="0 0 720 360" class="photo-card-img" role="img" aria-label="기관실 저조도와 복잡 배관 환경 3D 도식"><defs><linearGradient id="erbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#101923"/><stop offset="1" stop-color="#04080d"/></linearGradient><linearGradient id="erm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#475b6d"/><stop offset="1" stop-color="#1b2936"/></linearGradient><radialGradient id="erg"><stop offset="0" stop-color="#f8e6a0" stop-opacity=".9"/><stop offset="1" stop-color="#f8e6a0" stop-opacity="0"/></radialGradient></defs><rect width="720" height="360" fill="url(#erbg)"/><polygon points="90,310 300,190 650,242 438,354" fill="#0c1822" stroke="#3d5365"/><polygon points="90,310 90,96 300,22 300,190" fill="#142330" stroke="#3d5365"/><polygon points="300,190 300,22 650,78 650,242" fill="#192a38" stroke="#3d5365"/><g fill="none" stroke-linecap="round"><path d="M126 82v178h210v-74h208" stroke="#5f7c8f" stroke-width="16"/><path d="M168 60v100h86v122" stroke="#2bb8ad" stroke-width="10"/><path d="M368 58v88h154v82" stroke="#7c8fa0" stroke-width="13"/><path d="M420 110h136v92" stroke="#c07c45" stroke-width="9"/><path d="M208 112h110v64" stroke="#536f84" stroke-width="8"/></g><g fill="#273b4a" stroke="#6a8294"><rect x="236" y="213" width="124" height="78" rx="10"/><rect x="398" y="201" width="128" height="88" rx="10"/><rect x="548" y="141" width="58" height="104" rx="12"/></g><g stroke="#8fa2ae" stroke-width="4"><line x1="120" y1="280" x2="594" y2="280"/><line x1="140" y1="310" x2="560" y2="310"/></g><circle cx="112" cy="56" r="11" fill="#ffe28a"/><circle cx="112" cy="56" r="72" fill="url(#erg)"/><path d="M112 56L310 240L40 270Z" fill="#ffe28a" opacity=".08"/><g fill="#02060a" opacity=".6"><ellipse cx="500" cy="310" rx="96" ry="22"/><ellipse cx="220" cy="294" rx="68" ry="18"/></g><g font-family="monospace" font-size="14" font-weight="700"><text x="28" y="30" fill="#f87171">LOW LIGHT / SHADOW</text><text x="486" y="60" fill="#67e8f9">REFLECTIVE PIPE</text><text x="454" y="336" fill="#94a3b8">OCCLUDED WORK ZONE</text></g><rect x="462" y="170" width="106" height="78" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="8 6"/><circle cx="515" cy="208" r="6" fill="#ef4444"/></svg></div><div class="section-guide"><span><i class="fa-solid fa-circle-dot"></i><span>배관과 구조물 사이의 음영이 작업부 경계를 약하게 만듭니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>금속 배관 반사는 영상의 일부를 과포화시킵니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>가려진 작업부는 재촬영 또는 시점 변경이 필요합니다.</span></span></div></div>
+    <div class="glass-panel p-6 rounded-2xl border border-amber-500/20"><div class="flex items-center gap-3 mb-4"><div class="w-11 h-11 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400"><i class="fa-solid fa-fire-flame-curved"></i></div><div><h4 class="text-xl font-bold text-amber-300">② 가혹한 작업환경</h4><span class="text-[11px] font-mono text-amber-400">ARC LIGHT · FUME · SPATTER</span></div></div><div class="photo-card-wrap mb-5"><svg viewBox="0 0 720 360" class="photo-card-img" role="img" aria-label="협동로봇 용접 아크 흄 스패터 3D 도식"><defs><linearGradient id="wbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10151c"/><stop offset="1" stop-color="#05070a"/></linearGradient><radialGradient id="arc"><stop offset="0" stop-color="#fffef0"/><stop offset=".22" stop-color="#9df3ff"/><stop offset="1" stop-color="#58d5ff" stop-opacity="0"/></radialGradient></defs><rect width="720" height="360" fill="url(#wbg)"/><polygon points="86,310 280,205 650,248 446,356" fill="#101c28" stroke="#43586a"/><polygon points="86,310 86,128 280,62 280,205" fill="#172532" stroke="#43586a"/><g stroke-linecap="round" fill="none"><path d="M158 270L174 214L224 184L270 210" stroke="#6ee7b7" stroke-width="26"/><circle cx="174" cy="214" r="18" fill="#1f2937" stroke="#6ee7b7" stroke-width="8"/><circle cx="224" cy="184" r="18" fill="#1f2937" stroke="#6ee7b7" stroke-width="8"/><path d="M270 210L324 230" stroke="#7dd3fc" stroke-width="14"/><path d="M324 230L356 247" stroke="#a5b4fc" stroke-width="8"/></g><polygon points="355,252 510,212 584,245 428,286" fill="#334155" stroke="#718096"/><polygon points="428,286 584,245 584,278 432,320" fill="#1f2937" stroke="#718096"/><circle cx="370" cy="250" r="62" fill="url(#arc)"/><circle cx="370" cy="250" r="8" fill="#fff"/><g stroke="#fbbf24" stroke-width="3"><line x1="374" y1="247" x2="412" y2="220"/><line x1="376" y1="252" x2="426" y2="266"/><line x1="366" y1="246" x2="338" y2="214"/><line x1="369" y1="255" x2="348" y2="292"/></g><g fill="none" stroke="#cbd5e1" opacity=".28" stroke-linecap="round"><path d="M374 226C420 180 470 196 468 144" stroke-width="20"/><path d="M392 220C430 172 506 186 520 128" stroke-width="13"/></g><g font-family="monospace" font-size="14" font-weight="700"><text x="28" y="30" fill="#fbbf24">ARC LIGHT</text><text x="480" y="118" fill="#cbd5e1">FUME CLOUD</text><text x="438" y="310" fill="#67e8f9">FILLET WELD</text><text x="120" y="315" fill="#6ee7b7">COBOT ARM</text></g></svg></div><div class="section-guide"><span><i class="fa-solid fa-circle-dot"></i><span>아크광은 순간적인 프레임 포화를 유발합니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>흄은 카메라 시야를 가리고 대비를 낮춥니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>스패터와 공구 이동은 ROI 연속성을 끊습니다.</span></span></div></div>
+    <div class="glass-panel p-6 rounded-2xl border border-purple-500/20"><div class="flex items-center gap-3 mb-4"><div class="w-11 h-11 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400"><i class="fa-solid fa-crosshairs"></i></div><div><h4 class="text-xl font-bold text-purple-300">③ 복합 좌표 변형</h4><span class="text-[11px] font-mono text-purple-400">OFFSET · DEPTH LOSS · VIBRATION</span></div></div><div class="photo-card-wrap mb-5"><svg viewBox="0 0 720 360" class="photo-card-img" role="img" aria-label="블록 편차와 RGB-D 좌표 자동보정 3D 도식"><defs><linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#111827"/><stop offset="1" stop-color="#070a12"/></linearGradient></defs><rect width="720" height="360" fill="url(#cbg)"/><g stroke="#26384a" stroke-width="1"><path d="M65 310H650"/><path d="M95 280H620"/><path d="M125 250H590"/><path d="M155 220H560"/></g><polygon points="300,260 456,182 602,224 446,306" fill="#1b2c3c" stroke="#496279"/><polygon points="300,260 300,134 456,74 456,182" fill="#24394b" stroke="#496279"/><polygon points="456,182 456,74 602,110 602,224" fill="#30495d" stroke="#496279"/><g fill="none" stroke-linecap="round"><path d="M110 290L128 236L184 206L238 224" stroke="#7c3aed" stroke-width="28"/><circle cx="128" cy="236" r="17" fill="#111827" stroke="#a78bfa" stroke-width="8"/><circle cx="184" cy="206" r="17" fill="#111827" stroke="#a78bfa" stroke-width="8"/><path d="M238 224L292 205" stroke="#22d3ee" stroke-width="13"/></g><rect x="279" y="186" width="34" height="25" rx="4" fill="#0f172a" stroke="#67e8f9" stroke-width="2"/><circle cx="289" cy="197" r="4" fill="#67e8f9"/><circle cx="303" cy="197" r="4" fill="#67e8f9"/><line x1="296" y1="211" x2="430" y2="178" stroke="#67e8f9" stroke-width="2" stroke-dasharray="7 5"/><circle cx="430" cy="178" r="8" fill="#34d399"/><circle cx="456" cy="163" r="8" fill="#f59e0b"/><line x1="430" y1="178" x2="456" y2="163" stroke="#f59e0b" stroke-width="3"/><g stroke-width="3"><line x1="430" y1="178" x2="536" y2="178" stroke="#22d3ee"/><line x1="430" y1="178" x2="388" y2="215" stroke="#34d399"/><line x1="430" y1="178" x2="430" y2="91" stroke="#c084fc"/></g><g font-family="monospace" font-size="14" font-weight="700"><text x="540" y="181" fill="#22d3ee">X</text><text x="372" y="224" fill="#34d399">Y</text><text x="438" y="91" fill="#c084fc">Z</text><text x="438" y="150" fill="#34d399">CAD TARGET</text><text x="468" y="163" fill="#f59e0b">DETECTED</text><text x="24" y="30" fill="#d8b4fe">RGB-D + XYZ/θ OFFSET</text></g></svg></div><div class="section-guide"><span><i class="fa-solid fa-circle-dot"></i><span>CAD 기준점과 실제 검출점의 위치가 달라질 수 있습니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>Depth 결손은 X·Y·Z 위치 산출의 안정성을 낮춥니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>로봇 진동까지 더해지면 보정량이 증가합니다.</span></span></div></div>
+  </div>
+</section>
 
-            <p class="text-slate-400 text-sm mt-3">
-                기관실 블록 내부의 열악한 영상환경과 제작 편차를 극복합니다.
-            </p>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-
-            <!-- 영상환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-red-500/20 bg-gradient-to-b from-red-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
-
-                        <i class="fa-solid fa-lightbulb text-lg"></i>
-                    </div>
-
-                    <h4 class="text-lg font-bold text-red-300">
-                        ① 열악한 영상환경
-                    </h4>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>저조도 및 음영:</strong>
-                            복잡한 구조물에 의한 국부 그림자
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>금속 표면 반사:</strong>
-                            난반사와 고광량 핫스팟
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>낮은 색상 대비:</strong>
-                            숍프라이머와 의장품의 유사색
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 작업환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-amber-500/20 bg-gradient-to-b from-amber-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
-
-                        <i class="fa-solid fa-fire-flame-curved text-lg"></i>
-                    </div>
-
-                    <h4 class="text-lg font-bold text-amber-300">
-                        ② 가혹한 작업환경
-                    </h4>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>아크광 및 흄:</strong>
-                            용접 작업 중 영상 포화 발생
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>분진 및 오염:</strong>
-                            보호창 오염으로 영상 품질 저하
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>구조물 가림:</strong>
-                            배관·공구·보강재에 의한 ROI 가림
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 좌표환경 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-purple-500/20 bg-gradient-to-b from-purple-950/10 to-transparent">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
-
-                        <i class="fa-solid fa-drafting-compass text-lg"></i>
-                    </div>
-
-                    <h4 class="text-lg font-bold text-purple-300">
-                        ③ 복합 좌표 변형
-                    </h4>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>블록 제작 편차:</strong>
-                            용접 열변형과 조립 누적오차
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>Depth 데이터 결손:</strong>
-                            금속 반사부의 깊이정보 손실
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-purple-400 mt-0.5"></i>
-
-                        <span>
-                            <strong>로봇 진동:</strong>
-                            이동·정지 시 좌표 흔들림 발생
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
 
     <!-- Safety Section -->
     <section id="safety"
@@ -1426,173 +1653,81 @@
     </section>
 
     <!-- Task Process Section -->
-    <section id="process"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+    
 
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Task-Specific Workflows
-            </h2>
 
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                작업별 분기 처리 메커니즘
-            </h3>
 
-            <p class="text-slate-400 text-sm mt-3">
-                체결·용접·좌표 보정 작업에 맞춰 영상처리와 로봇 제어를 분기합니다.
-            </p>
+<section id="process" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80 report-visual-upgraded">
+    <div class="text-center max-w-3xl mx-auto mb-14">
+        <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Task-Specific Workflows</h2>
+        <h3 class="text-4xl md:text-5xl font-bold text-white">작업별 분기 처리 메커니즘</h3>
+        <div class="section-guide mt-4 text-left max-w-2xl mx-auto">
+            <span><i class="fa-solid fa-circle-dot"></i><span>공통 비전 입력 이후 작업 종류에 따라 판단 로직과 로봇 제어가 분기됩니다.</span></span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+        <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <span class="text-[11px] font-mono text-cyan-400">FASTENING</span>
+                    <h4 class="text-xl font-bold text-white mt-1">① 조립·체결</h4>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400"><i class="fa-solid fa-wrench"></i></div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-5">
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">INPUT</span><strong class="block text-cyan-300 mt-1">볼트·와셔 ROI</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">CHECK</span><strong class="block text-cyan-300 mt-1">누락·비체결</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">CONTROL</span><strong class="block text-cyan-300 mt-1">토크·각도 확인</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">OUTPUT</span><strong class="block text-cyan-300 mt-1">PASS / NG</strong></div>
+            </div>
+            <div class="flex flex-wrap gap-2 text-[12px]">
+                <span class="data-chip">M16 Bolt</span><span class="data-chip">Washer</span><span class="data-chip">Torque</span><span class="data-chip">체결진도</span>
+            </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-
-            <!-- 체결 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-cyan-500/20 hover:border-cyan-400/50 transition-all">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
-
-                        <i class="fa-solid fa-wrench"></i>
-                    </div>
-
-                    <div>
-                        <h4 class="text-lg font-bold text-white">
-                            ① 조립·체결 작업
-                        </h4>
-
-                        <span class="text-[10px] font-mono text-cyan-400">
-                            FASTENING
-                        </span>
-                    </div>
+        <div class="glass-panel p-6 rounded-2xl border border-indigo-500/25">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <span class="text-[11px] font-mono text-indigo-400">WELDING</span>
+                    <h4 class="text-xl font-bold text-white mt-1">② 용접</h4>
                 </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <span class="text-cyan-400 font-bold">1.</span>
-
-                        <span>
-                            볼트 체결부 ROI와 바운딩박스 검출
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-cyan-400 font-bold">2.</span>
-
-                        <span>
-                            체결 유무, 와셔 누락 및 마킹선 상태 확인
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-cyan-400 font-bold">3.</span>
-
-                        <span>
-                            토크·회전각 데이터와 비전 판정 연계
-                        </span>
-                    </li>
-                </ul>
+                <div class="w-11 h-11 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400"><i class="fa-solid fa-fire-flame-curved"></i></div>
             </div>
-
-            <!-- 용접 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-indigo-500/20 hover:border-indigo-400/50 transition-all">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">
-
-                        <i class="fa-solid fa-fire-flame-curved"></i>
-                    </div>
-
-                    <div>
-                        <h4 class="text-lg font-bold text-white">
-                            ② 필릿 용접 작업
-                        </h4>
-
-                        <span class="text-[10px] font-mono text-indigo-400">
-                            WELDING
-                        </span>
-                    </div>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <span class="text-indigo-400 font-bold">1.</span>
-
-                        <span>
-                            용접 필요부와 배관 연결부 검출
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-indigo-400 font-bold">2.</span>
-
-                        <span>
-                            작업 대상 ROI 기반 용접 시작점 생성
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-indigo-400 font-bold">3.</span>
-
-                        <span>
-                            작업 후 비드 형상과 외관 상태 확인
-                        </span>
-                    </li>
-                </ul>
+            <div class="grid grid-cols-2 gap-3 mb-5">
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">INPUT</span><strong class="block text-indigo-300 mt-1">용접부 ROI</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">PATH</span><strong class="block text-indigo-300 mt-1">시작점·경로</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">CONTROL</span><strong class="block text-indigo-300 mt-1">로봇 궤적</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">OUTPUT</span><strong class="block text-indigo-300 mt-1">비드 품질</strong></div>
             </div>
-
-            <!-- 좌표 -->
-            <div
-                class="glass-panel p-6 rounded-2xl border border-purple-500/20 hover:border-purple-400/50 transition-all">
-
-                <div class="flex items-center space-x-3 mb-4">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
-
-                        <i class="fa-solid fa-crosshairs"></i>
-                    </div>
-
-                    <div>
-                        <h4 class="text-lg font-bold text-white">
-                            ③ 3D 좌표 인식·보정
-                        </h4>
-
-                        <span class="text-[10px] font-mono text-purple-400">
-                            COORDINATE CALIBRATION
-                        </span>
-                    </div>
-                </div>
-
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <span class="text-purple-400 font-bold">1.</span>
-
-                        <span>
-                            검출 중심점과 3D 카메라 Depth를 결합해 X·Y·Z 상대좌표 산출
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-purple-400 font-bold">2.</span>
-
-                        <span>
-                            Hand-Eye 행렬로 Robot Base 좌표 변환
-                        </span>
-                    </li>
-
-                    <li class="flex items-start space-x-2">
-                        <span class="text-purple-400 font-bold">3.</span>
-
-                        <span>
-                            로봇 팔 기준점 대비 ΔX·ΔY·ΔZ·Δθ 상대 오프셋 보정
-                        </span>
-                    </li>
-                </ul>
+            <div class="flex flex-wrap gap-2 text-[12px]">
+                <span class="data-chip">Fillet Weld</span><span class="data-chip">Arc</span><span class="data-chip">Trajectory</span><span class="data-chip">비드검사</span>
             </div>
         </div>
-    </section>
+
+        <div class="glass-panel p-6 rounded-2xl border border-purple-500/25">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <span class="text-[11px] font-mono text-purple-400">XYZ / θ CALIBRATION</span>
+                    <h4 class="text-xl font-bold text-white mt-1">③ 좌표 인식·자동보정</h4>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400"><i class="fa-solid fa-location-crosshairs"></i></div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-5">
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">INPUT</span><strong class="block text-purple-300 mt-1">RGB-D Depth</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">COMPARE</span><strong class="block text-purple-300 mt-1">CAD ↔ 실제좌표</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">CONTROL</span><strong class="block text-purple-300 mt-1">ΔX·ΔY·ΔZ·Δθ</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">OUTPUT</span><strong class="block text-purple-300 mt-1">자동 좌표보정</strong></div>
+            </div>
+            <div class="flex flex-wrap gap-2 text-[12px]">
+                <span class="data-chip">Eye-in-Hand</span><span class="data-chip">Base Frame</span><span class="data-chip">3D Offset</span><span class="data-chip">재티칭 저감</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
 
     <!-- Technology Stack Overview -->
     <section id="technology-stack"
@@ -1634,9 +1769,9 @@
         
             <a href="#embedding-rag" class="glass-panel p-6 rounded-2xl border border-emerald-500/25 hover:border-emerald-400/70 transition-all">
                 <span class="text-[10px] font-mono text-emerald-400">STACK 04</span>
-                <h4 class="text-lg font-bold text-white mt-2">Embedding & RAG</h4>
+                <h4 class="text-lg font-bold text-white mt-2">MES DB + Embedding & RAG</h4>
                 <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-                    사내 생산·품질·설비·기술문서를 벡터화하여 유사도 기반 검색과 권한형 RAG 질의를 지원
+                    MES 관계형 DB와 이미지·기술문서 저장소를 통합하고, 키워드·Embedding 하이브리드 검색으로 생산관리 의사결정을 지원
                 </p>
             </a>
 
@@ -1644,220 +1779,46 @@
     </section>
 
     <!-- Preprocessing Pipeline -->
-    <section id="pipeline"
-        class="py-16 px-6 max-w-7xl mx-auto">
-
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Data Preprocessing Pipeline
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                데이터 전처리 5단계 핵심 파이프라인
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3">
-                불량 프레임 차단부터 로봇 3D 좌표 최적화까지 단계적으로 처리합니다.
-            </p>
+    
+<section id="pipeline" class="py-16 px-6 max-w-7xl mx-auto report-visual-upgraded">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Data Preprocessing Pipeline</h2>
+        <h3 class="text-4xl md:text-5xl font-bold text-white">데이터 전처리 5단계 핵심 파이프라인</h3>
+        <div class="section-guide mt-4 text-left max-w-2xl mx-auto">
+            <span><i class="fa-solid fa-circle-dot"></i><span>복잡한 글자 설명은 줄이고 단계별 핵심 기능만 남겼습니다.</span></span>
+            <span><i class="fa-solid fa-circle-dot"></i><span>각 Stage는 실시간 좌표 보정 흐름으로 바로 연결됩니다.</span></span>
         </div>
+    </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-12">
-
-            <!-- Stage 1 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-cyan-500/20 hover:border-cyan-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300">
-
-                            STAGE 01
-                        </span>
-
-                        <i class="fa-solid fa-camera-rotate text-cyan-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Geometry & Quality Gate
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        렌즈 왜곡을 보정하고 흐림, 과노출, 가림,
-                        Depth 결손 프레임을 재촬영 대상으로 분류합니다.
-                        <span class="block mt-2 text-cyan-300"><strong>선정 근거:</strong> 입력 품질이 낮은 프레임을 그대로 사용하면 오검출뿐 아니라 잘못된 3D 좌표가 생성되므로 AI 추론 전에 차단합니다.</span>
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-cyan-400 font-mono">
-
-                    Output: 정상 RGB-D
-                </div>
-            </div>
-
-            <!-- Stage 2 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-indigo-500/20 hover:border-indigo-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-500/20 text-indigo-300">
-
-                            STAGE 02
-                        </span>
-
-                        <i class="fa-solid fa-filter text-indigo-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Sensor Noise Clean-Up
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        Bilateral Filter로 철분진과 스패터 노이즈를 억제하면서
-                        볼트와 용접 비드의 경계는 보존합니다.
-                        <span class="block mt-2 text-indigo-300"><strong>선정 근거:</strong> Gaussian Filter보다 경계 보존성이 높아 작은 볼트 윤곽과 얇은 용접선을 흐리지 않으면서 표면 노이즈를 완화할 수 있습니다.</span>
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-indigo-400 font-mono">
-
-                    Output: Clean RGB-D
-                </div>
-            </div>
-
-            <!-- Stage 3 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300">
-
-                            STAGE 03
-                        </span>
-
-                        <i class="fa-solid fa-sliders text-emerald-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Photometric Normalization
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        CLAHE를 적용해 저조도와 국부 그림자를 완화하고
-                        작업 대상과 금속 배경의 대비를 높입니다.
-                        <span class="block mt-2 text-emerald-300"><strong>선정 근거:</strong> 전체 밝기를 일괄 증가시키면 금속 반사부가 포화되므로, 국부 영역별 대비를 조절하는 CLAHE가 기관실 음영 환경에 적합합니다.</span>
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-emerald-400 font-mono">
-
-                    Output: 대비 정규화 영상
-                </div>
-            </div>
-
-            <!-- Stage 4 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-amber-500/20 hover:border-amber-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300">
-
-                            STAGE 04
-                        </span>
-
-                        <i class="fa-solid fa-crop-simple text-amber-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Feature & ROI Enhancement
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        AprilTag와 CAD 예상좌표를 활용해 작업 대상 ROI를 추출하고
-                        주변 배관과 구조물의 영향을 줄입니다.
-                        <span class="block mt-2 text-amber-300"><strong>선정 근거:</strong> 전체 프레임에는 유사한 볼트·배관이 많으므로 예상 작업영역으로 탐색 범위를 제한해 오검출과 연산량을 동시에 줄입니다.</span>
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-amber-400 font-mono">
-
-                    Output: 작업 대상 ROI
-                </div>
-            </div>
-
-            <!-- Stage 5 -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-purple-500/20 hover:border-purple-400/60 transition-all flex flex-col justify-between">
-
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300">
-
-                            STAGE 05
-                        </span>
-
-                        <i class="fa-solid fa-cube text-purple-400 text-sm"></i>
-                    </div>
-
-                    <h4 class="text-sm font-bold text-white mb-2">
-                        Coordinate Optimization
-                    </h4>
-
-                    <p class="text-[11px] text-slate-300 leading-relaxed mb-3">
-                        Hand-Eye Calibration을 적용하여 카메라의 X·Y·Z 좌표를
-                        Robot Base 좌표로 변환하고 제작 편차를 보정합니다.
-                        <span class="block mt-2 text-purple-300"><strong>선정 근거:</strong> 검출 박스의 이미지 좌표만으로 로봇을 이동시킬 수 없으므로 Depth와 외부 파라미터를 결합해 실제 Robot Base 좌표로 변환합니다.</span>
-                    </p>
-                </div>
-
-                <div
-                    class="pt-3 border-t border-slate-800 text-[10px] text-purple-400 font-mono">
-
-                    Output: 보정 로봇 좌표
-                </div>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-5 mb-12">
+        <div class="glass-panel p-5 rounded-2xl border border-cyan-500/20 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3"><span class="px-2 py-1 rounded bg-cyan-500/20 text-cyan-300 text-[11px] font-mono font-bold">STAGE 01</span><i class="fa-solid fa-camera-rotate text-cyan-400"></i></div>
+            <h4 class="text-base font-bold text-white mb-2">입력 안정화</h4>
+            <p class="text-slate-300">왜곡과 흐림 프레임을 먼저 걸러 촬영 품질을 안정화합니다.</p>
         </div>
-
-        <div
-            class="glass-panel p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 flex flex-col md:flex-row items-center justify-between">
-
-            <div class="flex items-center space-x-4 mb-4 md:mb-0">
-                <div
-                    class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
-
-                    <i class="fa-solid fa-microchip"></i>
-                </div>
-
-                <div>
-                    <h4 class="text-base font-bold text-white">
-                        Eye-in-Hand RGB-D 온디바이스 연산
-                    </h4>
-
-                    <p class="text-xs text-slate-400">
-                        영상 취득 → 5단계 전처리 → 작업부 검출 → 3D 로봇 좌표 생성
-                    </p>
-                </div>
-            </div>
-
-            <a href="#simulator"
-                class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all">
-
-                시뮬레이터 확인
-                <i class="fa-solid fa-arrow-right ml-1"></i>
-            </a>
+        <div class="glass-panel p-5 rounded-2xl border border-indigo-500/20 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3"><span class="px-2 py-1 rounded bg-indigo-500/20 text-indigo-300 text-[11px] font-mono font-bold">STAGE 02</span><i class="fa-solid fa-sun text-indigo-400"></i></div>
+            <h4 class="text-base font-bold text-white mb-2">조명·반사 보정</h4>
+            <p class="text-slate-300">저조도와 금속 반사를 줄여 작업부 대비를 높입니다.</p>
         </div>
-    </section>
+        <div class="glass-panel p-5 rounded-2xl border border-emerald-500/20 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3"><span class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 text-[11px] font-mono font-bold">STAGE 03</span><i class="fa-solid fa-filter text-emerald-400"></i></div>
+            <h4 class="text-base font-bold text-white mb-2">노이즈 정제</h4>
+            <p class="text-slate-300">흄, 분진, 아크광 흔적을 줄여 특징을 더 선명하게 만듭니다.</p>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl border border-purple-500/20 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3"><span class="px-2 py-1 rounded bg-purple-500/20 text-purple-300 text-[11px] font-mono font-bold">STAGE 04</span><i class="fa-solid fa-object-group text-purple-400"></i></div>
+            <h4 class="text-base font-bold text-white mb-2">특징 강화·분할</h4>
+            <p class="text-slate-300">볼트, 용접부, 케이블 접속부의 ROI를 안정적으로 분리합니다.</p>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl border border-amber-500/20 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3"><span class="px-2 py-1 rounded bg-amber-500/20 text-amber-300 text-[11px] font-mono font-bold">STAGE 05</span><i class="fa-solid fa-location-crosshairs text-amber-400"></i></div>
+            <h4 class="text-base font-bold text-white mb-2">3D 좌표 산출</h4>
+            <p class="text-slate-300">정제된 ROI를 기준으로 XYZ 좌표와 품질 판정을 동시에 계산합니다.</p>
+        </div>
+    </div>
+</section>
+
 
     <!-- YOLO26n Fine-Tuning Section -->
     <section id="yolo-training"
@@ -2275,458 +2236,283 @@
     <!-- Simulator Section -->
     
     <!-- Embedding & RAG Section -->
-    <section id="embedding-rag"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+    
 
-        <div class="text-center max-w-4xl mx-auto mb-12">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Secure Enterprise Knowledge Retrieval
-            </h2>
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                Embedding & RAG 기반 사내 지식 검색 시스템
-            </h3>
-            <p class="text-slate-400 text-sm mt-4 leading-relaxed">
-                의장작업별 <strong>생산실적·불량이력·설비 알람·기술문서</strong>를 사내 데이터베이스에 통합하고,
-                Embedding 기반 유사도 검색을 적용합니다. 모든 데이터와 AI 처리는
-                <strong>사내망 또는 폐쇄망 환경</strong>에서 수행하여 생산·설비 정보의 외부 유출을 방지하고,
-                필요한 현장 정보를 신속하게 검색·활용합니다.
-            </p>
+
+<section id="embedding-rag" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80 report-visual-upgraded no-left-right">
+    <div class="text-center max-w-4xl mx-auto mb-12">
+        <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Secure Enterprise Knowledge Retrieval</h2>
+        <h3 class="text-4xl md:text-5xl font-bold text-white">Embedding · MES DB 기반 사내 지식 검색 시스템</h3>
+        <div class="section-guide mt-4 text-left max-w-3xl mx-auto">
+            <span><i class="fa-solid fa-circle-dot"></i><span>생산진도, 불량 이미지, 알람 이력, 로봇 문서를 하나의 MES 검색 화면에서 조회합니다.</span></span>
+            <span><i class="fa-solid fa-circle-dot"></i><span>종합모니터링 → DB 설계방안 → 보안 적용 원칙 순서로 구성했습니다.</span></span>
+        </div>
+    </div>
+
+    <!-- 1. MES Comprehensive Monitoring -->
+    <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25 mb-8">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-5">
+            <div>
+                <span class="text-[11px] font-mono text-emerald-400 uppercase">01 · MES Comprehensive Monitoring</span>
+                <h4 class="text-2xl font-bold text-white mt-1">MES 종합모니터링 화면</h4>
+            </div>
+            <span class="mini-badge"><i class="fa-solid fa-diagram-project"></i>Layout + Search + Drill-down</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <div class="grid grid-cols-1 xl:grid-cols-5 gap-5">
+            <div class="xl:col-span-3">
+                <div class="mes-scene">
+                    <svg viewBox="0 0 920 520" role="img" aria-label="선박 기관실 내부 의장공정 MES 레이아웃 상세 도식" style="width:100%;height:100%;display:block;background:#071019">
+                        <defs>
+                            <linearGradient id="mbg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d1823"/><stop offset="1" stop-color="#05090e"/></linearGradient>
+                            <linearGradient id="mdeck2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#30495c"/><stop offset="1" stop-color="#152534"/></linearGradient>
+                            <marker id="arrowCyan" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#67e8f9"/></marker>
+                            <marker id="arrowGreen" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#86efac"/></marker>
+                            <marker id="arrowRed" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#fca5a5"/></marker>
+                            <marker id="arrowAmber" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#fbbf24"/></marker>
+                            <marker id="arrowPurple" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#d8b4fe"/></marker>
+                        </defs>
+                        <rect width="920" height="520" fill="url(#mbg2)"/>
 
-            <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
-                        <i class="fa-solid fa-chart-line"></i>
-                    </div>
-                    <h4 class="text-lg font-bold text-white">① MES 생산진도 검색</h4>
+                        <!-- Ship/engine-room model -->
+                        <polygon points="118,446 330,304 804,363 576,492" fill="#0d1b26" stroke="#456279"/>
+                        <polygon points="118,446 118,142 330,56 330,304" fill="#182a38" stroke="#456279"/>
+                        <polygon points="330,304 330,56 804,122 804,363" fill="url(#mdeck2)" stroke="#456279"/>
+                        <g fill="none" stroke="#637c8d" stroke-width="6"><path d="M148 205H745"/><path d="M148 278H770"/><path d="M148 350H778"/></g>
+                        <g fill="none" stroke-linecap="round"><path d="M166 112V413H268V315H470" stroke="#2f6172" stroke-width="17"/><path d="M211 92V236H386V400" stroke="#2bb6a9" stroke-width="10"/><path d="M421 85V205H669V394" stroke="#6e8190" stroke-width="14"/><path d="M528 111V174H720V321" stroke="#b87340" stroke-width="9"/><path d="M277 126H360V250" stroke="#4e7185" stroke-width="8"/></g>
+                        <g stroke="#7790a2"><rect x="260" y="322" width="142" height="91" rx="10" fill="#22394a"/><rect x="430" y="294" width="155" height="108" rx="10" fill="#263f50"/><rect x="626" y="256" width="84" height="137" rx="14" fill="#293e4c"/><rect x="711" y="193" width="62" height="105" rx="10" fill="#1d3342"/></g>
+                        <g fill="#0f172a" stroke="#87a0b1"><circle cx="292" cy="360" r="24"/><circle cx="356" cy="360" r="24"/><circle cx="477" cy="347" r="28"/><circle cx="537" cy="347" r="28"/></g>
+
+                        <!-- Work zones: no labels on model -->
+                        <g fill="none" stroke-width="3" stroke-dasharray="9 6"><rect x="198" y="310" width="210" height="122" rx="14" stroke="#2dd4bf"/><rect x="414" y="253" width="207" height="166" rx="14" stroke="#38bdf8"/><rect x="612" y="222" width="180" height="183" rx="14" stroke="#a855f7"/></g>
+
+                        <!-- Robots / workers / tools -->
+                        <g><circle cx="324" cy="296" r="17" fill="#22c55e"/><path d="M324 296l13-34 24-8 17 25" fill="none" stroke="#86efac" stroke-width="10" stroke-linecap="round"/><circle cx="361" cy="254" r="7" fill="#86efac"/><circle cx="686" cy="235" r="17" fill="#ef4444"/><path d="M686 235l-4-33 27-21 17 19" fill="none" stroke="#fca5a5" stroke-width="10" stroke-linecap="round"/><circle cx="709" cy="181" r="7" fill="#fca5a5"/></g>
+                        <g fill="#f59e0b"><circle cx="231" cy="399" r="8"/><rect x="225" y="408" width="12" height="22" rx="5"/><circle cx="253" cy="399" r="8"/><rect x="247" y="408" width="12" height="22" rx="5"/><circle cx="545" cy="411" r="8"/><rect x="539" y="420" width="12" height="22" rx="5"/></g>
+                        <g fill="#67e8f9"><circle cx="302" cy="338" r="6"/><circle cx="368" cy="370" r="6"/><circle cx="465" cy="312" r="6"/><circle cx="565" cy="312" r="6"/><circle cx="657" cy="326" r="6"/></g>
+                        <g><rect x="184" y="263" width="49" height="21" rx="5" fill="#0ea5e9"/><rect x="556" y="220" width="58" height="21" rx="5" fill="#8b5cf6"/><rect x="724" y="330" width="59" height="21" rx="5" fill="#64748b"/></g>
+
+                        <!-- External callout labels -->
+                        <g font-family="monospace" font-weight="700">
+                            <text x="22" y="31" font-size="15" fill="#9ac5d6">ENGINE ROOM BLOCK · OUTFITTING MES LAYOUT</text>
+
+                            <rect x="18" y="58" width="160" height="45" rx="9" fill="#071019" stroke="#5eead4"/><text x="31" y="78" font-size="12" fill="#5eead4">ZONE A · 체결</text><text x="31" y="94" font-size="10" fill="#b8d8d1">Bolt / Bracket</text>
+                            <path d="M178 82 C225 93, 242 210, 270 318" fill="none" stroke="#5eead4" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+                            <rect x="380" y="16" width="160" height="45" rx="9" fill="#071019" stroke="#67e8f9"/><text x="393" y="36" font-size="12" fill="#67e8f9">ZONE B · 용접</text><text x="393" y="52" font-size="10" fill="#b9dfea">Fillet Weld</text>
+                            <path d="M460 61 C470 105, 500 178, 512 260" fill="none" stroke="#67e8f9" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+                            <rect x="732" y="35" width="168" height="45" rx="9" fill="#071019" stroke="#d8b4fe"/><text x="745" y="55" font-size="12" fill="#d8b4fe">ZONE C · 좌표보정</text><text x="745" y="71" font-size="10" fill="#d9c8e8">RGB-D / XYZ</text>
+                            <path d="M770 80 C748 126, 724 181, 697 225" fill="none" stroke="#d8b4fe" stroke-width="2" marker-end="url(#arrowPurple)"/>
+
+                            <rect x="18" y="455" width="148" height="43" rx="9" fill="#071019" stroke="#fbbf24"/><text x="31" y="475" font-size="12" fill="#fbbf24">작업자 2명</text><text x="31" y="490" font-size="10" fill="#e5d2a7">Zone A 배치</text>
+                            <path d="M166 475 C192 469, 217 445, 239 414" fill="none" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrowAmber)"/>
+
+                            <rect x="374" y="457" width="154" height="43" rx="9" fill="#071019" stroke="#fbbf24"/><text x="387" y="477" font-size="12" fill="#fbbf24">작업자 1명</text><text x="387" y="492" font-size="10" fill="#e5d2a7">Zone B 배치</text>
+                            <path d="M528 478 C535 465, 540 446, 545 424" fill="none" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrowAmber)"/>
+
+                            <rect x="744" y="445" width="158" height="46" rx="9" fill="#071019" stroke="#cbd5e1"/><text x="757" y="465" font-size="12" fill="#cbd5e1">Panel / 설비</text><text x="757" y="481" font-size="10" fill="#b9c3ca">Zone C</text>
+                            <path d="M744 463 C733 437, 741 387, 752 347" fill="none" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+                            <rect x="18" y="126" width="132" height="42" rx="9" fill="#071019" stroke="#86efac"/><text x="31" y="146" font-size="12" fill="#86efac">R1 · 가동</text><text x="31" y="160" font-size="10" fill="#c7ead5">협동로봇</text>
+                            <path d="M150 146 C226 148, 275 220, 320 287" fill="none" stroke="#86efac" stroke-width="2" marker-end="url(#arrowGreen)"/>
+
+                            <rect x="746" y="111" width="148" height="42" rx="9" fill="#071019" stroke="#fca5a5"/><text x="759" y="131" font-size="12" fill="#fca5a5">R2 · 비가동</text><text x="759" y="145" font-size="10" fill="#eac4c4">점검대기</text>
+                            <path d="M746 132 C725 150, 705 185, 690 224" fill="none" stroke="#fca5a5" stroke-width="2" marker-end="url(#arrowRed)"/>
+
+                            <rect x="18" y="206" width="145" height="42" rx="9" fill="#071019" stroke="#7dd3fc"/><text x="31" y="226" font-size="12" fill="#7dd3fc">Torque Tool</text><text x="31" y="240" font-size="10" fill="#bddce9">체결 설비</text>
+                            <path d="M163 226 C171 239, 188 253, 204 269" fill="none" stroke="#7dd3fc" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+                            <rect x="744" y="266" width="158" height="42" rx="9" fill="#071019" stroke="#c4b5fd"/><text x="757" y="286" font-size="12" fill="#c4b5fd">Vision Sensor</text><text x="757" y="300" font-size="10" fill="#d8d1ea">좌표 인식</text>
+                            <path d="M744 287 C694 273, 627 252, 588 230" fill="none" stroke="#c4b5fd" stroke-width="2" marker-end="url(#arrowPurple)"/>
+                        </g>
+                    </svg>
                 </div>
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li>사내 MES와 연계하여 선박별·의장작업별 작업계획 및 생산실적을 내부 DB에 저장</li>
-                    <li>자연어 검색을 통해 <strong>일일 계획 대비 진행률, 미완료 작업, 작업 위치</strong> 조회</li>
-                    <li>생산계획·실적 데이터는 외부 서버로 전송하지 않고 사내 시스템 내에서 처리</li>
-                </ul>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3 text-[12px]">
+                    <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800 flex items-center gap-2"><span class="legend-dot" style="background:#22c55e"></span><span>협동로봇 가동</span></div>
+                    <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800 flex items-center gap-2"><span class="legend-dot" style="background:#ef4444"></span><span>협동로봇 비가동</span></div>
+                    <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800 flex items-center gap-2"><span class="legend-dot" style="background:#f59e0b"></span><span>작업자 배치</span></div>
+                    <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800 flex items-center gap-2"><span class="legend-dot" style="background:#22d3ee"></span><span>설비/센서</span></div>
+                </div>
             </div>
 
-            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-                        <i class="fa-solid fa-images"></i>
-                    </div>
-                    <h4 class="text-lg font-bold text-white">② AI 비전 불량사례 검색</h4>
-                </div>
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li>비전 AI가 검출한 <strong>체결·접속·용접 불량 이미지와 판정 결과</strong>를 사내 DB에 축적</li>
-                    <li>Embedding 유사도 검색을 통해 <strong>과거 유사 불량 이미지·발생조건·조치이력</strong> 제공</li>
-                    <li>작업 이미지 및 품질정보는 사내 저장소에서만 관리하여 제품·공정정보 보호</li>
-                </ul>
-            </div>
+            <div class="xl:col-span-2 p-4 rounded-2xl bg-slate-950/55 border border-slate-800">
+                <div class="text-sm font-bold text-white mb-3">통합검색</div>
+                <div class="relative mb-3"><i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i><input id="mes-search-input" type="text" placeholder="예: LNG-2410 체결 진도 / E-STOP / UR 점검표" class="w-full bg-slate-950/70 border border-slate-700 rounded-xl pl-11 pr-4 py-3 text-sm text-slate-200 outline-none focus:border-cyan-400"></div>
+                <button id="mes-search-button" class="w-full px-4 py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-sm font-bold hover:bg-cyan-500/30 transition-all mb-3"><i class="fa-solid fa-magnifying-glass mr-2"></i>검색</button>
+                <p id="mes-search-status" class="meshint mb-4">검색어를 입력하면 관련 대표영역과 세부 단계가 자동으로 연결됩니다.</p>
 
-            <div class="glass-panel p-6 rounded-2xl border border-indigo-500/25">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">
-                        <i class="fa-solid fa-bell"></i>
-                    </div>
-                    <h4 class="text-lg font-bold text-white">③ PLC·HMI 인터록/알람 이력 검색</h4>
+                <div class="text-sm font-bold text-white mb-3">대표항목 4가지</div>
+                <div class="grid grid-cols-2 gap-2 mb-4" id="mes-domain-buttons">
+                    <button class="mes-domain-button active px-3 py-3 rounded-xl bg-slate-900/60 border border-slate-800 text-left text-sm text-slate-200" data-domain="progress"><strong class="block">선박 진도</strong><span class="text-[11px] text-slate-400">선박 → 작업 → 진도</span></button>
+                    <button class="mes-domain-button px-3 py-3 rounded-xl bg-slate-900/60 border border-slate-800 text-left text-sm text-slate-200" data-domain="defect"><strong class="block">불량 사례</strong><span class="text-[11px] text-slate-400">항목 → 사례 → 조치</span></button>
+                    <button class="mes-domain-button px-3 py-3 rounded-xl bg-slate-900/60 border border-slate-800 text-left text-sm text-slate-200" data-domain="alarm"><strong class="block">알람 이력</strong><span class="text-[11px] text-slate-400">설비 → 코드 → 이력</span></button>
+                    <button class="mes-domain-button px-3 py-3 rounded-xl bg-slate-900/60 border border-slate-800 text-left text-sm text-slate-200" data-domain="document"><strong class="block">기술 문서</strong><span class="text-[11px] text-slate-400">로봇 → 문서 → 상세</span></button>
                 </div>
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li>PLC·HMI의 <strong>알람 코드, 인터록 조건, 발생시각, 설비상태 및 조치이력</strong>을 내부 DB에 기록</li>
-                    <li>현재 발생한 이상과 유사한 과거 사례를 검색하여 <strong>예상 원인 및 기존 조치사례</strong> 제공</li>
-                    <li>설비 제어망과 AI 검색망을 분리하고 필요한 데이터만 승인된 인터페이스로 연계</li>
-                </ul>
+                <div id="mes-detail-panel" class="p-4 rounded-2xl bg-slate-900/50 border border-slate-800"></div>
             </div>
+        </div>
+    </div>
 
-            <div class="glass-panel p-6 rounded-2xl border border-purple-500/25">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
-                        <i class="fa-solid fa-book-open"></i>
-                    </div>
-                    <h4 class="text-lg font-bold text-white">④ 로봇 작업표준·기술문서 검색</h4>
-                </div>
-                <ul class="space-y-3 text-xs text-slate-300">
-                    <li>협동로봇 <strong>점검·교체 표준서, 내부 구조도/CAD, 유지보수 매뉴얼, 안전기준</strong>을 사내 지식DB로 구축</li>
-                    <li>RAG를 통해 질문과 관련된 내부 문서만 검색하여 <strong>점검절차·도면·안전사항</strong> 제공</li>
-                    <li>사용자 권한에 따라 열람 가능한 문서를 제한하여 기밀 기술자료의 무단 접근 방지</li>
-                </ul>
+    <!-- 2. DB Architecture -->
+    <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25 mb-8">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-11 h-11 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400"><i class="fa-solid fa-database"></i></div>
+            <div>
+                <span class="text-[11px] font-mono text-cyan-400 uppercase">02 · Database Architecture</span>
+                <h4 class="text-2xl font-bold text-white mt-1">생산관리 MES Database 설계방안</h4>
             </div>
         </div>
 
-        <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25">
-            <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
-                <h4 class="text-lg font-bold text-white">보안 적용 원칙</h4>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-300">
-                <div>• <strong>On-Premise / Private Cloud</strong> 기반 AI·Vector DB 구축</div>
-                <div>• 생산·품질·설비 데이터의 <strong>외부 API 전송 차단</strong></div>
-                <div>• 사내 계정 기반 <strong>RBAC 권한관리 및 문서별 접근통제</strong></div>
-                <div>• 검색·열람·AI 질의에 대한 <strong>Audit Log 기록</strong></div>
-                <div>• MES·PLC·로봇 제어망과 AI 서비스망의 <strong>네트워크 분리</strong></div>
-                <div>• 원본 문서 기반 <strong>RAG 구조</strong> 적용으로 임의 생성 최소화</div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            <div class="p-4 rounded-xl bg-slate-950/55 border border-slate-800"><strong class="text-cyan-300">Relational DB</strong><p class="text-slate-300 mt-2">선박, 블록, 작업지시, 진도, 설비, 알람, 문서 메타데이터를 PK/FK로 연결합니다.</p></div>
+            <div class="p-4 rounded-xl bg-slate-950/55 border border-slate-800"><strong class="text-emerald-300">Object Storage</strong><p class="text-slate-300 mt-2">불량 이미지, 점검표 PDF, CAD 구조도 원본을 사내 파일 저장소에 보관합니다.</p></div>
+            <div class="p-4 rounded-xl bg-slate-950/55 border border-slate-800"><strong class="text-purple-300">Embedding Index</strong><p class="text-slate-300 mt-2">문서 chunk와 source_id를 연결해 유사 문서·유사 사례 검색에 활용합니다.</p></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-cyan-500/5 border border-cyan-500/20"><span class="text-[10px] font-mono text-cyan-400">01 · PRODUCTION</span><h5 class="font-bold text-white mt-1">선박·의장작업 진도</h5><p class="text-slate-400 mt-2">선박 → 블록/Zone → 작업 → 작업지시 → 계획·실적·진행률</p></div>
+            <div class="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20"><span class="text-[10px] font-mono text-emerald-400">02 · DEFECT</span><h5 class="font-bold text-white mt-1">불량 이미지 사례</h5><p class="text-slate-400 mt-2">불량유형 → 작업 → Case → 이미지 → 원인·조치 → 유사 사례</p></div>
+            <div class="p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/20"><span class="text-[10px] font-mono text-indigo-400">03 · ALARM</span><h5 class="font-bold text-white mt-1">PLC·HMI 알람 이력</h5><p class="text-slate-400 mt-2">설비 → Alarm Code → Event → 상태 Snapshot → 원인·조치</p></div>
+            <div class="p-4 rounded-xl bg-purple-500/5 border border-purple-500/20"><span class="text-[10px] font-mono text-purple-400">04 · DOCUMENT</span><h5 class="font-bold text-white mt-1">협동로봇 기술문서</h5><p class="text-slate-400 mt-2">로봇 모델 → 문서유형 → Revision → 페이지/CAD → 점검·안전기준</p></div>
+        </div>
+    </div>
+
+    <!-- 3. Security -->
+    <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-11 h-11 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400"><i class="fa-solid fa-shield-halved"></i></div>
+            <div>
+                <span class="text-[11px] font-mono text-cyan-400 uppercase">03 · Security Principle</span>
+                <h4 class="text-2xl font-bold text-white mt-1">보안 적용 원칙</h4>
+                <p class="meshint mt-1">On-Premise, RBAC, Audit Log, 망분리 원칙을 적용합니다.</p>
             </div>
         </div>
-    </section>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 text-sm text-slate-300">
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">외부 API 전송을 차단합니다.</div>
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">문서별 접근 권한을 분리합니다.</div>
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">검색·열람 기록을 Audit Log로 남깁니다.</div>
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">제어망과 AI 검색망을 분리합니다.</div>
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">원본 문서 기반 RAG로 허위 생성을 줄입니다.</div>
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">폐쇄망에서도 검색·질의가 동작하도록 설계합니다.</div>
+        </div>
+    </div>
+</section>
 
 
-<section id="simulator"
+
+
+    <section id="simulator"
         class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
 
         <div class="text-center max-w-3xl mx-auto mb-12">
-            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                Live Simulation
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                실시간 AI 비전 좌표 자동보정 시뮬레이터
-            </h3>
-
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">3D Robot Coordinate Simulation</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">X·Y·Z 3차원 좌표·각도 자동보정 시뮬레이터</h3>
             <p class="text-slate-400 text-sm mt-3">
-                3D 카메라의 Depth 정보를 활용해 로봇 팔 기준점부터 타겟부위까지의 X·Y·Z 상대좌표와 회전각 θ 편차를 산출하고, AI가 작업 좌표를 자동 보정하는 과정을 확인합니다.
+                로봇 Base 기준점 <strong>O(0,0,0)</strong>에서 타겟까지의 X·Y·Z 절대좌표를 3차원 축으로 표시하고,
+                검출 편차 ΔX·ΔY·ΔZ와 회전각 θ를 반영합니다. 기준점에서 타겟까지의 직선거리는
+                <strong>d = √(X² + Y² + Z²)</strong>로 실시간 계산합니다.
             </p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-            <!-- Controls -->
-            <div
-                class="lg:col-span-5 glass-panel p-6 rounded-2xl flex flex-col justify-between">
-
+            <div class="lg:col-span-5 glass-panel p-6 rounded-2xl flex flex-col justify-between">
                 <div>
                     <h4 class="text-base font-bold text-white mb-4 flex items-center justify-between">
-                        <span>
-                            위치 편차 시뮬레이션
-                        </span>
-
-                        <span id="status-badge"
-                            class="px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-
-                            정상 가동
-                        </span>
+                        <span>검출 좌표 편차·각도 입력</span>
+                        <span id="status-badge" class="px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">정상 가동</span>
                     </h4>
 
+                    <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800 mb-5 text-[11px] text-slate-400 font-mono">
+                        시뮬레이션 기준 타겟 T₀ = (650, 250, 420) mm · Base O = (0, 0, 0)
+                    </div>
+
                     <div class="space-y-4 text-xs">
-
                         <div>
-                            <div class="flex justify-between text-slate-300 font-mono mb-1">
-                                <span>X축 편차</span>
-
-                                <span id="val-dx"
-                                    class="text-cyan-400 font-bold">
-
-                                    +0.12mm
-                                </span>
-                            </div>
-
-                            <input type="range"
-                                id="slider-dx"
-                                min="-2"
-                                max="2"
-                                step="0.05"
-                                value="0.12"
-                                class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-slate-300 font-mono mb-1"><span>ΔX 편차</span><span id="val-dx" class="text-cyan-400 font-bold">+0.12mm</span></div>
+                            <input type="range" id="slider-dx" min="-2" max="2" step="0.05" value="0.12" class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
                         </div>
-
                         <div>
-                            <div class="flex justify-between text-slate-300 font-mono mb-1">
-                                <span>Y축 편차</span>
-
-                                <span id="val-dy"
-                                    class="text-cyan-400 font-bold">
-
-                                    -0.08mm
-                                </span>
-                            </div>
-
-                            <input type="range"
-                                id="slider-dy"
-                                min="-2"
-                                max="2"
-                                step="0.05"
-                                value="-0.08"
-                                class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-slate-300 font-mono mb-1"><span>ΔY 편차</span><span id="val-dy" class="text-cyan-400 font-bold">-0.08mm</span></div>
+                            <input type="range" id="slider-dy" min="-2" max="2" step="0.05" value="-0.08" class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
                         </div>
-
                         <div>
-                            <div class="flex justify-between text-slate-300 font-mono mb-1">
-                                <span>Z축 편차 · Depth</span>
-
-                                <span id="val-dz"
-                                    class="text-cyan-400 font-bold">
-
-                                    +0.18mm
-                                </span>
-                            </div>
-
-                            <input type="range"
-                                id="slider-dz"
-                                min="-3"
-                                max="3"
-                                step="0.05"
-                                value="0.18"
-                                class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-slate-300 font-mono mb-1"><span>ΔZ 편차 · Depth</span><span id="val-dz" class="text-cyan-400 font-bold">+0.18mm</span></div>
+                            <input type="range" id="slider-dz" min="-3" max="3" step="0.05" value="0.18" class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
                         </div>
-
                         <div>
-                            <div class="flex justify-between text-slate-300 font-mono mb-1">
-                                <span>회전각 편차</span>
-
-                                <span id="val-dt"
-                                    class="text-cyan-400 font-bold">
-
-                                    +0.25°
-                                </span>
-                            </div>
-
-                            <input type="range"
-                                id="slider-dt"
-                                min="-3"
-                                max="3"
-                                step="0.05"
-                                value="0.25"
-                                class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-slate-300 font-mono mb-1"><span>회전각 θ 편차</span><span id="val-dt" class="text-cyan-400 font-bold">+0.25°</span></div>
+                            <input type="range" id="slider-dt" min="-3" max="3" step="0.05" value="0.25" class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
                         </div>
                     </div>
 
                     <div class="flex space-x-3 mt-6">
-                        <button id="btn-random"
-                            class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition-all flex items-center justify-center space-x-2">
-
-                            <i class="fa-solid fa-dice text-cyan-400"></i>
-
-                            <span>
-                                랜덤 편차
-                            </span>
+                        <button id="btn-random" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-dice text-cyan-400"></i><span>랜덤 편차</span>
                         </button>
-
-                        <button id="btn-calibrate"
-                            class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center space-x-2">
-
-                            <i class="fa-solid fa-wand-magic-sparkles"></i>
-
-                            <span>
-                                AI 자동보정
-                            </span>
+                        <button id="btn-calibrate" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i><span>AI 자동보정</span>
                         </button>
                     </div>
                 </div>
 
-                <div
-                    class="mt-6 pt-4 border-t border-slate-800 text-xs font-mono space-y-2">
-
-                    <div class="flex justify-between text-slate-400">
-                        <span>연산 지연</span>
-
-                        <span id="res-latency"
-                            class="text-slate-200 font-bold">
-
-                            142ms
-                        </span>
-                    </div>
-
-                    <div class="flex justify-between text-slate-400">
-                        <span>보정 오프셋</span>
-
-                        <span id="res-offset"
-                            class="text-cyan-300 font-bold">
-
-                            ΔX: -0.12 / ΔY: +0.08 / ΔZ: -0.18
-                        </span>
-                    </div>
-
-                    <div class="flex justify-between text-slate-400">
-                        <span>잔여 오차</span>
-
-                        <span id="res-residual"
-                            class="text-emerald-400 font-bold">
-
-                            0.02mm · PASS
-                        </span>
-                    </div>
+                <div class="mt-6 pt-4 border-t border-slate-800 text-xs font-mono space-y-2">
+                    <div class="flex justify-between text-slate-400"><span>연산 지연</span><span id="res-latency" class="text-slate-200 font-bold">142ms</span></div>
+                    <div class="flex justify-between text-slate-400 gap-4"><span>타겟 절대좌표</span><span id="res-target-coordinate" class="text-cyan-300 font-bold text-right">X 650.12 / Y 249.92 / Z 420.18 mm</span></div>
+                    <div class="flex justify-between text-slate-400 gap-4"><span>Base → Target 거리</span><span id="res-distance" class="text-cyan-300 font-bold text-right">813.43mm</span></div>
+                    <div class="flex justify-between text-slate-400 gap-4"><span>보정 오프셋</span><span id="res-offset" class="text-cyan-300 font-bold text-right">ΔX -0.12 / ΔY +0.08 / ΔZ -0.18 / Δθ -0.25°</span></div>
+                    <div class="flex justify-between text-slate-400"><span>3D 위치 오차</span><span id="res-residual" class="text-emerald-400 font-bold">0.23mm · PASS</span></div>
                 </div>
             </div>
 
-            <!-- Canvas -->
-            <div
-                class="lg:col-span-7 glass-panel p-6 rounded-2xl flex flex-col justify-between">
-
-                <div class="flex items-center justify-between mb-4">
-                    <h4 class="text-sm font-bold text-slate-200">
-                        목표 좌표와 검출 좌표 비교
-                    </h4>
-
-                    <span class="text-xs text-slate-400 font-mono">
-                        허용 공차 ±0.30mm
-                    </span>
+            <div class="lg:col-span-7 glass-panel p-6 rounded-2xl flex flex-col justify-between">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
+                    <h4 class="text-sm font-bold text-slate-200">Robot Base O → Target T · 3D 좌표계</h4>
+                    <span class="text-xs text-slate-400 font-mono">위치 허용오차 ±0.30mm · 각도 허용오차 ±1.0°</span>
                 </div>
-
-                <div
-                    class="relative w-full h-64 md:h-80 flex items-center justify-center bg-slate-950/60 rounded-xl border border-slate-800 overflow-hidden">
-
-                    <canvas id="calibrationCanvas"
-                        class="w-full h-full">
-                    </canvas>
+                <div class="relative w-full h-72 md:h-96 flex items-center justify-center bg-slate-950/60 rounded-xl border border-slate-800 overflow-hidden">
+                    <canvas id="calibrationCanvas" class="w-full h-full"></canvas>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4 text-[10px] font-mono text-slate-400">
+                    <div class="p-2 rounded bg-slate-950/50 border border-slate-800">X: 전후/작업방향</div>
+                    <div class="p-2 rounded bg-slate-950/50 border border-slate-800">Y: 좌우방향</div>
+                    <div class="p-2 rounded bg-slate-950/50 border border-slate-800">Z: 높이/Depth</div>
+                    <div class="p-2 rounded bg-slate-950/50 border border-slate-800">θ: Tool 회전편차</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ROI Section -->
-    <section id="roi"
-        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+    
 
-        <div class="text-center max-w-3xl mx-auto mb-12">
-            <h2 class="text-xs font-mono text-emerald-400 tracking-widest uppercase mb-2">
-                Return on Investment
-            </h2>
-
-            <h3 class="text-3xl md:text-4xl font-bold text-white">
-                ⑥ ROI · 투자비 대비 연간 절감효과
-            </h3>
-
-            <p class="text-slate-400 text-sm mt-3 gradient-copy">
-                초기 투자비와 연간 절감액을 동일한 기준으로 비교하여 시스템의 경제성을 정량화합니다.
-            </p>
+<section id="roi" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80 report-visual-upgraded">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-xs font-mono text-emerald-400 tracking-widest uppercase mb-2">Return on Investment</h2>
+        <h3 class="text-4xl md:text-5xl font-bold text-white">⑥ ROI · 유지보수비 가변 입력형 투자 경제성</h3>
+        <div class="section-guide mt-4 text-left max-w-2xl mx-auto">
+            <span><i class="fa-solid fa-circle-dot"></i><span>초기 투자비와 연간 절감효과는 고정값입니다.</span></span>
+            <span><i class="fa-solid fa-circle-dot"></i><span>유지보수비는 사용자가 직접 입력할 수 있는 변동비입니다.</span></span>
         </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
+        <div class="glass-panel p-5 rounded-2xl border border-emerald-500/25 metric-kpi"><span class="text-[11px] font-mono text-emerald-300 uppercase">Fixed CAPEX</span><div class="text-3xl font-black text-white font-mono mt-3">2,300<span class="text-sm text-emerald-300 ml-1">만원</span></div><p class="text-slate-400 mt-2">초기 투자비는 고정값입니다.</p></div>
+        <div class="glass-panel p-5 rounded-2xl border border-emerald-500/25 metric-kpi"><span class="text-[11px] font-mono text-emerald-300 uppercase">Fixed Saving</span><div class="text-3xl font-black text-white font-mono mt-3">4,000<span class="text-sm text-emerald-300 ml-1">만원/년</span></div><p class="text-slate-400 mt-2">연간 절감효과는 고정값입니다.</p></div>
+        <div class="glass-panel p-5 rounded-2xl border border-amber-500/25 metric-kpi"><span class="text-[11px] font-mono text-amber-300 uppercase">Variable Cost</span><div class="text-lg font-bold text-white mt-3 mb-3">유지보수 비용 입력</div><input id="maintenance-input" type="number" min="0" step="10" value="360" class="maint-input"><p class="text-slate-400 mt-2">단위: 만원/년</p></div>
+        <div class="glass-panel p-5 rounded-2xl border border-cyan-500/25 metric-kpi"><span class="text-[11px] font-mono text-cyan-300 uppercase">Updated Payback</span><div id="payback-display" class="text-3xl font-black text-white font-mono mt-3">0.63<span class="text-sm text-cyan-300 ml-1">년</span></div><p id="bep-display" class="text-slate-400 mt-2">손익분기점 약 7.6개월</p></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+        <div class="lg:col-span-4 glass-panel p-6 rounded-2xl border border-emerald-500/20"><div class="mb-4"><span class="text-[11px] font-mono text-emerald-400 uppercase">Fixed Cost</span><h4 class="text-xl font-bold text-white mt-1">초기 투자비 구성</h4></div><div class="space-y-3 text-sm"><div class="calc-line"><span>카메라·조명</span><strong class="text-emerald-300">500만원</strong></div><div class="calc-line"><span>산업용 PC</span><strong class="text-emerald-300">300만원</strong></div><div class="calc-line"><span>로봇 통신·제어장치</span><strong class="text-emerald-300">300만원</strong></div><div class="calc-line"><span>SW 개발비</span><strong class="text-emerald-300">1,200만원</strong></div></div></div>
+        <div class="lg:col-span-4 glass-panel p-6 rounded-2xl border border-emerald-500/20"><div class="mb-4"><span class="text-[11px] font-mono text-emerald-400 uppercase">Fixed Saving</span><h4 class="text-xl font-bold text-white mt-1">연간 절감효과 구성</h4></div><div class="space-y-3 text-sm"><div class="calc-line"><span>수동 재티칭 절감</span><strong class="text-emerald-300">1,200만원/년</strong></div><div class="calc-line"><span>위치 불량·재작업 감소</span><strong class="text-emerald-300">2,000만원/년</strong></div><div class="calc-line"><span>생산중단시간 감소</span><strong class="text-emerald-300">800만원/년</strong></div><div class="calc-line"><span>총 연간 절감효과</span><strong class="text-emerald-300">4,000만원/년</strong></div></div></div>
+        <div class="lg:col-span-4 glass-panel p-6 rounded-2xl border border-cyan-500/25 bg-gradient-to-b from-cyan-950/10 to-transparent"><div class="mb-4"><span class="text-[11px] font-mono text-cyan-400 uppercase">Auto Calculation</span><h4 class="text-xl font-bold text-white mt-1">입력값 반영 결과</h4></div><div class="space-y-3 text-sm"><div class="calc-line"><span>유지보수 비용</span><strong id="calc-maintenance" class="text-amber-300">360만원/년</strong></div><div class="calc-line"><span>순 연간효과</span><strong id="calc-net-saving" class="text-cyan-300">3,640만원/년</strong></div><div class="calc-line"><span>1년차 순 ROI</span><strong id="calc-roi" class="text-cyan-300">58.3%</strong></div><div class="calc-line"><span>손익분기점</span><strong id="calc-bep-month" class="text-cyan-300">7.6개월</strong></div></div></div>
+    </div>
+    <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-4"><div><span class="text-[11px] font-mono text-emerald-400 uppercase">Investment Recovery Curve</span><h4 class="text-xl font-bold text-white mt-1">초기 투자비 대비 회수기간 그래프</h4><p class="payback-note mt-2">X축은 월(Month)입니다. Y축은 누적 순효과(만원)입니다. 유지보수 비용 입력값에 따라 그래프와 손익분기점이 즉시 바뀝니다.</p></div><div class="flex flex-wrap gap-2 text-[12px]"><span class="data-chip">고정비: 초기 투자비 2,300만원</span><span class="data-chip">고정효과: 연간 절감 4,000만원</span></div></div>
+        <div class="rounded-2xl bg-slate-950/55 border border-slate-800 p-4" style="height:360px;"><canvas id="paybackChart"></canvas></div>
+    </div>
+</section>
 
-        <!-- ROI Summary -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/35 via-slate-950/55 to-slate-950/80">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-xs font-mono text-emerald-300 uppercase tracking-wider">Initial Investment</span>
-                    <i class="fa-solid fa-coins text-emerald-400"></i>
-                </div>
-                <div class="text-3xl font-black text-white font-mono">
-                    2,300<span class="text-base text-emerald-300 ml-1">만원</span>
-                </div>
-                <p class="text-xs text-slate-400 mt-2 gradient-copy">
-                    카메라·조명, 산업용 PC, 로봇 통신·제어장치, SW 개발비를 포함한 총 초기 투자비입니다.
-                </p>
-            </div>
 
-            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/35 via-slate-950/55 to-slate-950/80">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-xs font-mono text-emerald-300 uppercase tracking-wider">Annual Saving</span>
-                    <i class="fa-solid fa-chart-line text-emerald-400"></i>
-                </div>
-                <div class="text-3xl font-black text-white font-mono">
-                    4,000<span class="text-base text-emerald-300 ml-1">만원/년</span>
-                </div>
-                <p class="text-xs text-slate-400 mt-2 gradient-copy">
-                    재티칭 공수, 위치 불량·재작업, 생산중단시간 감소 효과를 합산한 연간 절감액입니다.
-                </p>
-            </div>
-
-            <div class="glass-panel p-6 rounded-2xl border border-emerald-400/40 bg-gradient-to-br from-emerald-900/45 via-emerald-950/35 to-slate-950/80 shadow-[0_0_32px_rgba(16,185,129,0.12)]">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-xs font-mono text-emerald-200 uppercase tracking-wider">Payback Period</span>
-                    <i class="fa-solid fa-stopwatch text-emerald-300"></i>
-                </div>
-                <div class="text-3xl font-black text-white font-mono">
-                    약 0.6<span class="text-base text-emerald-300 ml-1">년</span>
-                </div>
-                <p class="text-xs text-slate-300 mt-2 gradient-copy">
-                    약 7개월 내 초기 투자비 회수가 가능한 수준으로, 단기간 경제성 확보가 가능합니다.
-                </p>
-            </div>
-        </div>
-
-        <!-- Input / Output Breakdown -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-7 mb-8">
-            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/20">
-                <div class="flex items-center gap-3 mb-5">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400">
-                        <i class="fa-solid fa-arrow-down"></i>
-                    </div>
-                    <div>
-                        <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider">Input Cost</span>
-                        <h4 class="text-lg font-bold text-white">초기 투자비 구성</h4>
-                    </div>
-                </div>
-
-                <div class="space-y-3 text-xs">
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
-                        <span class="text-slate-300">카메라·조명</span>
-                        <strong class="font-mono text-emerald-300">500만원</strong>
-                    </div>
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
-                        <span class="text-slate-300">산업용 PC</span>
-                        <strong class="font-mono text-emerald-300">300만원</strong>
-                    </div>
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
-                        <span class="text-slate-300">로봇 통신·제어장치</span>
-                        <strong class="font-mono text-emerald-300">300만원</strong>
-                    </div>
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
-                        <span class="text-slate-300">SW 개발비</span>
-                        <strong class="font-mono text-emerald-300">1,200만원</strong>
-                    </div>
-                </div>
-
-                <div class="mt-4 pt-4 border-t border-emerald-500/15 flex items-center justify-between">
-                    <span class="text-sm font-bold text-white">총 초기 투자비</span>
-                    <strong class="text-xl font-black font-mono text-emerald-300">2,300만원</strong>
-                </div>
-            </div>
-
-            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/20">
-                <div class="flex items-center gap-3 mb-5">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400">
-                        <i class="fa-solid fa-arrow-trend-up"></i>
-                    </div>
-                    <div>
-                        <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider">Output Saving</span>
-                        <h4 class="text-lg font-bold text-white">연간 절감액 구성</h4>
-                    </div>
-                </div>
-
-                <div class="space-y-3 text-xs">
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
-                        <span class="text-slate-300">수동 재티칭 공수 절감</span>
-                        <strong class="font-mono text-emerald-300">1,200만원/년</strong>
-                    </div>
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
-                        <span class="text-slate-300">위치 불량·재작업 감소</span>
-                        <strong class="font-mono text-emerald-300">2,000만원/년</strong>
-                    </div>
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/10">
-                        <span class="text-slate-300">생산중단시간 감소</span>
-                        <strong class="font-mono text-emerald-300">800만원/년</strong>
-                    </div>
-                </div>
-
-                <div class="mt-4 pt-4 border-t border-emerald-500/15 flex items-center justify-between">
-                    <span class="text-sm font-bold text-white">총 연간 절감액</span>
-                    <strong class="text-xl font-black font-mono text-emerald-300">4,000만원/년</strong>
-                </div>
-            </div>
-        </div>
-
-        <!-- Visual Payback Bar -->
-        <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25 bg-gradient-to-r from-slate-950/80 via-emerald-950/25 to-slate-950/80">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
-                <div>
-                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider">Investment Recovery</span>
-                    <h4 class="text-lg font-bold text-white mt-1">투자 회수기간 산출</h4>
-                </div>
-                <div class="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-sm font-mono text-emerald-300">
-                    2,300만원 ÷ 4,000만원/년 = 약 0.6년
-                </div>
-            </div>
-
-            <div class="relative h-4 rounded-full bg-slate-900 border border-slate-800 overflow-hidden">
-                <div class="h-full w-[60%] bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 rounded-full"></div>
-            </div>
-
-            <div class="flex justify-between mt-2 text-[11px] font-mono text-slate-500">
-                <span>투자 시작</span>
-                <span class="text-emerald-300">약 7개월 · 손익분기점</span>
-                <span>1년</span>
-            </div>
-        </div>
-    </section>
 
     <!-- Contact -->
     <section id="contact"
@@ -2761,345 +2547,100 @@
 
     </main>
 
-    <script>
-        const canvas = document.getElementById('calibrationCanvas');
-        const ctx = canvas.getContext('2d');
-
-        const sliderDx = document.getElementById('slider-dx');
-        const sliderDy = document.getElementById('slider-dy');
-        const sliderDz = document.getElementById('slider-dz');
-        const sliderDt = document.getElementById('slider-dt');
-
-        const valueDx = document.getElementById('val-dx');
-        const valueDy = document.getElementById('val-dy');
-        const valueDz = document.getElementById('val-dz');
-        const valueDt = document.getElementById('val-dt');
-
-        const resultLatency = document.getElementById('res-latency');
-        const resultOffset = document.getElementById('res-offset');
-        const resultResidual = document.getElementById('res-residual');
-
-        const statusBadge = document.getElementById('status-badge');
-        const randomButton = document.getElementById('btn-random');
-        const calibrateButton = document.getElementById('btn-calibrate');
-
-        let dx = Number(sliderDx.value);
-        let dy = Number(sliderDy.value);
-        let dz = Number(sliderDz.value);
-        let dt = Number(sliderDt.value);
-
-        function formatSigned(value, unit = '') {
-            const number = Number(value);
-            const sign = number >= 0 ? '+' : '';
-
-            return `${sign}${number.toFixed(2)}${unit}`;
-        }
-
-        function resizeCanvas() {
-            const rect = canvas.getBoundingClientRect();
-            const deviceRatio = window.devicePixelRatio || 1;
-
-            canvas.width = rect.width * deviceRatio;
-            canvas.height = rect.height * deviceRatio;
-
-            ctx.setTransform(
-                deviceRatio,
-                0,
-                0,
-                deviceRatio,
-                0,
-                0
-            );
-
-            drawCalibration();
-        }
-
-        function drawCrosshair(x, y, size, strokeStyle, lineWidth = 2) {
-            ctx.strokeStyle = strokeStyle;
-            ctx.lineWidth = lineWidth;
-
-            ctx.beginPath();
-            ctx.moveTo(x - size, y);
-            ctx.lineTo(x + size, y);
-            ctx.moveTo(x, y - size);
-            ctx.lineTo(x, y + size);
-            ctx.stroke();
-        }
-
-        function drawCalibration() {
-            const width = canvas.clientWidth;
-            const height = canvas.clientHeight;
-
-            ctx.clearRect(0, 0, width, height);
-
-            ctx.fillStyle = 'rgba(2, 6, 23, 0.95)';
-            ctx.fillRect(0, 0, width, height);
-
-            const centerX = width / 2;
-            const centerY = height / 2;
-
-            ctx.strokeStyle = 'rgba(71, 85, 105, 0.35)';
-            ctx.lineWidth = 1;
-
-            for (let x = 0; x <= width; x += 30) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
-                ctx.stroke();
-            }
-
-            for (let y = 0; y <= height; y += 30) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(width, y);
-                ctx.stroke();
-            }
-
-            const toleranceRadius = 55;
-
-            ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
-            ctx.lineWidth = 2;
-            ctx.setLineDash([6, 6]);
-
-            ctx.beginPath();
-            ctx.arc(
-                centerX,
-                centerY,
-                toleranceRadius,
-                0,
-                Math.PI * 2
-            );
-            ctx.stroke();
-
-            ctx.setLineDash([]);
-
-            drawCrosshair(
-                centerX,
-                centerY,
-                15,
-                'rgba(52, 211, 153, 1)',
-                3
-            );
-
-            const scale = 40;
-            const detectionX = centerX + dx * scale;
-            const detectionY = centerY - dy * scale;
-            const depthScale = Math.max(0.72, Math.min(1.35, 1 + dz * 0.10));
-
-            ctx.save();
-            ctx.translate(detectionX, detectionY);
-            ctx.rotate(dt * Math.PI / 180);
-            ctx.scale(depthScale, depthScale);
-
-            ctx.strokeStyle = 'rgba(129, 140, 248, 1)';
-            ctx.lineWidth = 3;
-
-            ctx.strokeRect(
-                -18,
-                -18,
-                36,
-                36
-            );
-
-            ctx.restore();
-
-            drawCrosshair(
-                detectionX,
-                detectionY,
-                12,
-                'rgba(129, 140, 248, 1)',
-                2
-            );
-
-            ctx.fillStyle = 'rgba(52, 211, 153, 1)';
-            ctx.font = '12px monospace';
-            ctx.fillText(
-                'TARGET',
-                centerX + 18,
-                centerY - 18
-            );
-
-            ctx.fillStyle = 'rgba(129, 140, 248, 1)';
-            ctx.fillText(
-                'DETECTION',
-                detectionX + 18,
-                detectionY + 28
-            );
-
-            // Z축은 화면 깊이 방향이므로 원형 Depth 링과 수치로 시각화
-            ctx.strokeStyle = dz >= 0
-                ? 'rgba(34, 211, 238, 0.85)'
-                : 'rgba(94, 234, 212, 0.85)';
-            ctx.lineWidth = 2;
-            ctx.setLineDash([4, 4]);
-            ctx.beginPath();
-            ctx.arc(detectionX, detectionY, 25 + Math.abs(dz) * 7, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.setLineDash([]);
-
-            ctx.fillStyle = 'rgba(103, 232, 249, 1)';
-            ctx.font = '11px monospace';
-            ctx.fillText(
-                `Z ${formatSigned(dz, 'mm')}`,
-                detectionX + 18,
-                detectionY - 28
-            );
-
-            ctx.strokeStyle = 'rgba(192, 132, 252, 0.7)';
-            ctx.lineWidth = 1.5;
-
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY);
-            ctx.lineTo(detectionX, detectionY);
-            ctx.stroke();
-        }
-
-        function updateValues() {
-            dx = Number(sliderDx.value);
-            dy = Number(sliderDy.value);
-            dz = Number(sliderDz.value);
-            dt = Number(sliderDt.value);
-
-            valueDx.textContent = formatSigned(dx, 'mm');
-            valueDy.textContent = formatSigned(dy, 'mm');
-            valueDz.textContent = formatSigned(dz, 'mm');
-            valueDt.textContent = formatSigned(dt, '°');
-
-            resultOffset.textContent =
-                `ΔX: ${formatSigned(-dx)} / ΔY: ${formatSigned(-dy)} / ΔZ: ${formatSigned(-dz)}`;
-
-            const residual = Math.sqrt(
-                Math.pow(dx, 2) +
-                Math.pow(dy, 2) +
-                Math.pow(dz, 2)
-            );
-
-            if (residual <= 0.30) {
-                statusBadge.textContent = '정상 가동';
-                statusBadge.className =
-                    'px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
-
-                resultResidual.textContent =
-                    `${residual.toFixed(2)}mm · PASS`;
-
-                resultResidual.className =
-                    'text-emerald-400 font-bold';
-            } else {
-                statusBadge.textContent = '보정 필요';
-                statusBadge.className =
-                    'px-2.5 py-1 rounded-full text-[11px] font-mono bg-amber-500/20 text-amber-400 border border-amber-500/30';
-
-                resultResidual.textContent =
-                    `${residual.toFixed(2)}mm · OFFSET`;
-
-                resultResidual.className =
-                    'text-amber-400 font-bold';
-            }
-
-            drawCalibration();
-        }
-
-        sliderDx.addEventListener('input', updateValues);
-        sliderDy.addEventListener('input', updateValues);
-        sliderDz.addEventListener('input', updateValues);
-        sliderDt.addEventListener('input', updateValues);
-
-        randomButton.addEventListener('click', () => {
-            sliderDx.value =
-                (Math.random() * 4 - 2).toFixed(2);
-
-            sliderDy.value =
-                (Math.random() * 4 - 2).toFixed(2);
-
-            sliderDz.value =
-                (Math.random() * 6 - 3).toFixed(2);
-
-            sliderDt.value =
-                (Math.random() * 6 - 3).toFixed(2);
-
-            resultLatency.textContent =
-                `${Math.floor(Math.random() * 100) + 120}ms`;
-
-            updateValues();
-        });
-
-        calibrateButton.addEventListener('click', () => {
-            const originalText = calibrateButton.innerHTML;
-
-            calibrateButton.disabled = true;
-            calibrateButton.innerHTML =
-                '<i class="fa-solid fa-spinner fa-spin"></i><span>보정 중</span>';
-
-            statusBadge.textContent = 'AI 보정 중';
-            statusBadge.className =
-                'px-2.5 py-1 rounded-full text-[11px] font-mono bg-indigo-500/20 text-indigo-400 border border-indigo-500/30';
-
-            setTimeout(() => {
-                sliderDx.value = '0.02';
-                sliderDy.value = '-0.01';
-                sliderDz.value = '0.02';
-                sliderDt.value = '0.05';
-
-                resultLatency.textContent =
-                    `${Math.floor(Math.random() * 80) + 120}ms`;
-
-                updateValues();
-
-                calibrateButton.disabled = false;
-                calibrateButton.innerHTML = originalText;
-            }, 700);
-        });
-
-        window.addEventListener('resize', resizeCanvas);
-
-        resizeCanvas();
-        updateValues();
     
 
-        // Dashboard mobile sidebar and active navigation
-        const dashboardSidebar = document.getElementById('dashboard-sidebar');
-        const mobileSidebarButton = document.getElementById('mobile-sidebar-button');
-        const dashboardLinks = document.querySelectorAll('.dashboard-nav a');
+<script>
+    const canvas = document.getElementById('calibrationCanvas');
+    const ctx = canvas.getContext('2d');
+    const sliderDx = document.getElementById('slider-dx');
+    const sliderDy = document.getElementById('slider-dy');
+    const sliderDz = document.getElementById('slider-dz');
+    const sliderDt = document.getElementById('slider-dt');
+    const valueDx = document.getElementById('val-dx');
+    const valueDy = document.getElementById('val-dy');
+    const valueDz = document.getElementById('val-dz');
+    const valueDt = document.getElementById('val-dt');
+    const resultLatency = document.getElementById('res-latency');
+    const resultTargetCoordinate = document.getElementById('res-target-coordinate');
+    const resultDistance = document.getElementById('res-distance');
+    const resultOffset = document.getElementById('res-offset');
+    const resultResidual = document.getElementById('res-residual');
+    const statusBadge = document.getElementById('status-badge');
+    const randomButton = document.getElementById('btn-random');
+    const calibrateButton = document.getElementById('btn-calibrate');
+    const targetNominal = { x: 650, y: 250, z: 420 };
+    let dx = Number(sliderDx.value), dy = Number(sliderDy.value), dz = Number(sliderDz.value), dt = Number(sliderDt.value);
+    function formatSigned(value, unit = '') { const n = Number(value); return `${n >= 0 ? '+' : ''}${n.toFixed(2)}${unit}`; }
+    function targetActual() { return { x: targetNominal.x + dx, y: targetNominal.y + dy, z: targetNominal.z + dz }; }
+    function euclideanDistance(point) { return Math.sqrt(point.x**2 + point.y**2 + point.z**2); }
+    function resizeCanvas() { const rect = canvas.getBoundingClientRect(); const r = window.devicePixelRatio || 1; canvas.width = rect.width * r; canvas.height = rect.height * r; ctx.setTransform(r,0,0,r,0,0); drawCalibration3D(); }
+    function drawPoint(point, radius, color) { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(point.x, point.y, radius, 0, Math.PI * 2); ctx.fill(); }
+    function drawCalibration3D() {
+        const width = canvas.clientWidth, height = canvas.clientHeight;
+        ctx.clearRect(0,0,width,height); ctx.fillStyle='rgba(2,6,23,0.96)'; ctx.fillRect(0,0,width,height);
+        const origin={x:width*0.22,y:height*0.78}; const actual=targetActual(); const maxX=820,maxY=520,maxZ=620; const scale=Math.min(width/980,height/690);
+        function project3D(x,y,z){ return {x:origin.x+(x*0.72-y*0.42)*scale, y:origin.y+(x*0.06+y*0.28-z*0.72)*scale}; }
+        function drawAxis(end,label,color){ ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(origin.x,origin.y); ctx.lineTo(end.x,end.y); ctx.stroke(); ctx.fillStyle=color; ctx.font='bold 12px monospace'; ctx.fillText(label,end.x+7,end.y-5); }
+        ctx.strokeStyle='rgba(71,85,105,0.20)'; ctx.lineWidth=1;
+        for(let x=0;x<=maxX;x+=100){ const p1=project3D(x,0,0), p2=project3D(x,maxY,0); ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
+        for(let y=0;y<=maxY;y+=100){ const p1=project3D(0,y,0), p2=project3D(maxX,y,0); ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
+        drawAxis(project3D(maxX,0,0),'X','rgba(34,211,238,0.95)'); drawAxis(project3D(0,maxY,0),'Y','rgba(52,211,153,0.95)'); drawAxis(project3D(0,0,maxZ),'Z','rgba(192,132,252,0.95)');
+        const nominal2D=project3D(targetNominal.x,targetNominal.y,targetNominal.z), actual2D=project3D(actual.x,actual.y,actual.z);
+        ctx.strokeStyle='rgba(99,239,201,0.70)'; ctx.lineWidth=2.5; ctx.setLineDash([7,5]); ctx.beginPath(); ctx.moveTo(origin.x,origin.y); ctx.lineTo(actual2D.x,actual2D.y); ctx.stroke(); ctx.setLineDash([]);
+        drawPoint(nominal2D,6,'rgba(52,211,153,1)'); ctx.strokeStyle='rgba(52,211,153,0.8)'; ctx.lineWidth=2; ctx.strokeRect(nominal2D.x-10,nominal2D.y-10,20,20); drawPoint(actual2D,6,'rgba(129,140,248,1)');
+        ctx.strokeStyle='rgba(129,140,248,0.95)'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(nominal2D.x,nominal2D.y); ctx.lineTo(actual2D.x,actual2D.y); ctx.stroke();
+        const theta=dt*Math.PI/180, toolLength=38, thetaVisual=theta*12; ctx.save(); ctx.translate(actual2D.x,actual2D.y); ctx.rotate(thetaVisual); ctx.strokeStyle='rgba(251,191,36,0.95)'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(-toolLength/2,0); ctx.lineTo(toolLength/2,0); ctx.stroke(); ctx.restore();
+        ctx.fillStyle='rgba(226,232,240,0.95)'; ctx.font='11px monospace'; ctx.fillText('O Robot Base (0,0,0)',origin.x+8,origin.y+18); ctx.fillStyle='rgba(52,211,153,1)'; ctx.fillText('T₀ Nominal',nominal2D.x+10,nominal2D.y-12); ctx.fillStyle='rgba(129,140,248,1)'; ctx.fillText('T Detected',actual2D.x+10,actual2D.y+18); ctx.fillStyle='rgba(251,191,36,1)'; ctx.fillText(`θ ${formatSigned(dt,'°')}`,actual2D.x+10,actual2D.y-22);
+        const d=euclideanDistance(actual); ctx.fillStyle='rgba(103,232,249,1)'; ctx.font='bold 11px monospace'; ctx.fillText(`d = √(X²+Y²+Z²) = ${d.toFixed(2)} mm`,width*0.52,height*0.91);
+    }
+    function updateValues(){ dx=Number(sliderDx.value); dy=Number(sliderDy.value); dz=Number(sliderDz.value); dt=Number(sliderDt.value); const actual=targetActual(); const distance=euclideanDistance(actual); const positionError=Math.sqrt(dx*dx+dy*dy+dz*dz); const anglePass=Math.abs(dt)<=1.0; const positionPass=positionError<=0.30; valueDx.textContent=formatSigned(dx,'mm'); valueDy.textContent=formatSigned(dy,'mm'); valueDz.textContent=formatSigned(dz,'mm'); valueDt.textContent=formatSigned(dt,'°'); resultTargetCoordinate.textContent=`X ${actual.x.toFixed(2)} / Y ${actual.y.toFixed(2)} / Z ${actual.z.toFixed(2)} mm`; resultDistance.textContent=`${distance.toFixed(2)}mm`; resultOffset.textContent=`ΔX ${formatSigned(-dx)} / ΔY ${formatSigned(-dy)} / ΔZ ${formatSigned(-dz)} / Δθ ${formatSigned(-dt,'°')}`; if(positionPass&&anglePass){ statusBadge.textContent='정상 가동'; statusBadge.className='px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'; resultResidual.textContent=`${positionError.toFixed(2)}mm · PASS`; resultResidual.className='text-emerald-400 font-bold'; } else { statusBadge.textContent='보정 필요'; statusBadge.className='px-2.5 py-1 rounded-full text-[11px] font-mono bg-amber-500/20 text-amber-400 border border-amber-500/30'; resultResidual.textContent=`${positionError.toFixed(2)}mm · ${anglePass ? 'POSITION OFFSET' : 'ANGLE OFFSET'}`; resultResidual.className='text-amber-400 font-bold'; } drawCalibration3D(); }
+    sliderDx.addEventListener('input', updateValues); sliderDy.addEventListener('input', updateValues); sliderDz.addEventListener('input', updateValues); sliderDt.addEventListener('input', updateValues);
+    randomButton.addEventListener('click',()=>{ sliderDx.value=(Math.random()*4-2).toFixed(2); sliderDy.value=(Math.random()*4-2).toFixed(2); sliderDz.value=(Math.random()*6-3).toFixed(2); sliderDt.value=(Math.random()*6-3).toFixed(2); resultLatency.textContent=`${Math.floor(Math.random()*100)+120}ms`; updateValues(); });
+    calibrateButton.addEventListener('click',()=>{ const originalText=calibrateButton.innerHTML; calibrateButton.disabled=true; calibrateButton.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i><span>보정 중</span>'; statusBadge.textContent='AI 보정 중'; statusBadge.className='px-2.5 py-1 rounded-full text-[11px] font-mono bg-indigo-500/20 text-indigo-400 border border-indigo-500/30'; setTimeout(()=>{ sliderDx.value='0.02'; sliderDy.value='-0.01'; sliderDz.value='0.02'; sliderDt.value='0.05'; resultLatency.textContent=`${Math.floor(Math.random()*80)+120}ms`; updateValues(); calibrateButton.disabled=false; calibrateButton.innerHTML=originalText; },700); });
+    window.addEventListener('resize', resizeCanvas); resizeCanvas(); updateValues();
 
-        if (mobileSidebarButton && dashboardSidebar) {
-            mobileSidebarButton.addEventListener('click', () => {
-                dashboardSidebar.classList.toggle('open');
-            });
-        }
+    const mesData={
+        progress:{title:'선박·의장작업 생산진도',steps:[{label:'선박 선택',options:['LNG-2410','LNG-2411']},{label:'의장작업 선택',options:['체결','용접','좌표보정']},{label:'대상 항목 선택',options:['M16 브래킷 볼트','파이프 서포트','케이블 트레이']}],result(values){const map={'M16 브래킷 볼트':82,'파이프 서포트':64,'케이블 트레이':91}; const pct=map[values[2]]||78; return {badge:'MES PROGRESS',heading:`${values[0]} · ${values[1]} · ${values[2]}`,details:[`블록: 기관실 Zone A`,`계획 대비 진도: ${pct}%`,`미완료 수량: ${Math.max(2,10-Math.floor(pct/12))}건`,`협동로봇 상태: R1 가동 / R2 비가동`]};}},
+        defect:{title:'작업 이상·불량 이미지 사례',steps:[{label:'불량 항목 선택',options:['체결불량','용접불량','케이블 접속불량']},{label:'대표 사례 선택',options:['와셔 누락','비드 불연속','단자 체결미흡']},{label:'조치 이력 선택',options:['재작업 실시','토크 재검증','작업표준 수정']}],result(values){return {badge:'VISION CASE',heading:`${values[0]} · ${values[1]}`,details:[`유사 사례 수: 14건`,`주요 원인: 작업자 접근성 저하 / 시야 가림`,`추천 조치: ${values[2]}`,`이미지 검색 결과: 유사도 0.91`]};}},
+        alarm:{title:'PLC·HMI 인터록/알람 이력',steps:[{label:'설비 선택',options:['협동로봇 R1','토크 툴','용접 전원장치']},{label:'Alarm Code 선택',options:['E-STOP','TORQUE_LOW','ARC_FAULT']},{label:'상세 이력 선택',options:['발생시각 확인','조치이력 확인','재발빈도 확인']}],result(values){return {badge:'ALARM LOG',heading:`${values[0]} · ${values[1]}`,details:[`최근 발생: 2026-08-08 10:41`,`상태: 수동 Reset 후 정상`,`관련 인터록: 작업자 접근 안전문`,`상세조회: ${values[2]}`]};}},
+        document:{title:'협동로봇 점검·교체 표준서 / CAD / 안전기준',steps:[{label:'로봇 종류 선택',options:['UR10e','Doosan M0609','Hanwha HCR-5']},{label:'문서 종류 선택',options:['점검 표준서','내부 구조도 CAD','로봇 안전기준']},{label:'세부 문서 선택',options:['일일 점검표','감속기 모듈도','협동운전 안전거리']}],result(values){return {badge:'ROBOT DOCS',heading:`${values[0]} · ${values[1]}`,details:[`선택 문서: ${values[2]}`,`Rev.: 2026.07`,`권한 등급: 생산관리 / 설비기술 열람 가능`,`연결 문서: 점검표, 부품리스트, 안전기준 동시 조회`]};}}
+    };
+    const mesDetailPanel=document.getElementById('mes-detail-panel'); const mesButtons=[...document.querySelectorAll('.mes-domain-button')]; const mesSearchInput=document.getElementById('mes-search-input'); const mesSearchButton=document.getElementById('mes-search-button'); const mesSearchStatus=document.getElementById('mes-search-status'); let activeMesValues={};
+    function renderMesDetail(domainKey){ mesButtons.forEach(btn=>btn.classList.toggle('active', btn.dataset.domain===domainKey)); const domain=mesData[domainKey]; const defaults=domain.steps.map(step=>(activeMesValues[domainKey]?.[step.label]||step.options[0])); const summary=domain.result(defaults); mesDetailPanel.innerHTML=`<div class="flex items-center justify-between gap-3 mb-4"><div><span class="text-[11px] font-mono text-emerald-400 uppercase">${summary.badge}</span><h5 class="text-lg font-bold text-white mt-1">${domain.title}</h5></div><span class="mini-badge"><i class="fa-solid fa-sitemap"></i>Drill-down</span></div><div class="grid grid-cols-1 gap-3 mb-4">${domain.steps.map((step,index)=>`<div><label class="block text-[12px] text-slate-400 mb-1">${index+1}. ${step.label}</label><select class="mes-step-select" data-domain="${domainKey}" data-step="${step.label}">${step.options.map(option=>`<option value="${option}" ${defaults[index]===option?'selected':''}>${option}</option>`).join('')}</select></div>`).join('')}</div><div class="p-4 rounded-xl bg-slate-950/55 border border-slate-800"><div class="text-sm font-bold text-white mb-2">상세 조회 결과</div><div class="text-cyan-300 font-semibold mb-3">${summary.heading}</div><div class="grid gap-2 text-sm text-slate-300">${summary.details.map(line=>`<div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800">${line}</div>`).join('')}</div></div>`; mesDetailPanel.querySelectorAll('.mes-step-select').forEach(select=>{ select.addEventListener('change',()=>{ const key=select.dataset.domain; activeMesValues[key]=activeMesValues[key]||{}; activeMesValues[key][select.dataset.step]=select.value; renderMesDetail(key); });}); }
+    function pickMesDomainByQuery(query){ const q=String(query||'').toLowerCase(); if(!q) return 'progress'; if(/(불량|이미지|와셔|비드|케이블)/.test(q)) return 'defect'; if(/(알람|interlock|인터록|e-stop|torque|fault)/.test(q)) return 'alarm'; if(/(점검|cad|도면|안전|문서|robot|ur)/.test(q)) return 'document'; return 'progress'; }
+    function runMesSearch(){ const query=mesSearchInput?.value?.trim()||''; const domainKey=pickMesDomainByQuery(query); renderMesDetail(domainKey); if(mesSearchStatus){ mesSearchStatus.textContent=query?`“${query}” 검색 결과입니다. 관련 대표영역이 선택되었고 아래 단계에서 세부항목을 계속 좁혀갈 수 있습니다.`:'검색어를 입력하면 관련 대표영역과 세부 단계가 자동으로 연결됩니다.'; } }
+    mesButtons.forEach(button=>button.addEventListener('click',()=>{ renderMesDetail(button.dataset.domain); if(mesSearchStatus) mesSearchStatus.textContent=`${button.querySelector('strong').textContent} 항목을 선택했습니다. 단계별 상세항목을 계속 좁혀 확인하세요.`; })); mesSearchButton?.addEventListener('click',runMesSearch); mesSearchInput?.addEventListener('keydown',(event)=>{ if(event.key==='Enter') runMesSearch(); }); renderMesDetail('progress');
 
-        dashboardLinks.forEach((link) => {
-            link.addEventListener('click', () => {
-                dashboardLinks.forEach((item) => item.classList.remove('active'));
-                link.classList.add('active');
-                dashboardSidebar?.classList.remove('open');
-            });
-        });
+    const FIXED_CAPEX=2300; const FIXED_SAVING=4000; const maintenanceInput=document.getElementById('maintenance-input'); const calcMaintenance=document.getElementById('calc-maintenance'); const calcNetSaving=document.getElementById('calc-net-saving'); const calcRoi=document.getElementById('calc-roi'); const calcBepMonth=document.getElementById('calc-bep-month'); const paybackDisplay=document.getElementById('payback-display'); const bepDisplay=document.getElementById('bep-display');
+    function formatMoney(v){ return `${Number(v).toLocaleString('ko-KR')}만원`; }
+    function drawPaybackCanvas(maintenance){
+        const c=document.getElementById('paybackChart'); if(!c) return;
+        const box=c.parentElement.getBoundingClientRect(); const dpr=window.devicePixelRatio||1; const W=Math.max(640,box.width-32), H=320; c.width=W*dpr; c.height=H*dpr; c.style.width='100%'; c.style.height=H+'px'; const g=c.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,W,H);
+        const ml=72,mr=28,mt=32,mb=52,pw=W-ml-mr,ph=H-mt-mb; const net=FIXED_SAVING-maintenance; const monthly=net/12; const vals=Array.from({length:13},(_,m)=>-FIXED_CAPEX+monthly*m); const minY=Math.min(-2500,Math.min(...vals)-200), maxY=Math.max(1600,Math.max(...vals)+200); const xPix=m=>ml+(m/12)*pw; const yPix=v=>mt+(maxY-v)/(maxY-minY)*ph;
+        g.fillStyle='#071019'; g.fillRect(0,0,W,H);
+        g.strokeStyle='rgba(148,163,184,.13)'; g.lineWidth=1; g.font='11px monospace'; g.fillStyle='#8fa09a';
+        for(let m=0;m<=12;m+=2){ const x=xPix(m); g.beginPath(); g.moveTo(x,mt); g.lineTo(x,mt+ph); g.stroke(); g.fillText(m+'M',x-8,H-24); }
+        const steps=5; for(let i=0;i<=steps;i++){ const v=minY+(maxY-minY)*i/steps; const y=yPix(v); g.beginPath(); g.moveTo(ml,y); g.lineTo(ml+pw,y); g.stroke(); g.fillText(Math.round(v).toLocaleString(),8,y+4); }
+        const zeroY=yPix(0); g.strokeStyle='rgba(226,232,240,.45)'; g.lineWidth=1.4; g.beginPath(); g.moveTo(ml,zeroY); g.lineTo(ml+pw,zeroY); g.stroke();
+        g.strokeStyle='rgba(24,230,173,.95)'; g.lineWidth=3; g.beginPath(); vals.forEach((v,m)=>{const x=xPix(m),y=yPix(v); if(m===0)g.moveTo(x,y);else g.lineTo(x,y);}); g.stroke();
+        vals.forEach((v,m)=>{const x=xPix(m),y=yPix(v); g.fillStyle='#18e6ad'; g.beginPath(); g.arc(x,y,3,0,Math.PI*2); g.fill();});
+        if(net>0){ const bep=FIXED_CAPEX/monthly; if(bep<=12){ const x=xPix(bep); g.setLineDash([7,5]); g.strokeStyle='#facc15'; g.lineWidth=2; g.beginPath(); g.moveTo(x,mt); g.lineTo(x,mt+ph); g.stroke(); g.setLineDash([]); g.fillStyle='#facc15'; g.font='bold 12px monospace'; g.fillText(`BEP ${bep.toFixed(1)}개월`,Math.min(x+8,W-118),mt+16); }}
+        g.fillStyle='#aebbc2'; g.font='bold 12px sans-serif'; g.fillText('누적 순효과(만원)',8,18); g.fillText('월(Month)',W/2-28,H-6);
+    }
+    function updateRoi(){ const maintenance=Math.max(0,Number(maintenanceInput?.value||0)); const net=FIXED_SAVING-maintenance; const roi=((net-FIXED_CAPEX)/FIXED_CAPEX)*100; const paybackYears=net>0?FIXED_CAPEX/net:Infinity; const paybackMonths=net>0?paybackYears*12:Infinity; calcMaintenance.textContent=`${formatMoney(maintenance)}/년`; calcNetSaving.textContent=`${formatMoney(net)}/년`; calcRoi.textContent=Number.isFinite(roi)?`${roi.toFixed(1)}%`:'계산불가'; calcBepMonth.textContent=Number.isFinite(paybackMonths)?`${paybackMonths.toFixed(1)}개월`:'도달 불가'; paybackDisplay.innerHTML=Number.isFinite(paybackYears)?`${paybackYears.toFixed(2)}<span class="text-sm text-cyan-300 ml-1">년</span>`:'<span class="text-lg text-amber-300">회수 불가</span>'; bepDisplay.textContent=Number.isFinite(paybackMonths)?`손익분기점 약 ${paybackMonths.toFixed(1)}개월`:'손익분기점 도달 불가'; drawPaybackCanvas(maintenance); }
+    maintenanceInput?.addEventListener('input',updateRoi); window.addEventListener('resize',()=>updateRoi()); updateRoi();
 
-        const dashboardSections = [...dashboardLinks]
-            .map((link) => document.querySelector(link.getAttribute('href')))
-            .filter(Boolean);
+    const dashboardSidebar=document.getElementById('dashboard-sidebar'); const mobileSidebarButton=document.getElementById('mobile-sidebar-button'); const dashboardLinks=document.querySelectorAll('.dashboard-nav a'); if(mobileSidebarButton && dashboardSidebar){ mobileSidebarButton.addEventListener('click',()=>dashboardSidebar.classList.toggle('open')); } dashboardLinks.forEach(link=>{ link.addEventListener('click',()=>{ dashboardLinks.forEach(item=>item.classList.remove('active')); link.classList.add('active'); dashboardSidebar?.classList.remove('open'); });}); const dashboardSections=[...dashboardLinks].map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean); const sectionObserver=new IntersectionObserver((entries)=>{ entries.forEach((entry)=>{ if(!entry.isIntersecting) return; const targetLink=document.querySelector(`.dashboard-nav a[href="#${entry.target.id}"]`); if(targetLink){ dashboardLinks.forEach((item)=>item.classList.remove('active')); targetLink.classList.add('active'); } }); }, {rootMargin:'-30% 0px -60% 0px', threshold:0.01}); dashboardSections.forEach((section)=>sectionObserver.observe(section));
+</script>
 
-        const sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (!entry.isIntersecting) return;
-                const targetLink = document.querySelector(`.dashboard-nav a[href="#${entry.target.id}"]`);
-                if (targetLink) {
-                    dashboardLinks.forEach((item) => item.classList.remove('active'));
-                    targetLink.classList.add('active');
-                }
-            });
-        }, { rootMargin: '-30% 0px -60% 0px', threshold: 0.01 });
 
-        dashboardSections.forEach((section) => sectionObserver.observe(section));
-
-    </script>
 
 
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const reportSections = document.querySelectorAll(
-                '#overview, #problem, #safety, #process, #technology-stack, #pipeline, #yolo-training, #model-validation, #roi'
+                '#overview, #problem, #safety, #process, #technology-stack, #pipeline, #yolo-training, #model-validation, #embedding-rag, #simulator, #roi'
             );
 
             reportSections.forEach(section => {
