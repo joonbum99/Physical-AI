@@ -1,0 +1,2980 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+
+<head>
+    <!-- OFFLINE STANDALONE BUILD: no external images, CDN scripts, CSS, fonts, or HTTP requests -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Physical AI | HD현대삼호 선박 작업구역 YOLO26n 검출 & 6축 로봇 좌표 자동보정 시스템
+    </title>
+
+    <style>
+        body {
+            background-color: #090d16;
+            color: #f1f5f9;
+            font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .gradient-text {
+            background: linear-gradient(
+                135deg,
+                #38bdf8 0%,
+                #818cf8 50%,
+                #c084fc 100%
+            );
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-border {
+            border-image: linear-gradient(
+                to right,
+                #38bdf8,
+                #818cf8
+            ) 1;
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.25);
+        }
+
+        .pulse-subtle {
+            animation: pulse 3s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+
+        /* =========================================================
+           HD현대삼호 Maritime AI Dashboard Layout
+           - 기존 보고서 내용은 유지하고 화면 양식만 대시보드형으로 변경
+           ========================================================= */
+        :root {
+            --sidebar-width: 240px;
+            --topbar-height: 64px;
+            --dashboard-bg: #0b1018;
+            --sidebar-bg: #131920;
+            --panel-bg: #111821;
+            --panel-bg-soft: #151c24;
+            --line-color: rgba(148, 163, 184, 0.12);
+            --mint: #00f5a0;
+            --cyan: #22d3ee;
+            --muted: #94a3b8;
+        }
+
+        html {
+            scroll-padding-top: calc(var(--topbar-height) + 20px);
+        }
+
+        body {
+            background: var(--dashboard-bg);
+            overflow-x: hidden;
+        }
+
+        .dashboard-sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            width: var(--sidebar-width);
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--line-color);
+        }
+
+        .dashboard-brand {
+            min-height: var(--topbar-height);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 18px;
+            border-bottom: 1px solid var(--line-color);
+        }
+
+        .dashboard-brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: #e2e8f0;
+            background: linear-gradient(145deg, #2a333d, #1b222b);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .dashboard-nav {
+            padding: 18px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dashboard-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 44px;
+            padding: 0 14px;
+            border-radius: 5px;
+            color: #b9c4cf;
+            font-size: 12px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            letter-spacing: 0.07em;
+            transition: 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .dashboard-nav a:hover,
+        .dashboard-nav a.active {
+            color: #07120f;
+            background: var(--mint);
+            box-shadow: 0 0 22px rgba(0, 245, 160, 0.15);
+        }
+
+        .dashboard-nav a:hover i,
+        .dashboard-nav a.active i {
+            color: #07120f;
+        }
+
+        .dashboard-nav i {
+            width: 17px;
+            color: #9fb4aa;
+            text-align: center;
+        }
+
+        .dashboard-sidebar-footer {
+            margin-top: auto;
+            padding: 14px 10px 18px;
+            border-top: 1px solid var(--line-color);
+        }
+
+        .dashboard-report-button {
+            width: 100%;
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            border-radius: 4px;
+            color: #06120e;
+            background: var(--mint);
+            font-size: 11px;
+            font-weight: 800;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            letter-spacing: 0.08em;
+        }
+
+        .dashboard-topbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: var(--sidebar-width);
+            height: var(--topbar-height);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            background: rgba(11, 16, 24, 0.96);
+            border-bottom: 1px solid var(--line-color);
+            backdrop-filter: blur(14px);
+        }
+
+        .dashboard-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 7px 13px;
+            border-radius: 999px;
+            color: #a7b8ae;
+            background: #141b22;
+            border: 1px solid rgba(148, 163, 184, 0.08);
+            font-size: 10px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+        }
+
+        .dashboard-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--mint);
+            box-shadow: 0 0 10px rgba(0, 245, 160, 0.7);
+        }
+
+        .dashboard-top-icons {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: #91a09a;
+        }
+
+        .dashboard-main {
+            margin-left: var(--sidebar-width);
+            padding-top: var(--topbar-height);
+            min-height: 100vh;
+        }
+
+        .dashboard-main > section,
+        .dashboard-main > footer {
+            max-width: none !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: clamp(28px, 4vw, 56px) !important;
+            padding-right: clamp(28px, 4vw, 56px) !important;
+        }
+
+        .dashboard-main #overview {
+            min-height: auto !important;
+            padding-top: 48px !important;
+            padding-bottom: 86px !important;
+            justify-content: flex-start !important;
+        }
+
+        .dashboard-main #overview h1 {
+            max-width: 1100px;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+        }
+
+        .dashboard-main #overview .gradient-text {
+            background: linear-gradient(90deg, var(--mint), var(--cyan));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dashboard-main section:not(#overview) {
+            padding-top: 72px !important;
+            padding-bottom: 72px !important;
+            border-top-color: var(--line-color) !important;
+        }
+
+        .dashboard-main section > .text-center {
+            text-align: center;
+        }
+
+        .glass-panel,
+        .glass-card {
+            background: linear-gradient(145deg, rgba(21, 28, 36, 0.98), rgba(16, 22, 29, 0.98));
+            backdrop-filter: none;
+            border-color: rgba(148, 163, 184, 0.11);
+            box-shadow: none;
+            border-radius: 5px !important;
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 24px -12px rgba(0, 245, 160, 0.35);
+        }
+
+        .dashboard-main code,
+        .dashboard-main .font-mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .dashboard-main .rounded-2xl,
+        .dashboard-main .rounded-xl,
+        .dashboard-main .rounded-lg {
+            border-radius: 5px !important;
+        }
+
+        .dashboard-main .bg-gradient-to-r,
+        .dashboard-main .bg-gradient-to-b {
+            background-image: none !important;
+        }
+
+        .mobile-sidebar-button {
+            display: none;
+            width: 38px;
+            height: 38px;
+            place-items: center;
+            border: 1px solid var(--line-color);
+            border-radius: 5px;
+            color: #dbe7e2;
+            background: #151c24;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+            }
+
+            .dashboard-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .dashboard-topbar {
+                left: 0;
+                padding: 0 18px;
+            }
+
+            .dashboard-main {
+                margin-left: 0;
+            }
+
+            .mobile-sidebar-button {
+                display: grid;
+            }
+        }
+
+
+        /* =========================================================
+           ATTACHED IMAGE COLOR THEME OVERRIDE
+           내용 및 구조는 유지하고 색상·표면·타이포그래피만 변경
+           ========================================================= */
+        :root {
+            --sidebar-width: 177px;
+            --topbar-height: 52px;
+            --dashboard-bg: #0d1117;
+            --sidebar-bg: #171b21;
+            --topbar-bg: #0f141b;
+            --panel-bg: #151a20;
+            --panel-bg-soft: #181e25;
+            --panel-deep: #10151c;
+            --line-color: #242b33;
+            --line-soft: rgba(148, 163, 184, 0.10);
+            --mint: #00eea8;
+            --mint-strong: #00f5a9;
+            --mint-soft: rgba(0, 238, 168, 0.12);
+            --cyan: #22d3c5;
+            --white: #f3f6f4;
+            --text: #d5ddd9;
+            --muted: #8d9a95;
+            --muted-dark: #66736e;
+        }
+
+        html, body {
+            background: var(--dashboard-bg) !important;
+            color: var(--text) !important;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', system-ui, -apple-system, sans-serif !important;
+        }
+
+        .dashboard-sidebar {
+            width: var(--sidebar-width) !important;
+            background: var(--sidebar-bg) !important;
+            border-right: 1px solid #20262d !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-brand {
+            min-height: var(--topbar-height) !important;
+            height: var(--topbar-height) !important;
+            padding: 0 12px !important;
+            gap: 9px !important;
+            border-bottom: 1px solid #20262d !important;
+        }
+
+        .dashboard-brand-icon {
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 3px !important;
+            color: #dfe8e3 !important;
+            background: #252b31 !important;
+            border: 1px solid #30373e !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-brand .font-bold,
+        .dashboard-brand strong {
+            color: #f1f5f2 !important;
+        }
+
+        .dashboard-brand .text-slate-400,
+        .dashboard-brand .text-\[10px\] {
+            color: #a8b2ad !important;
+        }
+
+        .dashboard-nav {
+            padding: 11px 7px !important;
+            gap: 4px !important;
+        }
+
+        .dashboard-nav a {
+            min-height: 35px !important;
+            padding: 0 11px !important;
+            gap: 9px !important;
+            border-radius: 3px !important;
+            color: #a9b4ae !important;
+            font-size: 9px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.10em !important;
+            background: transparent !important;
+            border: 1px solid transparent !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-nav a i {
+            width: 15px !important;
+            color: #a4b4ab !important;
+            font-size: 13px !important;
+        }
+
+        .dashboard-nav a:hover,
+        .dashboard-nav a.active {
+            color: #052118 !important;
+            background: var(--mint) !important;
+            border-color: var(--mint) !important;
+            box-shadow: 0 0 14px rgba(0, 238, 168, 0.12) !important;
+        }
+
+        .dashboard-nav a:hover i,
+        .dashboard-nav a.active i {
+            color: #062219 !important;
+        }
+
+        .dashboard-sidebar-footer {
+            padding: 11px 7px 8px !important;
+            border-top: 1px solid #20262d !important;
+        }
+
+        .dashboard-report-button {
+            min-height: 31px !important;
+            border-radius: 3px !important;
+            color: #052118 !important;
+            background: var(--mint) !important;
+            font-size: 8px !important;
+            letter-spacing: 0.12em !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-topbar {
+            left: var(--sidebar-width) !important;
+            height: var(--topbar-height) !important;
+            padding: 0 28px !important;
+            background: var(--topbar-bg) !important;
+            border-bottom: 1px solid #20262d !important;
+            backdrop-filter: none !important;
+        }
+
+        .dashboard-status {
+            padding: 5px 10px !important;
+            gap: 7px !important;
+            color: #91a19a !important;
+            background: #171d23 !important;
+            border: 1px solid #20272e !important;
+            font-size: 8px !important;
+            letter-spacing: 0.10em !important;
+            box-shadow: none !important;
+        }
+
+        .dashboard-status-dot {
+            width: 6px !important;
+            height: 6px !important;
+            background: var(--mint) !important;
+            box-shadow: 0 0 7px rgba(0, 238, 168, 0.70) !important;
+        }
+
+        .dashboard-top-icons {
+            gap: 16px !important;
+            color: #8f9d97 !important;
+            font-size: 13px !important;
+        }
+
+        .dashboard-main {
+            margin-left: var(--sidebar-width) !important;
+            padding-top: var(--topbar-height) !important;
+            background: var(--dashboard-bg) !important;
+        }
+
+        .dashboard-main > section,
+        .dashboard-main > footer {
+            padding-left: 28px !important;
+            padding-right: 28px !important;
+        }
+
+        .dashboard-main #overview {
+            padding-top: 31px !important;
+            padding-bottom: 70px !important;
+        }
+
+        .dashboard-main #overview h1 {
+            color: var(--white) !important;
+            font-size: clamp(2rem, 3.5vw, 3.05rem) !important;
+            line-height: 1.18 !important;
+            letter-spacing: -0.035em !important;
+        }
+
+        .dashboard-main #overview .gradient-text,
+        .gradient-text {
+            background: none !important;
+            -webkit-text-fill-color: var(--mint) !important;
+            color: var(--mint) !important;
+        }
+
+        .dashboard-main #overview p {
+            color: #c4ceca !important;
+            font-size: 13px !important;
+            line-height: 1.75 !important;
+        }
+
+        .dashboard-main section:not(#overview) {
+            padding-top: 62px !important;
+            padding-bottom: 62px !important;
+            border-top: 1px solid #171d23 !important;
+        }
+
+        .dashboard-main section > .text-center h2 {
+            color: #9ac5d6 !important;
+            font-size: 9px !important;
+            letter-spacing: 0.12em !important;
+        }
+
+        .dashboard-main section > .text-center h3 {
+            color: var(--white) !important;
+            font-size: clamp(1.65rem, 3vw, 2.25rem) !important;
+            letter-spacing: -0.025em !important;
+        }
+
+        .dashboard-main section > .text-center p {
+            color: #9da9a4 !important;
+        }
+
+        .glass-panel,
+        .glass-card {
+            background: var(--panel-bg) !important;
+            border: 1px solid #252c33 !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.015) !important;
+            backdrop-filter: none !important;
+            border-radius: 4px !important;
+        }
+
+        .glass-panel:hover,
+        .glass-card:hover {
+            border-color: #313a42 !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .glow-effect {
+            box-shadow: none !important;
+        }
+
+        .dashboard-main .bg-slate-900\/60,
+        .dashboard-main .bg-slate-900\/50,
+        .dashboard-main .bg-slate-900\/40,
+        .dashboard-main .bg-slate-800\/90,
+        .dashboard-main .bg-slate-800\/60,
+        .dashboard-main .bg-slate-800\/50 {
+            background: var(--panel-deep) !important;
+        }
+
+        .dashboard-main .border-slate-800,
+        .dashboard-main .border-slate-700\/80,
+        .dashboard-main .border-slate-800\/80 {
+            border-color: #252c33 !important;
+        }
+
+        .dashboard-main .text-white,
+        .dashboard-main h1,
+        .dashboard-main h3,
+        .dashboard-main h4 {
+            color: var(--white) !important;
+        }
+
+        .dashboard-main .text-slate-300 {
+            color: #c5cfca !important;
+        }
+
+        .dashboard-main .text-slate-400 {
+            color: #929f99 !important;
+        }
+
+        .dashboard-main .text-slate-500 {
+            color: #6f7b76 !important;
+        }
+
+        /* 청록 계열은 첨부 이미지의 민트 포인트로 통일 */
+        .dashboard-main .text-cyan-300,
+        .dashboard-main .text-cyan-400,
+        .dashboard-main .text-emerald-300,
+        .dashboard-main .text-emerald-400,
+        .dashboard-main .text-indigo-300,
+        .dashboard-main .text-indigo-400,
+        .dashboard-main .text-purple-300,
+        .dashboard-main .text-purple-400 {
+            color: var(--mint) !important;
+        }
+
+        .dashboard-main .bg-cyan-500\/10,
+        .dashboard-main .bg-cyan-500\/15,
+        .dashboard-main .bg-cyan-500\/20,
+        .dashboard-main .bg-emerald-500\/10,
+        .dashboard-main .bg-emerald-500\/15,
+        .dashboard-main .bg-emerald-500\/20,
+        .dashboard-main .bg-indigo-500\/10,
+        .dashboard-main .bg-indigo-500\/15,
+        .dashboard-main .bg-indigo-500\/20,
+        .dashboard-main .bg-purple-500\/10,
+        .dashboard-main .bg-purple-500\/15,
+        .dashboard-main .bg-purple-500\/20 {
+            background: var(--mint-soft) !important;
+        }
+
+        .dashboard-main .border-cyan-500\/20,
+        .dashboard-main .border-cyan-500\/25,
+        .dashboard-main .border-cyan-400\/50,
+        .dashboard-main .border-cyan-400\/60,
+        .dashboard-main .border-emerald-500\/20,
+        .dashboard-main .border-emerald-500\/25,
+        .dashboard-main .border-indigo-500\/20,
+        .dashboard-main .border-indigo-500\/25,
+        .dashboard-main .border-purple-500\/20,
+        .dashboard-main .border-purple-500\/25 {
+            border-color: rgba(0, 238, 168, 0.25) !important;
+        }
+
+        .dashboard-main .bg-gradient-to-r,
+        .dashboard-main .bg-gradient-to-b,
+        .dashboard-main .bg-gradient-to-tr {
+            background-image: none !important;
+        }
+
+        .dashboard-main .rounded-full,
+        .dashboard-main .rounded-2xl,
+        .dashboard-main .rounded-xl,
+        .dashboard-main .rounded-lg {
+            border-radius: 4px !important;
+        }
+
+        .dashboard-main .shadow-lg,
+        .dashboard-main [class*="shadow-"] {
+            box-shadow: none !important;
+        }
+
+        .dashboard-main .border-l-cyan-400,
+        .dashboard-main .border-l-indigo-400,
+        .dashboard-main .border-l-emerald-400 {
+            border-left-color: var(--mint) !important;
+        }
+
+        .dashboard-main .border-l-purple-400 {
+            border-left-color: #7537ca !important;
+        }
+
+        .dashboard-main button,
+        .dashboard-main a[class*="bg-indigo"],
+        .dashboard-main a[class*="bg-cyan"],
+        .dashboard-main a[class*="bg-emerald"] {
+            border-radius: 3px !important;
+        }
+
+        .dashboard-main button[class*="bg-indigo"],
+        .dashboard-main button[class*="bg-cyan"],
+        .dashboard-main button[class*="bg-emerald"],
+        .dashboard-main a[class*="bg-indigo"],
+        .dashboard-main a[class*="bg-cyan"],
+        .dashboard-main a[class*="bg-emerald"] {
+            background: var(--mint) !important;
+            color: #062119 !important;
+            border-color: var(--mint) !important;
+        }
+
+        canvas {
+            filter: saturate(0.75) hue-rotate(115deg) !important;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-topbar { left: 0 !important; }
+            .dashboard-main { margin-left: 0 !important; }
+        }
+
+    </style>
+
+
+    <!-- Unified Maritime AI palette + gradient description treatment -->
+    <style>
+        :root {
+            --marine-bg: #0b1017;
+            --marine-panel: rgba(18, 27, 36, 0.92);
+            --marine-panel-2: rgba(14, 24, 33, 0.96);
+            --marine-border: rgba(30, 230, 177, 0.22);
+            --marine-border-strong: rgba(31, 235, 184, 0.48);
+            --marine-accent: #18e6ad;
+            --marine-accent-2: #20c9d7;
+            --marine-accent-soft: rgba(24, 230, 173, 0.09);
+            --marine-text-soft: #aebbc2;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 78% 8%, rgba(24, 230, 173, 0.055), transparent 30%),
+                radial-gradient(circle at 30% 72%, rgba(32, 201, 215, 0.04), transparent 34%),
+                var(--marine-bg) !important;
+        }
+
+        /* 박스 색상을 청록·딥네이비 계열로 통일 */
+        .glass-panel,
+        .glass-card,
+        section [class*="bg-red-"],
+        section [class*="bg-orange-"],
+        section [class*="bg-amber-"],
+        section [class*="bg-yellow-"],
+        section [class*="bg-purple-"],
+        section [class*="bg-indigo-"],
+        section [class*="bg-blue-"],
+        section [class*="bg-emerald-"] {
+            background-color: var(--marine-panel) !important;
+            background-image: linear-gradient(145deg, rgba(24, 230, 173, 0.045), rgba(11, 16, 23, 0.18)) !important;
+            border-color: var(--marine-border) !important;
+        }
+
+        section .glass-panel:hover,
+        section .glass-card:hover {
+            border-color: var(--marine-border-strong) !important;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(24, 230, 173, 0.05) inset;
+        }
+
+        /* 서로 다른 색의 상단 테두리도 동일한 계열로 정리 */
+        section [class*="border-l-"],
+        section [class*="border-t-"] {
+            border-left-color: var(--marine-accent-2) !important;
+            border-top-color: var(--marine-accent) !important;
+        }
+
+        /* 아이콘 배경과 배지 색상 통일 */
+        section [class*="rounded-xl"][class*="bg-"]:has(i),
+        section [class*="rounded-lg"][class*="bg-"]:has(i),
+        section [class*="rounded-full"][class*="bg-"]:has(i) {
+            background: linear-gradient(135deg, rgba(24, 230, 173, 0.16), rgba(32, 201, 215, 0.08)) !important;
+            color: var(--marine-accent) !important;
+            border-color: rgba(24, 230, 173, 0.24) !important;
+        }
+
+        /* 긴 설명과 단계별 설명에 은은한 색 그라데이션 적용 */
+        .gradient-copy {
+            position: relative;
+            display: block;
+            padding: 0.78rem 0.9rem 0.78rem 1rem !important;
+            margin-top: 0.5rem;
+            border-left: 2px solid rgba(24, 230, 173, 0.65);
+            border-radius: 0 0.7rem 0.7rem 0;
+            background:
+                linear-gradient(90deg, rgba(24, 230, 173, 0.105) 0%, rgba(32, 201, 215, 0.055) 48%, rgba(11, 16, 23, 0) 100%) !important;
+            color: #c4d0d5 !important;
+        }
+
+        .gradient-copy strong,
+        .gradient-copy code {
+            color: #5ff2c8 !important;
+        }
+
+        /* 단계형 카드의 설명은 좌→우로 흐르는 동일 계열 강조 */
+        #pipeline .glass-panel p,
+        #yolo-training .glass-panel p,
+        #model-validation .glass-panel p,
+        #process .glass-panel li,
+        #safety .glass-panel li,
+        #problem .glass-panel li {
+            background-image: linear-gradient(90deg, rgba(24, 230, 173, 0.075), rgba(32, 201, 215, 0.028), transparent) !important;
+            border-radius: 0.55rem;
+        }
+
+        #process .glass-panel li,
+        #safety .glass-panel li,
+        #problem .glass-panel li {
+            padding: 0.55rem 0.65rem;
+        }
+
+        /* 제목·핵심 수치도 청록 계열로 통일하되 가독성 유지 */
+        section h2,
+        section .font-mono[class*="text-"] {
+            color: #63efc9 !important;
+        }
+
+        section h3,
+        section h4 {
+            text-shadow: 0 0 18px rgba(24, 230, 173, 0.045);
+        }
+
+        /* 진행선, 버튼, 활성 메뉴 */
+        a[class*="bg-gradient"],
+        button[class*="bg-gradient"],
+        .nav-link.active,
+        [aria-current="page"] {
+            background-image: linear-gradient(90deg, #18e6ad, #20c9d7) !important;
+            color: #06110f !important;
+        }
+
+        /* 모바일에서도 그라데이션 설명의 여백을 과도하게 차지하지 않도록 조정 */
+        @media (max-width: 768px) {
+            .gradient-copy {
+                padding: 0.65rem 0.7rem 0.65rem 0.82rem !important;
+            }
+        }
+    </style>
+
+
+<style id="visual-report-upgrade">
+    .dashboard-main section p,
+    .dashboard-main section li {
+        font-size: 14px !important;
+        line-height: 1.78 !important;
+    }
+    .dashboard-main section h3 { letter-spacing: -0.02em !important; }
+    .dashboard-main .section-guide {
+        display: grid;
+        gap: 8px;
+        color: #c9d5d0;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+    .dashboard-main .section-guide span {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .dashboard-main .section-guide i { color: var(--marine-accent); margin-top: 4px; }
+    .viz-3d-wrap {
+        position: relative;
+        min-height: 170px;
+        border-radius: 16px;
+        border: 1px solid rgba(56, 189, 248, 0.16);
+        background: linear-gradient(180deg, rgba(10,14,22,0.35), rgba(8,12,18,0.65));
+        overflow: hidden;
+    }
+    .viz-3d-wrap svg { width: 100%; height: 100%; display: block; }
+    .mini-badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 6px 10px; border-radius: 999px;
+        font-size: 11px; font-weight: 700; letter-spacing: .04em;
+        border: 1px solid rgba(148,163,184,.18);
+        background: rgba(2,6,23,.45); color: #c8d1cf;
+    }
+    .data-chip {
+        display: inline-flex; align-items: center; gap: 7px;
+        padding: 8px 12px; border-radius: 10px; font-size: 12px;
+        background: rgba(2,6,23,.50); border: 1px solid rgba(148,163,184,.12);
+        color: #c6d3d0;
+    }
+    .mes-map-panel { background: linear-gradient(145deg, rgba(12,19,28,.98), rgba(17,26,36,.98)); }
+    .mes-domain-button.active {
+        border-color: rgba(24,230,173,.55) !important;
+        background: rgba(24,230,173,.10) !important;
+        color: #f0fff8 !important;
+        box-shadow: 0 0 0 1px rgba(24,230,173,.10) inset;
+    }
+    .mes-step-select {
+        width: 100%; background: rgba(2,6,23,.68); color: #e2e8f0;
+        border: 1px solid rgba(71,85,105,.75); border-radius: 10px;
+        padding: 12px 14px; font-size: 13px; outline: none;
+    }
+    .mes-step-select:focus { border-color: rgba(34,211,238,.8); }
+    .meshint {
+        font-size: 12px; color: #91a09a; line-height: 1.65;
+    }
+    .svg-label {
+        fill: #dce8e4; font-size: 10px; font-family: ui-monospace, monospace; letter-spacing: .06em;
+    }
+    .svg-small { fill: #91a09a; font-size: 8px; font-family: ui-monospace, monospace; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+    .payback-note {
+        font-size: 12px; color: #b8c4c0; line-height: 1.7;
+    }
+</style>
+
+
+<style id="photo-upgrade-style">
+.photo-card-img {width:100%; height:220px; object-fit:cover; border-radius:16px; border:1px solid rgba(255,255,255,.08);}
+.photo-card-wrap {position:relative;}
+.photo-badges {position:absolute; left:14px; top:14px; display:flex; gap:8px; flex-wrap:wrap;}
+.photo-badge {padding:6px 10px; border-radius:999px; background:rgba(2,6,23,.68); color:#eef7f3; border:1px solid rgba(255,255,255,.12); font-size:11px; font-weight:700; letter-spacing:.04em;}
+.photo-caption-box {position:absolute; left:14px; right:14px; bottom:14px; padding:10px 12px; border-radius:14px; background:linear-gradient(180deg, rgba(2,6,23,.12), rgba(2,6,23,.82)); border:1px solid rgba(255,255,255,.08);}
+.photo-caption-box .title {display:block; font-size:13px; font-weight:700; color:#f8fafc;}
+.photo-caption-box .sub {display:block; margin-top:4px; font-size:11px; color:#d3ddd9;}
+.photo-grid-note {font-size:13px; color:#b9c5c0; line-height:1.7;}
+.mes-scene {position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,.08); min-height:400px; background:#081019;}
+.mes-scene > img {position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(0.95) brightness(0.48) contrast(1.03);}
+.mes-scene-overlay {position:relative; z-index:2; padding:18px; min-height:400px; background:linear-gradient(180deg, rgba(7,14,21,.15), rgba(7,14,21,.35) 30%, rgba(7,14,21,.78) 100%);}
+.mes-zone {position:absolute; border:2px solid rgba(46, 211, 183, .9); background:rgba(46, 211, 183, .10); border-radius:12px; box-shadow:0 0 0 1px rgba(46, 211, 183, .15) inset;}
+.mes-zone .zone-label {position:absolute; top:-14px; left:8px; padding:4px 8px; border-radius:999px; background:rgba(5,12,18,.88); color:#ebfffb; font-size:11px; font-weight:700; border:1px solid rgba(46, 211, 183, .35);}
+.mes-node {position:absolute; padding:6px 9px; border-radius:10px; background:rgba(5,12,18,.86); color:#edf7f4; font-size:11px; font-weight:700; border:1px solid rgba(255,255,255,.13); white-space:nowrap;}
+.mes-node.green {border-color:rgba(34,197,94,.52);} .mes-node.red {border-color:rgba(239,68,68,.52);} .mes-node.cyan {border-color:rgba(34,211,238,.52);} .mes-node.amber {border-color:rgba(245,158,11,.52);} .mes-node.purple {border-color:rgba(168,85,247,.52);} 
+.metric-kpi {padding:12px 14px; border-radius:14px; border:1px solid rgba(255,255,255,.08); background:rgba(2,6,23,.35);} 
+.maint-input {width:100%; background:rgba(2,6,23,.68); color:#fff; border:1px solid rgba(71,85,105,.8); border-radius:12px; padding:13px 14px; font-size:18px; font-weight:700; outline:none;}
+.maint-input:focus {border-color:rgba(34,211,238,.9);} 
+.calc-line {display:flex; justify-content:space-between; gap:12px; padding:11px 12px; border-radius:12px; background:rgba(2,6,23,.38); border:1px solid rgba(255,255,255,.06); font-size:14px;}
+.calc-line strong {font-family: ui-monospace, SFMono-Regular, monospace;}
+.no-left-right .meshint b {font-weight:700; color:#eef7f3;}
+</style>
+
+<style id="offline-utility-css">
+.-translate-y-1\/2{transform:translateY(-50%);}
+.-z-10{z-index:-10;}
+.absolute{position:absolute;}
+.accent-cyan-400{accent-color:#22d3ee;}
+.animate-ping{animation:offlinePing 1.4s cubic-bezier(0,0,.2,1) infinite;}
+.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+.bg-amber-500\/20{background-color:rgba(245,158,11,0.2);}
+.bg-cyan-400{background-color:#22d3ee;}
+.bg-cyan-500\/10{background-color:rgba(6,182,212,0.1);}
+.bg-cyan-500\/15{background-color:rgba(6,182,212,0.15);}
+.bg-cyan-500\/20{background-color:rgba(6,182,212,0.2);}
+.bg-emerald-500\/10{background-color:rgba(16,185,129,0.1);}
+.bg-emerald-500\/15{background-color:rgba(16,185,129,0.15);}
+.bg-emerald-500\/20{background-color:rgba(16,185,129,0.2);}
+.bg-indigo-500\/10{background-color:rgba(99,102,241,0.1);}
+.bg-indigo-500\/15{background-color:rgba(99,102,241,0.15);}
+.bg-indigo-500\/20{background-color:rgba(99,102,241,0.2);}
+.bg-orange-500\/20{background-color:rgba(249,115,22,0.2);}
+.bg-purple-500\/10{background-color:rgba(168,85,247,0.1);}
+.bg-purple-500\/15{background-color:rgba(168,85,247,0.15);}
+.bg-purple-500\/20{background-color:rgba(168,85,247,0.2);}
+.bg-red-500\/20{background-color:rgba(239,68,68,0.2);}
+.bg-slate-800{background-color:#1e293b;}
+.bg-slate-800\/90{background-color:rgba(30,41,59,0.9);}
+.bg-slate-900\/50{background-color:rgba(15,23,42,0.5);}
+.bg-slate-900\/60{background-color:rgba(15,23,42,0.6);}
+.bg-slate-950\/50{background-color:rgba(2,6,23,0.5);}
+.bg-slate-950\/55{background-color:rgba(2,6,23,0.55);}
+.bg-slate-950\/60{background-color:rgba(2,6,23,0.6);}
+.bg-slate-950\/70{background-color:rgba(2,6,23,0.7);}
+.block{display:block;}
+.blur-3xl{filter:blur(64px);}
+.border{border-width:1px;border-style:solid;}
+.border-amber-500\/20{border-color:rgba(245,158,11,0.2);}
+.border-amber-500\/25{border-color:rgba(245,158,11,0.25);}
+.border-amber-500\/30{border-color:rgba(245,158,11,0.3);}
+.border-cyan-500\/20{border-color:rgba(6,182,212,0.2);}
+.border-cyan-500\/25{border-color:rgba(6,182,212,0.25);}
+.border-cyan-500\/30{border-color:rgba(6,182,212,0.3);}
+.border-emerald-500\/20{border-color:rgba(16,185,129,0.2);}
+.border-emerald-500\/25{border-color:rgba(16,185,129,0.25);}
+.border-emerald-500\/30{border-color:rgba(16,185,129,0.3);}
+.border-indigo-500\/20{border-color:rgba(99,102,241,0.2);}
+.border-indigo-500\/25{border-color:rgba(99,102,241,0.25);}
+.border-l-4{border-left-width:4px;border-left-style:solid;}
+.border-l-cyan-400{border-left-color:#22d3ee;}
+.border-l-emerald-400{border-left-color:#34d399;}
+.border-l-indigo-400{border-left-color:#818cf8;}
+.border-l-purple-400{border-left-color:#c084fc;}
+.border-orange-500\/30{border-color:rgba(249,115,22,0.3);}
+.border-purple-500\/20{border-color:rgba(168,85,247,0.2);}
+.border-purple-500\/25{border-color:rgba(168,85,247,0.25);}
+.border-red-500\/20{border-color:rgba(239,68,68,0.2);}
+.border-red-500\/40{border-color:rgba(239,68,68,0.4);}
+.border-slate-700{border-color:#334155;}
+.border-slate-700\/80{border-color:rgba(51,65,85,0.8);}
+.border-slate-800{border-color:#1e293b;}
+.border-slate-800\/80{border-color:rgba(30,41,59,0.8);}
+.border-slate-900{border-color:#0f172a;}
+.border-t{border-top-width:1px;border-top-style:solid;}
+.bottom-10{bottom:2.5rem;}
+.cursor-pointer{cursor:pointer;}
+.flex{display:flex;}
+.flex-1{flex:1 1 0%;}
+.flex-col{flex-direction:column;}
+.flex-wrap{flex-wrap:wrap;}
+.font-black{font-weight:900;}
+.font-bold{font-weight:700;}
+.font-extrabold{font-weight:800;}
+.font-light{font-weight:300;}
+.font-medium{font-weight:500;}
+.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;}
+.font-normal{font-weight:400;}
+.font-semibold{font-weight:600;}
+.gap-2{gap:0.5rem;}
+.gap-3{gap:0.75rem;}
+.gap-4{gap:1rem;}
+.gap-5{gap:1.25rem;}
+.gap-6{gap:1.5rem;}
+.gap-7{gap:1.75rem;}
+.gap-8{gap:2rem;}
+.grid{display:grid;}
+.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr));}
+.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+.h-10{height:2.5rem;}
+.h-11{height:2.75rem;}
+.h-2{height:0.5rem;}
+.h-7{height:1.75rem;}
+.h-72{height:18rem;}
+.h-9{height:2.25rem;}
+.h-96{height:24rem;}
+.h-full{height:100%;}
+.inline-flex{display:inline-flex;}
+.items-center{align-items:center;}
+.items-start{align-items:flex-start;}
+.justify-between{justify-content:space-between;}
+.justify-center{justify-content:center;}
+.leading-relaxed{line-height:1.625;}
+.leading-tight{line-height:1.25;}
+.left-10{left:2.5rem;}
+.left-4{left:1rem;}
+.max-w-2xl{max-width:42rem;}
+.max-w-3xl{max-width:48rem;}
+.max-w-4xl{max-width:56rem;}
+.max-w-7xl{max-width:80rem;}
+.mb-1{margin-bottom:0.25rem;}
+.mb-10{margin-bottom:2.5rem;}
+.mb-12{margin-bottom:3rem;}
+.mb-14{margin-bottom:3.5rem;}
+.mb-16{margin-bottom:4rem;}
+.mb-2{margin-bottom:0.5rem;}
+.mb-3{margin-bottom:0.75rem;}
+.mb-4{margin-bottom:1rem;}
+.mb-5{margin-bottom:1.25rem;}
+.mb-6{margin-bottom:1.5rem;}
+.mb-8{margin-bottom:2rem;}
+.min-h-screen{min-height:100vh;}
+.ml-1{margin-left:0.25rem;}
+.mr-2{margin-right:0.5rem;}
+.mt-0\.5{margin-top:0.125rem;}
+.mt-1{margin-top:0.25rem;}
+.mt-2{margin-top:0.5rem;}
+.mt-3{margin-top:0.75rem;}
+.mt-4{margin-top:1rem;}
+.mt-6{margin-top:1.5rem;}
+.mt-7{margin-top:1.75rem;}
+.mx-auto{margin-left:auto;margin-right:auto;}
+.outline-none{outline:none;}
+.overflow-hidden{overflow:hidden;}
+.p-2{padding:0.5rem;}
+.p-3{padding:0.75rem;}
+.p-4{padding:1rem;}
+.p-5{padding:1.25rem;}
+.p-6{padding:1.5rem;}
+.p-8{padding:2rem;}
+.pb-20{padding-bottom:5rem;}
+.pl-11{padding-left:2.75rem;}
+.pr-4{padding-right:1rem;}
+.pt-32{padding-top:8rem;}
+.pt-4{padding-top:1rem;}
+.px-2{padding-inline:0.5rem;}
+.px-2\.5{padding-inline:0.625rem;}
+.px-3{padding-inline:0.75rem;}
+.px-3\.5{padding-inline:0.875rem;}
+.px-4{padding-inline:1rem;}
+.px-5{padding-inline:1.25rem;}
+.px-6{padding-inline:1.5rem;}
+.py-1{padding-block:0.25rem;}
+.py-1\.5{padding-block:0.375rem;}
+.py-16{padding-block:4rem;}
+.py-2\.5{padding-block:0.625rem;}
+.py-20{padding-block:5rem;}
+.py-3{padding-block:0.75rem;}
+.py-8{padding-block:2rem;}
+.relative{position:relative;}
+.right-10{right:2.5rem;}
+.rounded{border-radius:.25rem;}
+.rounded-2xl{border-radius:1rem;}
+.rounded-full{border-radius:9999px;}
+.rounded-lg{border-radius:.5rem;}
+.rounded-md{border-radius:.375rem;}
+.rounded-xl{border-radius:.75rem;}
+.selection\:bg-cyan-500{background-color:#06b6d4;}
+.selection\:text-slate-900{color:#0f172a;}
+.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.22);}
+.shrink-0{flex-shrink:0;}
+.space-x-2{column-gap:0.5rem;}
+.space-x-3{column-gap:0.75rem;}
+.space-y-2{row-gap:0.5rem;display:flex;flex-direction:column;}
+.space-y-3{row-gap:0.75rem;display:flex;flex-direction:column;}
+.space-y-4{row-gap:1rem;display:flex;flex-direction:column;}
+.text-2xl{font-size:1.5rem;}
+.text-3xl{font-size:1.875rem;}
+.text-4xl{font-size:2.25rem;}
+.text-\[10px\]{font-size:10px;}
+.text-\[11px\]{font-size:11px;}
+.text-\[12px\]{font-size:12px;}
+.text-\[15px\]{font-size:15px;}
+.text-amber-300{color:#fcd34d;}
+.text-amber-400{color:#fbbf24;}
+.text-amber-400\/80{color:rgba(251,191,36,0.8);}
+.text-base{font-size:1rem;}
+.text-center{text-align:center;}
+.text-cyan-200{color:#a5f3fc;}
+.text-cyan-300{color:#67e8f9;}
+.text-cyan-400{color:#22d3ee;}
+.text-emerald-300{color:#6ee7b7;}
+.text-emerald-400{color:#34d399;}
+.text-indigo-200{color:#c7d2fe;}
+.text-indigo-300{color:#a5b4fc;}
+.text-indigo-400{color:#818cf8;}
+.text-left{text-align:left;}
+.text-lg{font-size:1.125rem;}
+.text-orange-300{color:#fdba74;}
+.text-orange-400{color:#fb923c;}
+.text-orange-400\/80{color:rgba(251,146,60,0.8);}
+.text-purple-200{color:#e9d5ff;}
+.text-purple-300{color:#d8b4fe;}
+.text-purple-400{color:#c084fc;}
+.text-red-300{color:#fca5a5;}
+.text-red-400{color:#f87171;}
+.text-red-400\/80{color:rgba(248,113,113,0.8);}
+.text-right{text-align:right;}
+.text-slate-200{color:#e2e8f0;}
+.text-slate-300{color:#cbd5e1;}
+.text-slate-400{color:#94a3b8;}
+.text-slate-500{color:#64748b;}
+.text-sm{font-size:0.875rem;}
+.text-white{color:#ffffff;}
+.text-xl{font-size:1.25rem;}
+.text-xs{font-size:0.75rem;}
+.top-1\/2{top:50%;}
+.top-1\/4{top:25%;}
+.tracking-tight{letter-spacing:-.025em;}
+.tracking-wider{letter-spacing:.05em;}
+.tracking-widest{letter-spacing:.1em;}
+.transition-all{transition:all .2s ease;}
+.uppercase{text-transform:uppercase;}
+.w-10{width:2.5rem;}
+.w-11{width:2.75rem;}
+.w-2{width:0.5rem;}
+.w-7{width:1.75rem;}
+.w-9{width:2.25rem;}
+.w-96{width:24rem;}
+.w-fit{width:fit-content;}
+.w-full{width:100%;}
+.focus\:border-cyan-400:focus{border-color:#22d3ee;}
+.hover\:bg-cyan-500\/30:hover{background-color:rgba(6,182,212,0.3);}
+.hover\:bg-slate-700:hover{background-color:#334155;}
+.hover\:border-cyan-400\/70:hover{border-color:rgba(34,211,238,0.7);}
+.hover\:border-emerald-400\/70:hover{border-color:rgba(52,211,153,0.7);}
+.hover\:border-indigo-400\/70:hover{border-color:rgba(129,140,248,0.7);}
+.hover\:border-l-cyan-300:hover{border-left-color:#67e8f9;}
+.hover\:border-l-emerald-300:hover{border-left-color:#6ee7b7;}
+.hover\:border-l-indigo-300:hover{border-left-color:#a5b4fc;}
+.hover\:border-l-purple-300:hover{border-left-color:#d8b4fe;}
+@keyframes offlinePing{75%,100%{transform:scale(2);opacity:0;}}
+@media(min-width:768px){.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr));}.md\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr));}.md\:h-96{height:24rem;}.md\:items-center{align-items:center;}.md\:justify-between{justify-content:space-between;}.md\:text-4xl{font-size:2.25rem;}.md\:text-5xl{font-size:3rem;}.md\:text-lg{font-size:1.125rem;}}
+@media(min-width:1024px){.lg\:grid-cols-12{grid-template-columns:repeat(12,minmax(0,1fr));}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}.lg\:items-center{align-items:center;}.lg\:justify-between{justify-content:space-between;}}
+@media(min-width:1280px){.xl\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}.xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr));}.xl\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr));}}
+.fa-solid,.fa-regular{display:inline-flex;align-items:center;justify-content:center;font-style:normal;line-height:1;width:1.1em;}
+.fa-sailboat::before{content:"⛵";}
+.fa-ship::before{content:"⚓";}
+.fa-eye::before{content:"◉";}
+.fa-shield-halved::before{content:"◈";}
+.fa-robot::before{content:"▣";}
+.fa-layer-group::before{content:"▤";}
+.fa-chart-column::before{content:"▥";}
+.fa-database::before{content:"▦";}
+.fa-sliders::before{content:"≛";}
+.fa-file-lines::before{content:"▧";}
+.fa-bars::before{content:"☰";}
+.fa-bell::before{content:"●";}
+.fa-circle-user::before{content:"◉";}
+.fa-lightbulb::before{content:"✦";}
+.fa-fire-flame-curved::before{content:"♨";}
+.fa-drafting-compass::before{content:"⌖";}
+.fa-rotate-right::before{content:"↻";}
+.fa-user-gear::before{content:"⚙";}
+.fa-hand::before{content:"■";}
+.fa-wrench::before{content:"⚒";}
+.fa-crosshairs::before{content:"⌖";}
+.fa-camera-rotate::before{content:"◉";}
+.fa-sun::before{content:"☼";}
+.fa-filter::before{content:"▽";}
+.fa-object-group::before{content:"▱";}
+.fa-location-crosshairs::before{content:"⌾";}
+.fa-images::before{content:"▧";}
+.fa-book-open::before{content:"▥";}
+.fa-magnifying-glass::before{content:"⌕";}
+.fa-diagram-project::before{content:"⌘";}
+.fa-dice::before{content:"◆";}
+.fa-wand-magic-sparkles::before{content:"✧";}
+.fa-envelope::before{content:"✉";}
+.fa-circle-dot::before{content:"•";}
+.fa-list-check::before{content:"✓";}
+.fa-gauge-high::before{content:"◔";}
+.fa-plug::before{content:"⌁";}
+.fa-arrows-to-circle::before{content:"⊙";}
+.fa-screwdriver-wrench::before{content:"⚒";}
+.fa-magnifying-glass-plus::before{content:"⌕";}
+.fa-chart-line::before{content:"⌁";}
+.fa-circle-check::before{content:"✓";}
+.fa-microchip::before{content:"▦";}
+</style>
+
+<style id="hw-architecture-style">
+.hw-architecture-section{--hw-line:#2a343d;--hw-accent:#18e6ad;--hw-soft:rgba(24,230,173,.08)}
+.hw-step-block{background:linear-gradient(145deg,rgba(16,24,32,.98),rgba(10,16,23,.98))!important}
+.hw-table-wrap{overflow-x:auto;border:1px solid #273039;border-radius:10px;background:#0d141c}
+.hw-spec-table,.hw-role-table{width:100%;border-collapse:collapse;min-width:900px;font-size:12px;line-height:1.55}
+.hw-spec-table th,.hw-role-table th{padding:11px 12px;text-align:left;color:#91a09a;background:#111a23;border-bottom:1px solid #2a343d;font-size:11px;letter-spacing:.03em}
+.hw-spec-table td,.hw-role-table td{padding:11px 12px;color:#c8d2ce;border-bottom:1px solid #222c34;vertical-align:top}
+.hw-spec-table tbody tr:last-child td,.hw-role-table tbody tr:last-child td{border-bottom:0}
+.hw-click-row{cursor:pointer;transition:background .16s ease,border-color .16s ease}
+.hw-click-row:hover{background:rgba(24,230,173,.075)}
+.hw-click-row:hover td:first-child{color:#6ff2ce}
+.hw-spec-table code{padding:2px 5px;border-radius:4px;background:#18222c;color:#a8d9cc;font-size:10px}
+.hw-kpi-card{padding:15px;border:1px solid #28333b;border-radius:9px;background:#0f1720;display:flex;flex-direction:column;gap:4px}
+.hw-kpi-card span{font-size:9px;font-family:ui-monospace,monospace;letter-spacing:.08em;color:#63efc9}.hw-kpi-card strong{font-size:21px;color:#f4f8f6;font-family:ui-monospace,monospace}.hw-kpi-card small{font-size:10px;color:#81908a}
+.hw-power-strip,.hw-flow-line,.hw-interface-summary{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border:1px solid #273039;border-radius:9px;background:#0e151d;color:#abb8b3;font-size:11px;font-family:ui-monospace,monospace}
+.hw-power-node{color:#062119;background:#18e6ad;padding:4px 8px;border-radius:4px;font-weight:900}.hw-power-arrow{color:#18e6ad}.hw-flow-line strong,.hw-interface-summary b{color:#63efc9}
+.hw-modal{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:24px}.hw-modal.open{display:flex}.hw-modal-backdrop{position:absolute;inset:0;background:rgba(2,6,12,.78);backdrop-filter:blur(5px)}
+.hw-modal-card{position:relative;width:min(980px,96vw);max-height:88vh;overflow:auto;border:1px solid rgba(24,230,173,.34);border-radius:14px;background:#0d141c;box-shadow:0 26px 80px rgba(0,0,0,.55);padding:24px}
+.hw-modal-close{position:absolute;right:16px;top:12px;border:1px solid #34404a;background:#151e27;color:#dce7e2;width:34px;height:34px;border-radius:7px;font-size:22px;cursor:pointer}.hw-modal-head{padding-right:44px;margin-bottom:18px}.hw-modal-tag{font:700 10px ui-monospace,monospace;letter-spacing:.12em;color:#18e6ad}.hw-modal-head h4{margin:4px 0 2px;font-size:24px}.hw-modal-head p{margin:0;color:#8e9c96;font-size:12px}
+.hw-modal-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.hw-drawing-panel{border:1px solid #26313a;border-radius:10px;background:#071019;min-height:330px;padding:12px;display:flex;align-items:center}.hw-drawing-panel svg{width:100%;height:auto;display:block}.hw-modal-info{display:flex;flex-direction:column;gap:10px}.hw-info-box{padding:12px;border:1px solid #27323a;border-radius:8px;background:#111a23}.hw-info-box span{display:block;color:#71817a;font:700 9px ui-monospace,monospace;letter-spacing:.08em;margin-bottom:5px}.hw-info-box strong{display:block;color:#e7f0ec;font-size:12px;line-height:1.6}.hw-info-box p{margin:0;color:#b9c6c0;font-size:11px;line-height:1.65}.hw-datasheet-link{display:block;margin-top:auto;text-align:center;padding:11px 12px;border-radius:7px;background:#18e6ad;color:#042118!important;font-size:11px;font-weight:900;text-decoration:none}
+@media(max-width:760px){.hw-modal-grid{grid-template-columns:1fr}.hw-modal{padding:10px}.hw-modal-card{padding:18px}.hw-spec-table,.hw-role-table{min-width:760px}}
+</style>
+
+
+<style id="responsive-layout-hotfix">
+/* =========================================================
+   RESPONSIVE LAYOUT HOTFIX
+   - 누락된 responsive col-span/flex utility 보완
+   - Simulator / ROI가 좁은 1/12 column으로 찌그러지는 현상 수정
+   - 화면 폭에 따라 1/2/3/4열로 자연스럽게 재배치
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+
+.dashboard-main,
+.dashboard-main > section,
+.dashboard-main > footer {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.dashboard-main > section > * {
+    min-width: 0;
+}
+
+/* Tailwind CDN 제거 후 누락된 span utility를 로컬로 보완 */
+@media (min-width: 1024px) {
+    .lg\:col-span-4 { grid-column: span 4 / span 4 !important; }
+    .lg\:col-span-5 { grid-column: span 5 / span 5 !important; }
+    .lg\:col-span-7 { grid-column: span 7 / span 7 !important; }
+    .lg\:flex-row { flex-direction: row !important; }
+    .lg\:items-end { align-items: flex-end !important; }
+}
+@media (min-width: 1280px) {
+    .xl\:col-span-2 { grid-column: span 2 / span 2 !important; }
+    .xl\:col-span-3 { grid-column: span 3 / span 3 !important; }
+}
+
+/* Simulator: 데스크톱 5:7, 태블릿/모바일 1열 */
+#simulator > .grid.grid-cols-1.lg\:grid-cols-12 {
+    width: 100% !important;
+    min-width: 0 !important;
+    align-items: stretch;
+}
+#simulator .glass-panel,
+#simulator canvas,
+#simulator input,
+#simulator [class*="col-span"] {
+    min-width: 0 !important;
+    max-width: 100% !important;
+}
+
+/* ROI: 작은 화면에서 4열을 강제하지 않고 가독성 우선 */
+#roi > .grid {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+#roi .metric-kpi,
+#roi .glass-panel,
+#roi .calc-line {
+    min-width: 0 !important;
+    overflow-wrap: anywhere;
+}
+
+/* 첫 KPI row */
+#roi > .grid.grid-cols-1.md\:grid-cols-4 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+/* 비용/절감/계산 row */
+#roi > .grid.grid-cols-1.lg\:grid-cols-12 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+#roi > .grid.grid-cols-1.lg\:grid-cols-12 > .lg\:col-span-4 {
+    grid-column: auto !important;
+}
+
+@media (min-width: 700px) and (max-width: 1199px) {
+    #roi > .grid.grid-cols-1.md\:grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    #roi > .grid.grid-cols-1.lg\:grid-cols-12 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    #simulator > .grid.grid-cols-1.lg\:grid-cols-12 {
+        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    }
+    #simulator > .grid > .lg\:col-span-5 { grid-column: span 5 / span 5 !important; }
+    #simulator > .grid > .lg\:col-span-7 { grid-column: span 7 / span 7 !important; }
+}
+
+@media (min-width: 1200px) {
+    #roi > .grid.grid-cols-1.md\:grid-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+    #roi > .grid.grid-cols-1.lg\:grid-cols-12 {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+    #roi > .grid.grid-cols-1.lg\:grid-cols-12 > .lg\:col-span-4 {
+        grid-column: auto !important;
+    }
+}
+
+/* 1024px 이하: sidebar가 접힐 때 본문을 viewport 전체 폭으로 복원 */
+@media (max-width: 1024px) {
+    .dashboard-main {
+        margin-left: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+    }
+    .dashboard-main > section,
+    .dashboard-main > footer {
+        width: 100% !important;
+        padding-left: clamp(16px, 3vw, 28px) !important;
+        padding-right: clamp(16px, 3vw, 28px) !important;
+    }
+    #simulator > .grid.grid-cols-1.lg\:grid-cols-12 {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+    #simulator > .grid > .lg\:col-span-5,
+    #simulator > .grid > .lg\:col-span-7 {
+        grid-column: auto !important;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 699px) {
+    #roi > .grid.grid-cols-1.md\:grid-cols-4,
+    #roi > .grid.grid-cols-1.lg\:grid-cols-12 {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+    #roi h3,
+    #simulator h3 {
+        font-size: clamp(1.55rem, 7vw, 2.15rem) !important;
+    }
+}
+</style>
+
+</head>
+
+<body class="antialiased selection:bg-cyan-500 selection:text-slate-900">
+    <!-- Dashboard Sidebar -->
+    <aside id="dashboard-sidebar" class="dashboard-sidebar">
+        <div class="dashboard-brand">
+            <div class="dashboard-brand-icon">
+                <i class="fa-solid fa-sailboat"></i>
+            </div>
+            <div>
+                <div class="text-[15px] font-extrabold text-white leading-tight">HD현대삼호</div>
+                <div class="text-[10px] text-slate-400 font-mono tracking-widest">Maritime AI Engine</div>
+            </div>
+        </div>
+
+        <nav class="dashboard-nav">
+            <a href="#overview" class="active">
+                <i class="fa-solid fa-ship"></i>
+                <span>Fleet Overview</span>
+            </a>
+            <a href="#problem">
+                <i class="fa-solid fa-eye"></i>
+                <span>Vision Analysis</span>
+            </a>
+            <a href="#safety">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Safety Interlock</span>
+            </a>
+            <a href="#process">
+                <i class="fa-solid fa-robot"></i>
+                <span>Task Process</span>
+            </a>
+            <a href="#technology-stack">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Technology Stack</span>
+            </a>
+            <a href="#model-validation">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Metric Logs</span>
+            </a>
+
+            <a href="#embedding-rag">
+                <i class="fa-solid fa-database"></i>
+                <span>MES DB + RAG</span>
+            </a>
+
+            <a href="#mcu-sbc">
+                <i class="fa-solid fa-microchip"></i>
+                <span>HW · MCU/SBC</span>
+            </a>
+
+            <a href="#simulator">
+                <i class="fa-solid fa-sliders"></i>
+                <span>System Health</span>
+            </a>
+        </nav>
+
+        <div class="dashboard-sidebar-footer">
+            <a href="#contact" class="dashboard-report-button">
+                <i class="fa-regular fa-file-lines"></i>
+                <span>Generate Report</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Dashboard Top Bar -->
+    <header class="dashboard-topbar">
+        <div class="flex items-center gap-3">
+            <button id="mobile-sidebar-button" class="mobile-sidebar-button" type="button" aria-label="메뉴 열기">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="dashboard-status">
+                <span class="dashboard-status-dot"></span>
+                <span>HD현대삼호 LNG운반선 기관실 블록 선행의장 PHYSICAL AI</span>
+            </div>
+        </div>
+
+        <div class="dashboard-top-icons">
+            <i class="fa-regular fa-bell"></i>
+            <i class="fa-regular fa-circle-user"></i>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+
+    <!-- Hero Section -->
+    <section id="overview"
+        class="pt-32 pb-20 px-6 max-w-7xl mx-auto min-h-screen flex flex-col justify-center relative overflow-hidden">
+
+        <!-- Background Decorative Glows -->
+        <div
+            class="absolute top-1/4 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl -z-10">
+        </div>
+
+        <div
+            class="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -z-10">
+        </div>
+
+        <div
+            class="inline-flex items-center space-x-2 bg-slate-800/90 border border-slate-700/80 px-3.5 py-1.5 rounded-full w-fit mb-6 glow-effect">
+
+            <span class="flex h-2 w-2 rounded-full bg-cyan-400 animate-ping"></span>
+
+            <span class="text-xs font-mono font-semibold text-cyan-300 uppercase tracking-wider">
+                HD현대삼호 LNG운반선 기관실 블록 선행의장 Physical AI
+            </span>
+        </div>
+
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-6">
+            HD현대삼호 선박 의장품 체결·용접<br>
+
+            <span class="gradient-text">
+                Eye-in-Hand RGB-D AI 비전 & 좌표 자동보정
+            </span>
+        </h1>
+
+        <p class="text-slate-300 text-base md:text-lg max-w-4xl mb-10 leading-relaxed font-light">
+            조선소 기관실 블록의 브래킷·파이프 서포트 조립,
+            M16 볼트 체결, 필릿용접 공정에 적용하는 Physical AI 시스템입니다.
+
+            저조도, 스패터·흄, 숍프라이머 반사 및 제작 열변형 환경에서도
+            <strong class="text-cyan-400 font-semibold">
+                5단계 영상 전처리 파이프라인
+            </strong>을 거쳐 로봇 작업 좌표를 자동 보정합니다.
+
+            또한
+            <strong class="text-indigo-300 font-semibold">
+                YOLO26n 전이학습 모델
+            </strong>을 활용하여 볼트 체결부·용접부·케이블 접속부를 검출하고,
+            검출 결과를 로봇 작업 좌표 생성 단계와 연결합니다.
+        </p>
+
+        <!-- KPI Key Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-12">
+
+            <div
+                class="glass-panel p-5 rounded-2xl border-l-4 border-l-cyan-400 hover:border-l-cyan-300 transition-all">
+
+                <div class="text-slate-400 text-xs font-medium mb-1">
+                    좌표 정밀도
+                </div>
+
+                <div class="text-3xl font-bold text-white font-mono">
+                    ±0.15
+                    <span class="text-sm font-normal text-cyan-400 ml-1">
+                        mm
+                    </span>
+                </div>
+
+                <p class="text-[11px] text-slate-400 mt-1">
+                    평균오차 ≤±2mm / 각도 ≤±1°
+                </p>
+            </div>
+
+            <div
+                class="glass-panel p-5 rounded-2xl border-l-4 border-l-indigo-400 hover:border-l-indigo-300 transition-all">
+
+                <div class="text-slate-400 text-xs font-medium mb-1">
+                    전처리 & 좌표 연산
+                </div>
+
+                <div class="text-3xl font-bold text-white font-mono">
+                    ≤ 500
+                    <span class="text-sm font-normal text-indigo-400 ml-1">
+                        ms
+                    </span>
+                </div>
+
+                <p class="text-[11px] text-slate-400 mt-1">
+                    실시간 좌표 보정 250ms 목표
+                </p>
+            </div>
+
+            <div
+                class="glass-panel p-5 rounded-2xl border-l-4 border-l-emerald-400 hover:border-l-emerald-300 transition-all">
+
+                <div class="text-slate-400 text-xs font-medium mb-1">
+                    작업구역 검출
+                </div>
+
+                <div class="text-3xl font-bold text-white font-mono">
+                    3
+                    <span class="text-sm font-normal text-emerald-400 ml-1">
+                        Classes
+                    </span>
+                </div>
+
+                <p class="text-[11px] text-slate-400 mt-1">
+                    볼트 · 용접 · 케이블 접속부
+                </p>
+            </div>
+
+            <div
+                class="glass-panel p-5 rounded-2xl border-l-4 border-l-purple-400 hover:border-l-purple-300 transition-all">
+
+                <div class="text-slate-400 text-xs font-medium mb-1">
+                    수동 재티칭 공수 절감
+                </div>
+
+                <div class="text-3xl font-bold text-white font-mono">
+                    40
+                    <span class="text-sm font-normal text-purple-400 ml-1">
+                        %+
+                    </span>
+                </div>
+
+                <p class="text-[11px] text-slate-400 mt-1">
+                    블록 제작편차 자동 수용 보정
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Report Sequence: 현장 장애 요소 → 안전·인터록 → 작업별 분기 → 통합 기술스택 -->
+    <!-- Problem Section -->
+    
+
+
+<section id="problem" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80 report-visual-upgraded">
+  <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Shipbuilding Field Challenges</h2><h3 class="text-4xl md:text-5xl font-bold text-white">조선소 선행의장 현장의 3대 장애 요소</h3><div class="section-guide mt-4 text-left max-w-2xl mx-auto"><span><i class="fa-solid fa-circle-dot"></i><span>외부 사진 대신 항목별 현장 특성을 반영한 독립형 3D 도식으로 구성했습니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>기관실 환경, 용접 작업, 좌표 편차가 서로 다른 구조로 보이도록 표현했습니다.</span></span></div></div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+    <div class="glass-panel p-6 rounded-2xl border border-red-500/20"><div class="flex items-center gap-3 mb-4"><div class="w-11 h-11 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400"><i class="fa-solid fa-lightbulb"></i></div><div><h4 class="text-xl font-bold text-red-300">① 열악한 영상환경</h4><span class="text-[11px] font-mono text-red-400">LOW LIGHT · SHADOW · GLARE</span></div></div><div class="photo-card-wrap mb-5"><svg viewBox="0 0 720 360" class="photo-card-img" role="img" aria-label="기관실 저조도와 복잡 배관 환경 3D 도식"><defs><linearGradient id="erbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#101923"/><stop offset="1" stop-color="#04080d"/></linearGradient><linearGradient id="erm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#475b6d"/><stop offset="1" stop-color="#1b2936"/></linearGradient><radialGradient id="erg"><stop offset="0" stop-color="#f8e6a0" stop-opacity=".9"/><stop offset="1" stop-color="#f8e6a0" stop-opacity="0"/></radialGradient></defs><rect width="720" height="360" fill="url(#erbg)"/><polygon points="90,310 300,190 650,242 438,354" fill="#0c1822" stroke="#3d5365"/><polygon points="90,310 90,96 300,22 300,190" fill="#142330" stroke="#3d5365"/><polygon points="300,190 300,22 650,78 650,242" fill="#192a38" stroke="#3d5365"/><g fill="none" stroke-linecap="round"><path d="M126 82v178h210v-74h208" stroke="#5f7c8f" stroke-width="16"/><path d="M168 60v100h86v122" stroke="#2bb8ad" stroke-width="10"/><path d="M368 58v88h154v82" stroke="#7c8fa0" stroke-width="13"/><path d="M420 110h136v92" stroke="#c07c45" stroke-width="9"/><path d="M208 112h110v64" stroke="#536f84" stroke-width="8"/></g><g fill="#273b4a" stroke="#6a8294"><rect x="236" y="213" width="124" height="78" rx="10"/><rect x="398" y="201" width="128" height="88" rx="10"/><rect x="548" y="141" width="58" height="104" rx="12"/></g><g stroke="#8fa2ae" stroke-width="4"><line x1="120" y1="280" x2="594" y2="280"/><line x1="140" y1="310" x2="560" y2="310"/></g><circle cx="112" cy="56" r="11" fill="#ffe28a"/><circle cx="112" cy="56" r="72" fill="url(#erg)"/><path d="M112 56L310 240L40 270Z" fill="#ffe28a" opacity=".08"/><g fill="#02060a" opacity=".6"><ellipse cx="500" cy="310" rx="96" ry="22"/><ellipse cx="220" cy="294" rx="68" ry="18"/></g><g font-family="monospace" font-size="14" font-weight="700"><text x="28" y="30" fill="#f87171">LOW LIGHT / SHADOW</text><text x="486" y="60" fill="#67e8f9">REFLECTIVE PIPE</text><text x="454" y="336" fill="#94a3b8">OCCLUDED WORK ZONE</text></g><rect x="462" y="170" width="106" height="78" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="8 6"/><circle cx="515" cy="208" r="6" fill="#ef4444"/></svg></div><div class="section-guide"><span><i class="fa-solid fa-circle-dot"></i><span>배관과 구조물 사이의 음영이 작업부 경계를 약하게 만듭니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>금속 배관 반사는 영상의 일부를 과포화시킵니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>가려진 작업부는 재촬영 또는 시점 변경이 필요합니다.</span></span></div></div>
+    <div class="glass-panel p-6 rounded-2xl border border-amber-500/20"><div class="flex items-center gap-3 mb-4"><div class="w-11 h-11 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400"><i class="fa-solid fa-fire-flame-curved"></i></div><div><h4 class="text-xl font-bold text-amber-300">② 가혹한 작업환경</h4><span class="text-[11px] font-mono text-amber-400">ARC LIGHT · FUME · SPATTER</span></div></div><div class="photo-card-wrap mb-5"><svg viewBox="0 0 720 360" class="photo-card-img" role="img" aria-label="협동로봇 용접 아크 흄 스패터 3D 도식"><defs><linearGradient id="wbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10151c"/><stop offset="1" stop-color="#05070a"/></linearGradient><radialGradient id="arc"><stop offset="0" stop-color="#fffef0"/><stop offset=".22" stop-color="#9df3ff"/><stop offset="1" stop-color="#58d5ff" stop-opacity="0"/></radialGradient></defs><rect width="720" height="360" fill="url(#wbg)"/><polygon points="86,310 280,205 650,248 446,356" fill="#101c28" stroke="#43586a"/><polygon points="86,310 86,128 280,62 280,205" fill="#172532" stroke="#43586a"/><g stroke-linecap="round" fill="none"><path d="M158 270L174 214L224 184L270 210" stroke="#6ee7b7" stroke-width="26"/><circle cx="174" cy="214" r="18" fill="#1f2937" stroke="#6ee7b7" stroke-width="8"/><circle cx="224" cy="184" r="18" fill="#1f2937" stroke="#6ee7b7" stroke-width="8"/><path d="M270 210L324 230" stroke="#7dd3fc" stroke-width="14"/><path d="M324 230L356 247" stroke="#a5b4fc" stroke-width="8"/></g><polygon points="355,252 510,212 584,245 428,286" fill="#334155" stroke="#718096"/><polygon points="428,286 584,245 584,278 432,320" fill="#1f2937" stroke="#718096"/><circle cx="370" cy="250" r="62" fill="url(#arc)"/><circle cx="370" cy="250" r="8" fill="#fff"/><g stroke="#fbbf24" stroke-width="3"><line x1="374" y1="247" x2="412" y2="220"/><line x1="376" y1="252" x2="426" y2="266"/><line x1="366" y1="246" x2="338" y2="214"/><line x1="369" y1="255" x2="348" y2="292"/></g><g fill="none" stroke="#cbd5e1" opacity=".28" stroke-linecap="round"><path d="M374 226C420 180 470 196 468 144" stroke-width="20"/><path d="M392 220C430 172 506 186 520 128" stroke-width="13"/></g><g font-family="monospace" font-size="14" font-weight="700"><text x="28" y="30" fill="#fbbf24">ARC LIGHT</text><text x="480" y="118" fill="#cbd5e1">FUME CLOUD</text><text x="438" y="310" fill="#67e8f9">FILLET WELD</text><text x="120" y="315" fill="#6ee7b7">COBOT ARM</text></g></svg></div><div class="section-guide"><span><i class="fa-solid fa-circle-dot"></i><span>아크광은 순간적인 프레임 포화를 유발합니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>흄은 카메라 시야를 가리고 대비를 낮춥니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>스패터와 공구 이동은 ROI 연속성을 끊습니다.</span></span></div></div>
+    <div class="glass-panel p-6 rounded-2xl border border-purple-500/20"><div class="flex items-center gap-3 mb-4"><div class="w-11 h-11 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400"><i class="fa-solid fa-crosshairs"></i></div><div><h4 class="text-xl font-bold text-purple-300">③ 복합 좌표 변형</h4><span class="text-[11px] font-mono text-purple-400">OFFSET · DEPTH LOSS · VIBRATION</span></div></div><div class="photo-card-wrap mb-5"><svg viewBox="0 0 720 360" class="photo-card-img" role="img" aria-label="블록 편차와 RGB-D 좌표 자동보정 3D 도식"><defs><linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#111827"/><stop offset="1" stop-color="#070a12"/></linearGradient></defs><rect width="720" height="360" fill="url(#cbg)"/><g stroke="#26384a" stroke-width="1"><path d="M65 310H650"/><path d="M95 280H620"/><path d="M125 250H590"/><path d="M155 220H560"/></g><polygon points="300,260 456,182 602,224 446,306" fill="#1b2c3c" stroke="#496279"/><polygon points="300,260 300,134 456,74 456,182" fill="#24394b" stroke="#496279"/><polygon points="456,182 456,74 602,110 602,224" fill="#30495d" stroke="#496279"/><g fill="none" stroke-linecap="round"><path d="M110 290L128 236L184 206L238 224" stroke="#7c3aed" stroke-width="28"/><circle cx="128" cy="236" r="17" fill="#111827" stroke="#a78bfa" stroke-width="8"/><circle cx="184" cy="206" r="17" fill="#111827" stroke="#a78bfa" stroke-width="8"/><path d="M238 224L292 205" stroke="#22d3ee" stroke-width="13"/></g><rect x="279" y="186" width="34" height="25" rx="4" fill="#0f172a" stroke="#67e8f9" stroke-width="2"/><circle cx="289" cy="197" r="4" fill="#67e8f9"/><circle cx="303" cy="197" r="4" fill="#67e8f9"/><line x1="296" y1="211" x2="430" y2="178" stroke="#67e8f9" stroke-width="2" stroke-dasharray="7 5"/><circle cx="430" cy="178" r="8" fill="#34d399"/><circle cx="456" cy="163" r="8" fill="#f59e0b"/><line x1="430" y1="178" x2="456" y2="163" stroke="#f59e0b" stroke-width="3"/><g stroke-width="3"><line x1="430" y1="178" x2="536" y2="178" stroke="#22d3ee"/><line x1="430" y1="178" x2="388" y2="215" stroke="#34d399"/><line x1="430" y1="178" x2="430" y2="91" stroke="#c084fc"/></g><g font-family="monospace" font-size="14" font-weight="700"><text x="540" y="181" fill="#22d3ee">X</text><text x="372" y="224" fill="#34d399">Y</text><text x="438" y="91" fill="#c084fc">Z</text><text x="438" y="150" fill="#34d399">CAD TARGET</text><text x="468" y="163" fill="#f59e0b">DETECTED</text><text x="24" y="30" fill="#d8b4fe">RGB-D + XYZ/θ OFFSET</text></g></svg></div><div class="section-guide"><span><i class="fa-solid fa-circle-dot"></i><span>CAD 기준점과 실제 검출점의 위치가 달라질 수 있습니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>Depth 결손은 X·Y·Z 위치 산출의 안정성을 낮춥니다.</span></span><span><i class="fa-solid fa-circle-dot"></i><span>로봇 진동까지 더해지면 보정량이 증가합니다.</span></span></div></div>
+  </div>
+</section>
+
+
+
+    <!-- Safety Section -->
+    <section id="safety"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
+                Safety & Interlock Protocol
+            </h2>
+
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                핵심 안전관리 및 로봇 인터록 기준
+            </h3>
+
+            <p class="text-slate-400 text-sm mt-3">
+                불량 판단 시 무리한 로봇 이동을 방지하고
+                작업자와 장비를 보호하는 3단계 안전 제어
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+
+            <!-- 1. 재촬영 -->
+            <div
+                class="glass-panel p-6 rounded-2xl border border-amber-500/30 bg-gradient-to-b from-amber-950/20 to-transparent">
+
+                <div class="flex items-center space-x-3 mb-4">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 text-lg">
+
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-bold text-amber-300">
+                            ① 재촬영 실행
+                        </h4>
+
+                        <span class="text-[11px] text-amber-400/80">
+                            카메라 각도 변경 및 재취득
+                        </span>
+                    </div>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>시야 가림률</span>
+
+                        <span class="font-mono text-amber-400 font-bold">
+                            &gt; 40%
+                        </span>
+                    </li>
+
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>Depth 결손률</span>
+
+                        <span class="font-mono text-amber-400 font-bold">
+                            &gt; 30%
+                        </span>
+                    </li>
+
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>프레임 간 좌표 편차</span>
+
+                        <span class="font-mono text-amber-400 font-bold">
+                            &gt; 1.5mm
+                        </span>
+                    </li>
+
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>AI 신뢰도</span>
+
+                        <span class="font-mono text-amber-400 font-bold">
+                            기준 미달
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 2. 작업자 확인 -->
+            <div
+                class="glass-panel p-6 rounded-2xl border border-orange-500/30 bg-gradient-to-b from-orange-950/20 to-transparent">
+
+                <div class="flex items-center space-x-3 mb-4">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 text-lg">
+
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-bold text-orange-300">
+                            ② 작업자 확인
+                        </h4>
+
+                        <span class="text-[11px] text-orange-400/80">
+                            수동 개입 및 현장 점검
+                        </span>
+                    </div>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>CAD 대비 위치 편차</span>
+
+                        <span class="font-mono text-orange-400 font-bold">
+                            &gt; 20mm
+                        </span>
+                    </li>
+
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>재촬영 후 신뢰도</span>
+
+                        <span class="font-mono text-orange-400 font-bold">
+                            2회 연속 부족
+                        </span>
+                    </li>
+
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>토크·각도 데이터</span>
+
+                        <span class="font-mono text-orange-400 font-bold">
+                            비전 판정 불일치
+                        </span>
+                    </li>
+
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>로봇 상태</span>
+
+                        <span class="font-mono text-orange-400 font-bold">
+                            승인 대기
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 3. 정지 -->
+            <div
+                class="glass-panel p-6 rounded-2xl border border-red-500/40 bg-gradient-to-b from-red-950/30 to-transparent glow-effect">
+
+                <div class="flex items-center space-x-3 mb-4">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 text-lg">
+
+                        <i class="fa-solid fa-hand"></i>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-bold text-red-300">
+                            ③ Safety PLC 정지
+                        </h4>
+
+                        <span class="text-[11px] text-red-400/80">
+                            위험 발생 시 즉시 인터록
+                        </span>
+                    </div>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-300">
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>AprilTag 기준점</span>
+
+                        <span class="font-mono text-red-400 font-bold">
+                            검출 실패
+                        </span>
+                    </li>
+
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>최대 좌표 오차</span>
+
+                        <span class="font-mono text-red-400 font-bold">
+                            &gt; 5mm
+                        </span>
+                    </li>
+
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>아크광·충돌 위험</span>
+
+                        <span class="font-mono text-red-400 font-bold">
+                            즉시 정지
+                        </span>
+                    </li>
+
+                    <li
+                        class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800">
+
+                        <span>Calibration 데이터</span>
+
+                        <span class="font-mono text-red-400 font-bold">
+                            불일치
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Task Process Section -->
+    
+
+
+
+<section id="process" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80 report-visual-upgraded">
+    <div class="text-center max-w-3xl mx-auto mb-14">
+        <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Task-Specific Workflows</h2>
+        <h3 class="text-4xl md:text-5xl font-bold text-white">작업별 분기 처리 메커니즘</h3>
+        <div class="section-guide mt-4 text-left max-w-2xl mx-auto">
+            <span><i class="fa-solid fa-circle-dot"></i><span>공통 비전 입력 이후 작업 종류에 따라 판단 로직과 로봇 제어가 분기됩니다.</span></span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+        <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <span class="text-[11px] font-mono text-cyan-400">FASTENING</span>
+                    <h4 class="text-xl font-bold text-white mt-1">① 조립·체결</h4>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400"><i class="fa-solid fa-wrench"></i></div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-5">
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">INPUT</span><strong class="block text-cyan-300 mt-1">볼트·와셔 ROI</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">CHECK</span><strong class="block text-cyan-300 mt-1">누락·비체결</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">CONTROL</span><strong class="block text-cyan-300 mt-1">토크·각도 확인</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">OUTPUT</span><strong class="block text-cyan-300 mt-1">PASS / NG</strong></div>
+            </div>
+            <div class="flex flex-wrap gap-2 text-[12px]">
+                <span class="data-chip">M16 Bolt</span><span class="data-chip">Washer</span><span class="data-chip">Torque</span><span class="data-chip">체결진도</span>
+            </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-indigo-500/25">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <span class="text-[11px] font-mono text-indigo-400">WELDING</span>
+                    <h4 class="text-xl font-bold text-white mt-1">② 용접</h4>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400"><i class="fa-solid fa-fire-flame-curved"></i></div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-5">
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">INPUT</span><strong class="block text-indigo-300 mt-1">용접부 ROI</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">PATH</span><strong class="block text-indigo-300 mt-1">시작점·경로</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">CONTROL</span><strong class="block text-indigo-300 mt-1">로봇 궤적</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">OUTPUT</span><strong class="block text-indigo-300 mt-1">비드 품질</strong></div>
+            </div>
+            <div class="flex flex-wrap gap-2 text-[12px]">
+                <span class="data-chip">Fillet Weld</span><span class="data-chip">Arc</span><span class="data-chip">Trajectory</span><span class="data-chip">비드검사</span>
+            </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-purple-500/25">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <span class="text-[11px] font-mono text-purple-400">XYZ / θ CALIBRATION</span>
+                    <h4 class="text-xl font-bold text-white mt-1">③ 좌표 인식·자동보정</h4>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400"><i class="fa-solid fa-location-crosshairs"></i></div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-5">
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">INPUT</span><strong class="block text-purple-300 mt-1">RGB-D Depth</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">COMPARE</span><strong class="block text-purple-300 mt-1">CAD ↔ 실제좌표</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">CONTROL</span><strong class="block text-purple-300 mt-1">ΔX·ΔY·ΔZ·Δθ</strong></div>
+                <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800"><span class="text-[10px] font-mono text-slate-500">OUTPUT</span><strong class="block text-purple-300 mt-1">자동 좌표보정</strong></div>
+            </div>
+            <div class="flex flex-wrap gap-2 text-[12px]">
+                <span class="data-chip">Eye-in-Hand</span><span class="data-chip">Base Frame</span><span class="data-chip">3D Offset</span><span class="data-chip">재티칭 저감</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+    <!-- Technology Stack Overview -->
+    <section id="technology-stack"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-4xl mx-auto mb-14">
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">
+                Integrated Technology Stack
+            </h2>
+
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                통합 기술스택
+            </h3>
+
+            <p class="text-slate-400 text-sm mt-4 leading-relaxed">
+                선박 기관실의 저조도·금속 반사·분진·제작 편차를 영상 전처리로 완화하고,
+                YOLO26n을 2단계로 파인튜닝한 뒤 IoU·mAP·Precision·Recall로 성능을 검증합니다.
+                각 기술과 파라미터는 단순 적용이 아니라 현장 영상의 작은 작업부, 제한된 GPU 자원,
+                로봇 좌표 활용 시 요구되는 위치 정밀도를 기준으로 선정했습니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <a href="#pipeline" class="glass-panel p-6 rounded-2xl border border-cyan-500/25 hover:border-cyan-400/70 transition-all">
+                <span class="text-[10px] font-mono text-cyan-400">STACK 01</span>
+                <h4 class="text-lg font-bold text-white mt-2">전처리 PIPELINE</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">불량 프레임 차단, 노이즈 억제, 명암 정규화, ROI 추출, 좌표 변환의 5단계 구성</p>
+            </a>
+            <a href="#yolo-training" class="glass-panel p-6 rounded-2xl border border-indigo-500/25 hover:border-indigo-400/70 transition-all">
+                <span class="text-[10px] font-mono text-indigo-400">STACK 02</span>
+                <h4 class="text-lg font-bold text-white mt-2">YOLO26 파인튜닝</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">고해상도 입력과 단계적 동결 해제로 3개 작업 클래스를 안정적으로 전이학습</p>
+            </a>
+            <a href="#model-validation" class="glass-panel p-6 rounded-2xl border border-emerald-500/25 hover:border-emerald-400/70 transition-all">
+                <span class="text-[10px] font-mono text-emerald-400">STACK 03</span>
+                <h4 class="text-lg font-bold text-white mt-2">학습검증</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">IoU 0.50·0.75와 mAP50·mAP50-95를 함께 확인해 검출 여부와 위치 정밀도를 동시 검증</p>
+            </a>
+        
+            <a href="#embedding-rag" class="glass-panel p-6 rounded-2xl border border-emerald-500/25 hover:border-emerald-400/70 transition-all">
+                <span class="text-[10px] font-mono text-emerald-400">STACK 04</span>
+                <h4 class="text-lg font-bold text-white mt-2">MES DB + Embedding & RAG</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                    MES 관계형 DB와 이미지·기술문서 저장소를 통합하고, 키워드·Embedding 하이브리드 검색으로 생산관리 의사결정을 지원
+                </p>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- Preprocessing Pipeline -->
+    
+<section id="pipeline" class="py-16 px-6 max-w-7xl mx-auto report-visual-upgraded">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Data Preprocessing Pipeline</h2>
+        <h3 class="text-4xl md:text-5xl font-bold text-white">데이터 전처리 5단계 핵심 파이프라인</h3>
+        <div class="section-guide mt-4 text-left max-w-2xl mx-auto">
+            <span><i class="fa-solid fa-circle-dot"></i><span>복잡한 글자 설명은 줄이고 단계별 핵심 기능만 남겼습니다.</span></span>
+            <span><i class="fa-solid fa-circle-dot"></i><span>각 Stage는 실시간 좌표 보정 흐름으로 바로 연결됩니다.</span></span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-5 mb-12">
+        <div class="glass-panel p-5 rounded-2xl border border-cyan-500/20 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3"><span class="px-2 py-1 rounded bg-cyan-500/20 text-cyan-300 text-[11px] font-mono font-bold">STAGE 01</span><i class="fa-solid fa-camera-rotate text-cyan-400"></i></div>
+            <h4 class="text-base font-bold text-white mb-2">입력 안정화</h4>
+            <p class="text-slate-300">왜곡과 흐림 프레임을 먼저 걸러 촬영 품질을 안정화합니다.</p>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl border border-indigo-500/20 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3"><span class="px-2 py-1 rounded bg-indigo-500/20 text-indigo-300 text-[11px] font-mono font-bold">STAGE 02</span><i class="fa-solid fa-sun text-indigo-400"></i></div>
+            <h4 class="text-base font-bold text-white mb-2">조명·반사 보정</h4>
+            <p class="text-slate-300">저조도와 금속 반사를 줄여 작업부 대비를 높입니다.</p>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl border border-emerald-500/20 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3"><span class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 text-[11px] font-mono font-bold">STAGE 03</span><i class="fa-solid fa-filter text-emerald-400"></i></div>
+            <h4 class="text-base font-bold text-white mb-2">노이즈 정제</h4>
+            <p class="text-slate-300">흄, 분진, 아크광 흔적을 줄여 특징을 더 선명하게 만듭니다.</p>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl border border-purple-500/20 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3"><span class="px-2 py-1 rounded bg-purple-500/20 text-purple-300 text-[11px] font-mono font-bold">STAGE 04</span><i class="fa-solid fa-object-group text-purple-400"></i></div>
+            <h4 class="text-base font-bold text-white mb-2">특징 강화·분할</h4>
+            <p class="text-slate-300">볼트, 용접부, 케이블 접속부의 ROI를 안정적으로 분리합니다.</p>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl border border-amber-500/20 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3"><span class="px-2 py-1 rounded bg-amber-500/20 text-amber-300 text-[11px] font-mono font-bold">STAGE 05</span><i class="fa-solid fa-location-crosshairs text-amber-400"></i></div>
+            <h4 class="text-base font-bold text-white mb-2">3D 좌표 산출</h4>
+            <p class="text-slate-300">정제된 ROI를 기준으로 XYZ 좌표와 품질 판정을 동시에 계산합니다.</p>
+        </div>
+    </div>
+</section>
+
+
+    <!-- YOLO26n Fine-Tuning Section -->
+    <section id="yolo-training"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-xs font-mono text-indigo-400 tracking-widest uppercase mb-2">
+                YOLO26n Fine-Tuning
+            </h2>
+
+            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                선박 작업구역 AI 파인튜닝
+            </h3>
+
+            <p class="text-slate-400 text-sm mt-3">
+                사전학습된 YOLO26n을 기반으로 볼트 체결부·용접부·케이블 접속부를 학습합니다.
+            </p>
+        </div>
+
+        <!-- Detection Classes -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+
+            <div
+                class="glass-panel p-5 rounded-2xl border border-cyan-500/25">
+
+                <div class="flex items-center justify-between mb-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400">
+
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                    </div>
+
+                    <span
+                        class="px-2 py-1 rounded-md bg-cyan-500/10 text-cyan-300 text-[10px] font-mono">
+
+                        CLASS 0
+                    </span>
+                </div>
+
+                <h4 class="text-base font-bold text-white mb-1">
+                    볼트 체결부
+                </h4>
+
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    로봇이 볼팅 작업을 수행해야 하는 체결 위치를 바운딩박스로 검출합니다.
+                </p>
+            </div>
+
+            <div
+                class="glass-panel p-5 rounded-2xl border border-indigo-500/25">
+
+                <div class="flex items-center justify-between mb-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400">
+
+                        <i class="fa-solid fa-fire-flame-curved"></i>
+                    </div>
+
+                    <span
+                        class="px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-300 text-[10px] font-mono">
+
+                        CLASS 1
+                    </span>
+                </div>
+
+                <h4 class="text-base font-bold text-white mb-1">
+                    용접부
+                </h4>
+
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    배관과 철판 연결부 등 로봇 용접이 필요한 작업구역을 검출합니다.
+                </p>
+            </div>
+
+            <div
+                class="glass-panel p-5 rounded-2xl border border-purple-500/25">
+
+                <div class="flex items-center justify-between mb-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center text-purple-400">
+
+                        <i class="fa-solid fa-plug"></i>
+                    </div>
+
+                    <span
+                        class="px-2 py-1 rounded-md bg-purple-500/10 text-purple-300 text-[10px] font-mono">
+
+                        CLASS 2
+                    </span>
+                </div>
+
+                <h4 class="text-base font-bold text-white mb-1">
+                    케이블 접속부
+                </h4>
+
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    커넥터와 단자 등 케이블 체결 작업이 필요한 접속 위치를 검출합니다.
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
+
+            <!-- Core Parameters -->
+            <div class="glass-panel p-6 rounded-2xl border border-indigo-500/20">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono text-indigo-400 uppercase tracking-wider">Parameters & Rationale</span>
+                        <h3 class="text-lg font-bold text-white">핵심 학습 파라미터와 선정 근거</h3>
+                    </div>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-cyan-300">model=yolo26n.pt</strong><span class="text-slate-500">Nano</span></div><p class="text-slate-400 mt-1">산업용 PC의 실시간 추론 부담을 줄이고, 소규모 산업 데이터에서 대형 모델보다 과적합 위험을 낮추기 위해 선정했습니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-cyan-300">imgsz=1280</strong><span class="text-slate-500">고해상도</span></div><p class="text-slate-400 mt-1">선박 전체 영상에서 작은 볼트·커넥터가 차지하는 픽셀이 적으므로 640보다 형상과 얇은 용접 경계를 더 많이 보존합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-cyan-300">batch=8</strong><span class="text-slate-500">VRAM 균형</span></div><p class="text-slate-400 mt-1">1280 입력의 메모리 사용량을 고려해 Colab급 GPU에서 OOM을 줄이면서 Gradient 안정성을 확보하는 절충값입니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-indigo-300">epochs=300 · patience=20</strong><span class="text-slate-500">충분한 적응 + 조기종료</span></div><p class="text-slate-400 mt-1">COCO와 금속 선박 영상의 도메인 차이를 학습할 상한은 확보하되, 20 Epoch 동안 개선이 없으면 과적합과 불필요한 연산을 차단합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-indigo-300">optimizer=AdamW · lr0=0.001</strong><span class="text-slate-500">안정적 미세조정</span></div><p class="text-slate-400 mt-1">소규모 전이학습의 빠른 수렴과 가중치 감쇠를 활용하며, 낮은 학습률로 기존 윤곽 특징이 급격히 무너지는 것을 방지합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-purple-300">scale=0.5 · mosaic=0.5</strong><span class="text-slate-500">중간 강도 증강</span></div><p class="text-slate-400 mt-1">작업거리와 배경 다양성을 학습하되, mosaic=1.0에서 발생할 수 있는 비현실적인 선박 장면과 작은 객체 소실을 피합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-emerald-300">cache=disk · amp=True</strong><span class="text-slate-500">자원 최적화</span></div><p class="text-slate-400 mt-1">고해상도 데이터를 RAM 대신 디스크에 캐시해 메모리 부족을 줄이고, 혼합 정밀도로 VRAM과 학습시간을 절감합니다.</p></div>
+                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between gap-4"><strong class="font-mono text-emerald-300">multi_scale=False</strong><span class="text-slate-500">입력 일관성</span></div><p class="text-slate-400 mt-1">운영 카메라 해상도가 고정될 예정이므로 배치마다 입력 크기를 바꾸지 않고 작은 객체의 픽셀 조건과 VRAM 사용량을 일정하게 유지합니다.</p></div>
+                </div>
+            </div>
+
+            <!-- Training Process -->
+            <div
+                class="glass-panel p-6 rounded-2xl border border-cyan-500/20">
+
+                <div class="flex items-center gap-3 mb-5">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400">
+
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+
+                    <div>
+                        <span class="text-[10px] font-mono text-cyan-400 uppercase tracking-wider">
+                            Training Process
+                        </span>
+
+                        <h3 class="text-lg font-bold text-white">
+                            2단계 파인튜닝 과정
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+
+                    <div
+                        class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+
+                        <div class="flex items-start gap-3">
+                            <span
+                                class="shrink-0 w-7 h-7 rounded-lg bg-cyan-500/15 flex items-center justify-center text-cyan-300 text-xs font-bold">
+
+                                1
+                            </span>
+
+                            <div>
+                                <h4 class="text-sm font-bold text-white">
+                                    사전 오류 점검
+                                </h4>
+
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                                    전체 학습 전
+                                    <code class="text-cyan-300">fraction=0.10</code>으로
+                                    데이터 경로, 클래스 번호, 라벨 위치와 GPU 메모리를 점검합니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+
+                        <div class="flex items-start gap-3">
+                            <span
+                                class="shrink-0 w-7 h-7 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-300 text-xs font-bold">
+
+                                2
+                            </span>
+
+                            <div>
+                                <h4 class="text-sm font-bold text-white">
+                                    Stage 1 · 검출 Head 우선 학습
+                                </h4>
+
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                                    초기 30 Epoch 동안
+                                    <code class="text-indigo-300">freeze=10</code>을 적용하여
+                                    Backbone 특징을 보호하고 3개 작업 클래스의 분류 기준을 먼저 안정화합니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+
+                        <div class="flex items-start gap-3">
+                            <span
+                                class="shrink-0 w-7 h-7 rounded-lg bg-purple-500/15 flex items-center justify-center text-purple-300 text-xs font-bold">
+
+                                3
+                            </span>
+
+                            <div>
+                                <h4 class="text-sm font-bold text-white">
+                                    Stage 2 · 전체 레이어 미세조정
+                                </h4>
+
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                                    이후 270 Epoch 동안
+                                    <code class="text-purple-300">freeze=None</code>으로 전환하여
+                                    금속 표면, 용접 비드, 케이블 단자의 세부 질감을 학습합니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+
+                        <div class="flex items-start gap-3">
+                            <span
+                                class="shrink-0 w-7 h-7 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-300 text-xs font-bold">
+
+                                4
+                            </span>
+
+                            <div>
+                                <h4 class="text-sm font-bold text-white">
+                                    검증 및 최종 모델 선정
+                                </h4>
+
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                                    전체 mAP와 함께 클래스별 AP·Precision·Recall을 확인하고,
+                                    마지막 가중치가 아닌 최고 검증 성능의
+                                    <code class="text-emerald-300">best.pt</code>를 적용합니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Strengths -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-7">
+
+            <div
+                class="glass-panel p-5 rounded-2xl border border-cyan-500/20">
+
+                <div
+                    class="w-9 h-9 rounded-lg bg-cyan-500/15 flex items-center justify-center text-cyan-400 mb-3">
+
+                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                </div>
+
+                <h4 class="text-sm font-bold text-cyan-300 mb-2">
+                    작은 작업부 검출
+                </h4>
+
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    imgsz=1280으로 작은 볼트와 케이블 접속부의 픽셀 정보를 보존합니다.
+                </p>
+            </div>
+
+            <div
+                class="glass-panel p-5 rounded-2xl border border-indigo-500/20">
+
+                <div
+                    class="w-9 h-9 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-400 mb-3">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+
+                <h4 class="text-sm font-bold text-indigo-300 mb-2">
+                    안정적인 전이학습
+                </h4>
+
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    단계적 동결 해제로 사전학습 특징의 급격한 손상을 방지합니다.
+                </p>
+            </div>
+
+            <div
+                class="glass-panel p-5 rounded-2xl border border-purple-500/20">
+
+                <div
+                    class="w-9 h-9 rounded-lg bg-purple-500/15 flex items-center justify-center text-purple-400 mb-3">
+
+                    <i class="fa-solid fa-arrows-to-circle"></i>
+                </div>
+
+                <h4 class="text-sm font-bold text-purple-300 mb-2">
+                    현장 일반화 성능
+                </h4>
+
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    scale=0.5와 mosaic=0.5로 작업거리와 배경 변화에 대응합니다.
+                </p>
+            </div>
+
+            <div
+                class="glass-panel p-5 rounded-2xl border border-emerald-500/20">
+
+                <div
+                    class="w-9 h-9 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-400 mb-3">
+
+                    <i class="fa-solid fa-gauge-high"></i>
+                </div>
+
+                <h4 class="text-sm font-bold text-emerald-300 mb-2">
+                    경량 실시간 운영
+                </h4>
+
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Nano 모델과 AMP를 사용해 학습 자원과 추론 부담을 줄입니다.
+                </p>
+            </div>
+        </div>
+
+        <div
+            class="mt-7 glass-panel p-5 rounded-2xl border border-emerald-500/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+
+            <div class="flex items-start gap-3">
+                <i class="fa-solid fa-circle-check text-emerald-400 mt-0.5"></i>
+
+                <div>
+                    <h3 class="text-sm font-bold text-white">
+                        최종 적용 기준
+                    </h3>
+
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                        오류 분석에서는
+                        <code class="text-slate-300">conf=0.10</code>,
+                        현장 운영 초기값은
+                        <code class="text-emerald-300">conf=0.50</code>을 적용합니다.
+
+                        클래스별 Recall이 낮은 경우 전체 mAP가 높더라도
+                        실제 로봇 작업 모델로 사용하지 않습니다.
+                    </p>
+                </div>
+            </div>
+
+            <span
+                class="shrink-0 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-[11px] font-mono text-emerald-300">
+
+                OUTPUT · best.pt
+            </span>
+        </div>
+    </section>
+
+    <!-- Model Validation Section -->
+    <section id="model-validation"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-4xl mx-auto mb-14">
+            <h2 class="text-xs font-mono text-emerald-400 tracking-widest uppercase mb-2">YOLO26 Model Validation</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">IoU · mAP 기반 학습검증</h3>
+            <p class="text-slate-400 text-sm mt-3 leading-relaxed">
+                전체 mAP 한 개만으로 모델을 판단하지 않고, 예측 박스의 위치 정밀도와 클래스별 오검출·미검출을 분리해 검증합니다.
+                로봇이 검출 중심점을 실제 작업 좌표에 활용하므로 일반 객체 인식보다 높은 IoU 구간의 성능을 반드시 함께 확인합니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25">
+                <span class="text-[10px] font-mono text-cyan-400">DATA SPLIT</span>
+                <h4 class="text-lg font-bold text-white mt-2">영상 단위 데이터 분리</h4>
+                <p class="text-xs text-slate-400 mt-3 leading-relaxed">Train 70%, Validation 20%, Test 10%를 권장합니다. 동일 영상의 인접 프레임이 서로 다른 세트에 섞이면 배경과 대상이 거의 같아 성능이 과대평가되므로 반드시 원본 영상 단위로 분리합니다.</p>
+                <div class="mt-4 p-3 rounded-xl bg-cyan-500/10 text-xs text-cyan-200">선정 근거 · 실제 신규 블록과 촬영조건에 대한 일반화 성능을 검증하기 위함</div>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border border-indigo-500/25">
+                <span class="text-[10px] font-mono text-indigo-400">LOCALIZATION</span>
+                <h4 class="text-lg font-bold text-white mt-2">IoU 0.50 · 0.75 이중 검증</h4>
+                <p class="text-xs text-slate-400 mt-3 leading-relaxed"><strong class="text-indigo-300">IoU 0.50</strong>은 작업 대상을 전반적으로 찾는 능력을, <strong class="text-indigo-300">IoU 0.75</strong>는 볼트 머리·용접 경계·케이블 단자에 박스가 정밀하게 맞는지를 평가합니다.</p>
+                <div class="mt-4 p-3 rounded-xl bg-indigo-500/10 text-xs text-indigo-200">선정 근거 · 검출 성공과 로봇 좌표용 위치 정밀도는 서로 다른 성능이므로 분리 평가</div>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border border-purple-500/25">
+                <span class="text-[10px] font-mono text-purple-400">ACCURACY</span>
+                <h4 class="text-lg font-bold text-white mt-2">mAP50 · mAP50-95 병행</h4>
+                <p class="text-xs text-slate-400 mt-3 leading-relaxed"><strong class="text-purple-300">mAP50</strong>은 기본 검출 능력, <strong class="text-purple-300">mAP50-95</strong>는 IoU 0.50~0.95를 평균해 정밀한 위치 일치까지 반영합니다. 세 클래스의 AP도 별도로 확인합니다.</p>
+                <div class="mt-4 p-3 rounded-xl bg-purple-500/10 text-xs text-purple-200">선정 근거 · 쉬운 IoU 조건만 사용할 때 발생하는 성능 과대평가 방지</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-7">
+            <div class="glass-panel p-6 rounded-2xl border border-emerald-500/20">
+                <h4 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-list-check text-emerald-400 mr-2"></i>초기 성능 판정 기준</h4>
+                <div class="space-y-3 text-xs">
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">전체 mAP50</span><strong class="font-mono text-emerald-300">≥ 0.85</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">전체 mAP50-95</span><strong class="font-mono text-emerald-300">≥ 0.60</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">클래스별 AP50</span><strong class="font-mono text-emerald-300">≥ 0.80</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">Precision</span><strong class="font-mono text-cyan-300">≥ 0.85</strong></div>
+                    <div class="flex justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="text-slate-300">Recall</span><strong class="font-mono text-cyan-300">≥ 0.80</strong></div>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-4 leading-relaxed">위 값은 초기 개발 목표이며 실제 현장 적용값은 Test 데이터와 로봇 작업 실패 비용을 기준으로 재조정합니다. 특히 클래스별 Recall이 낮으면 전체 mAP가 높아도 적용하지 않습니다.</p>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-7">
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-cyan-300 text-sm">PR Curve</strong><p class="text-[11px] text-slate-400 mt-2">신뢰도 변화에 따른 Precision·Recall 균형과 클래스별 임계값 선정</p></div>
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-indigo-300 text-sm">F1 Curve</strong><p class="text-[11px] text-slate-400 mt-2">Precision과 Recall을 함께 고려해 운영 conf 후보값 결정</p></div>
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-purple-300 text-sm">Confusion Matrix</strong><p class="text-[11px] text-slate-400 mt-2">용접부·케이블 접속부 혼동과 배경 오검출 원인 확인</p></div>
+            <div class="glass-panel p-4 rounded-xl border border-slate-700"><strong class="text-emerald-300 text-sm">Test 영상 검증</strong><p class="text-[11px] text-slate-400 mt-2">미사용 영상에서 박스 흔들림·누락·연속 프레임 일관성 최종 확인</p></div>
+        </div>
+    </section>
+
+    <!-- Simulator Section -->
+    
+    <!-- Embedding & RAG Section -->
+    
+
+
+<section id="embedding-rag" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80 report-visual-upgraded no-left-right">
+    <div class="text-center max-w-4xl mx-auto mb-12">
+        <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Secure Enterprise Knowledge Retrieval</h2>
+        <h3 class="text-4xl md:text-5xl font-bold text-white">Embedding · MES DB 기반 사내 지식 검색 시스템</h3>
+        <div class="section-guide mt-4 text-left max-w-3xl mx-auto">
+            <span><i class="fa-solid fa-circle-dot"></i><span>생산진도, 불량 이미지, 알람 이력, 로봇 문서를 하나의 MES 검색 화면에서 조회합니다.</span></span>
+            <span><i class="fa-solid fa-circle-dot"></i><span>종합모니터링 → DB 설계방안 → 보안 적용 원칙 순서로 구성했습니다.</span></span>
+        </div>
+    </div>
+
+    <!-- 1. MES Comprehensive Monitoring -->
+    <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25 mb-8">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-5">
+            <div>
+                <span class="text-[11px] font-mono text-emerald-400 uppercase">01 · MES Comprehensive Monitoring</span>
+                <h4 class="text-2xl font-bold text-white mt-1">MES 종합모니터링 화면</h4>
+            </div>
+            <span class="mini-badge"><i class="fa-solid fa-diagram-project"></i>Layout + Search + Drill-down</span>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-5 gap-5">
+            <div class="xl:col-span-3">
+                <div class="mes-scene">
+                    <svg viewBox="0 0 920 520" role="img" aria-label="선박 기관실 내부 의장공정 MES 레이아웃 상세 도식" style="width:100%;height:100%;display:block;background:#071019">
+                        <defs>
+                            <linearGradient id="mbg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d1823"/><stop offset="1" stop-color="#05090e"/></linearGradient>
+                            <linearGradient id="mdeck2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#30495c"/><stop offset="1" stop-color="#152534"/></linearGradient>
+                            <marker id="arrowCyan" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#67e8f9"/></marker>
+                            <marker id="arrowGreen" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#86efac"/></marker>
+                            <marker id="arrowRed" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#fca5a5"/></marker>
+                            <marker id="arrowAmber" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#fbbf24"/></marker>
+                            <marker id="arrowPurple" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#d8b4fe"/></marker>
+                        </defs>
+                        <rect width="920" height="520" fill="url(#mbg2)"/>
+
+                        <!-- Ship/engine-room model -->
+                        <polygon points="118,446 330,304 804,363 576,492" fill="#0d1b26" stroke="#456279"/>
+                        <polygon points="118,446 118,142 330,56 330,304" fill="#182a38" stroke="#456279"/>
+                        <polygon points="330,304 330,56 804,122 804,363" fill="url(#mdeck2)" stroke="#456279"/>
+                        <g fill="none" stroke="#637c8d" stroke-width="6"><path d="M148 205H745"/><path d="M148 278H770"/><path d="M148 350H778"/></g>
+                        <g fill="none" stroke-linecap="round"><path d="M166 112V413H268V315H470" stroke="#2f6172" stroke-width="17"/><path d="M211 92V236H386V400" stroke="#2bb6a9" stroke-width="10"/><path d="M421 85V205H669V394" stroke="#6e8190" stroke-width="14"/><path d="M528 111V174H720V321" stroke="#b87340" stroke-width="9"/><path d="M277 126H360V250" stroke="#4e7185" stroke-width="8"/></g>
+                        <g stroke="#7790a2"><rect x="260" y="322" width="142" height="91" rx="10" fill="#22394a"/><rect x="430" y="294" width="155" height="108" rx="10" fill="#263f50"/><rect x="626" y="256" width="84" height="137" rx="14" fill="#293e4c"/><rect x="711" y="193" width="62" height="105" rx="10" fill="#1d3342"/></g>
+                        <g fill="#0f172a" stroke="#87a0b1"><circle cx="292" cy="360" r="24"/><circle cx="356" cy="360" r="24"/><circle cx="477" cy="347" r="28"/><circle cx="537" cy="347" r="28"/></g>
+
+                        <!-- Work zones: no labels on model -->
+                        <g fill="none" stroke-width="3" stroke-dasharray="9 6"><rect x="198" y="310" width="210" height="122" rx="14" stroke="#2dd4bf"/><rect x="414" y="253" width="207" height="166" rx="14" stroke="#38bdf8"/><rect x="612" y="222" width="180" height="183" rx="14" stroke="#a855f7"/></g>
+
+                        <!-- Robots / workers / tools -->
+                        <g><circle cx="324" cy="296" r="17" fill="#22c55e"/><path d="M324 296l13-34 24-8 17 25" fill="none" stroke="#86efac" stroke-width="10" stroke-linecap="round"/><circle cx="361" cy="254" r="7" fill="#86efac"/><circle cx="686" cy="235" r="17" fill="#ef4444"/><path d="M686 235l-4-33 27-21 17 19" fill="none" stroke="#fca5a5" stroke-width="10" stroke-linecap="round"/><circle cx="709" cy="181" r="7" fill="#fca5a5"/></g>
+                        <g fill="#f59e0b"><circle cx="231" cy="399" r="8"/><rect x="225" y="408" width="12" height="22" rx="5"/><circle cx="253" cy="399" r="8"/><rect x="247" y="408" width="12" height="22" rx="5"/><circle cx="545" cy="411" r="8"/><rect x="539" y="420" width="12" height="22" rx="5"/></g>
+                        <g fill="#67e8f9"><circle cx="302" cy="338" r="6"/><circle cx="368" cy="370" r="6"/><circle cx="465" cy="312" r="6"/><circle cx="565" cy="312" r="6"/><circle cx="657" cy="326" r="6"/></g>
+                        <g><rect x="184" y="263" width="49" height="21" rx="5" fill="#0ea5e9"/><rect x="556" y="220" width="58" height="21" rx="5" fill="#8b5cf6"/><rect x="724" y="330" width="59" height="21" rx="5" fill="#64748b"/></g>
+
+                        <!-- External callout labels -->
+                        <g font-family="monospace" font-weight="700">
+                            <text x="22" y="31" font-size="15" fill="#9ac5d6">ENGINE ROOM BLOCK · OUTFITTING MES LAYOUT</text>
+
+                            <rect x="18" y="58" width="160" height="45" rx="9" fill="#071019" stroke="#5eead4"/><text x="31" y="78" font-size="12" fill="#5eead4">ZONE A · 체결</text><text x="31" y="94" font-size="10" fill="#b8d8d1">Bolt / Bracket</text>
+                            <path d="M178 82 C225 93, 242 210, 270 318" fill="none" stroke="#5eead4" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+                            <rect x="380" y="16" width="160" height="45" rx="9" fill="#071019" stroke="#67e8f9"/><text x="393" y="36" font-size="12" fill="#67e8f9">ZONE B · 용접</text><text x="393" y="52" font-size="10" fill="#b9dfea">Fillet Weld</text>
+                            <path d="M460 61 C470 105, 500 178, 512 260" fill="none" stroke="#67e8f9" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+                            <rect x="732" y="35" width="168" height="45" rx="9" fill="#071019" stroke="#d8b4fe"/><text x="745" y="55" font-size="12" fill="#d8b4fe">ZONE C · 좌표보정</text><text x="745" y="71" font-size="10" fill="#d9c8e8">RGB-D / XYZ</text>
+                            <path d="M770 80 C748 126, 724 181, 697 225" fill="none" stroke="#d8b4fe" stroke-width="2" marker-end="url(#arrowPurple)"/>
+
+                            <rect x="18" y="455" width="148" height="43" rx="9" fill="#071019" stroke="#fbbf24"/><text x="31" y="475" font-size="12" fill="#fbbf24">작업자 2명</text><text x="31" y="490" font-size="10" fill="#e5d2a7">Zone A 배치</text>
+                            <path d="M166 475 C192 469, 217 445, 239 414" fill="none" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrowAmber)"/>
+
+                            <rect x="374" y="457" width="154" height="43" rx="9" fill="#071019" stroke="#fbbf24"/><text x="387" y="477" font-size="12" fill="#fbbf24">작업자 1명</text><text x="387" y="492" font-size="10" fill="#e5d2a7">Zone B 배치</text>
+                            <path d="M528 478 C535 465, 540 446, 545 424" fill="none" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrowAmber)"/>
+
+                            <rect x="744" y="445" width="158" height="46" rx="9" fill="#071019" stroke="#cbd5e1"/><text x="757" y="465" font-size="12" fill="#cbd5e1">Panel / 설비</text><text x="757" y="481" font-size="10" fill="#b9c3ca">Zone C</text>
+                            <path d="M744 463 C733 437, 741 387, 752 347" fill="none" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+                            <rect x="18" y="126" width="132" height="42" rx="9" fill="#071019" stroke="#86efac"/><text x="31" y="146" font-size="12" fill="#86efac">R1 · 가동</text><text x="31" y="160" font-size="10" fill="#c7ead5">협동로봇</text>
+                            <path d="M150 146 C226 148, 275 220, 320 287" fill="none" stroke="#86efac" stroke-width="2" marker-end="url(#arrowGreen)"/>
+
+                            <rect x="746" y="111" width="148" height="42" rx="9" fill="#071019" stroke="#fca5a5"/><text x="759" y="131" font-size="12" fill="#fca5a5">R2 · 비가동</text><text x="759" y="145" font-size="10" fill="#eac4c4">점검대기</text>
+                            <path d="M746 132 C725 150, 705 185, 690 224" fill="none" stroke="#fca5a5" stroke-width="2" marker-end="url(#arrowRed)"/>
+
+                            <rect x="18" y="206" width="145" height="42" rx="9" fill="#071019" stroke="#7dd3fc"/><text x="31" y="226" font-size="12" fill="#7dd3fc">Torque Tool</text><text x="31" y="240" font-size="10" fill="#bddce9">체결 설비</text>
+                            <path d="M163 226 C171 239, 188 253, 204 269" fill="none" stroke="#7dd3fc" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+                            <rect x="744" y="266" width="158" height="42" rx="9" fill="#071019" stroke="#c4b5fd"/><text x="757" y="286" font-size="12" fill="#c4b5fd">Vision Sensor</text><text x="757" y="300" font-size="10" fill="#d8d1ea">좌표 인식</text>
+                            <path d="M744 287 C694 273, 627 252, 588 230" fill="none" stroke="#c4b5fd" stroke-width="2" marker-end="url(#arrowPurple)"/>
+                        </g>
+                    </svg>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3 text-[12px]">
+                    <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800 flex items-center gap-2"><span class="legend-dot" style="background:#22c55e"></span><span>협동로봇 가동</span></div>
+                    <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800 flex items-center gap-2"><span class="legend-dot" style="background:#ef4444"></span><span>협동로봇 비가동</span></div>
+                    <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800 flex items-center gap-2"><span class="legend-dot" style="background:#f59e0b"></span><span>작업자 배치</span></div>
+                    <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800 flex items-center gap-2"><span class="legend-dot" style="background:#22d3ee"></span><span>설비/센서</span></div>
+                </div>
+            </div>
+
+            <div class="xl:col-span-2 p-4 rounded-2xl bg-slate-950/55 border border-slate-800">
+                <div class="text-sm font-bold text-white mb-3">통합검색</div>
+                <div class="relative mb-3"><i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i><input id="mes-search-input" type="text" placeholder="예: LNG-2410 체결 진도 / E-STOP / UR 점검표" class="w-full bg-slate-950/70 border border-slate-700 rounded-xl pl-11 pr-4 py-3 text-sm text-slate-200 outline-none focus:border-cyan-400"></div>
+                <button id="mes-search-button" class="w-full px-4 py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-sm font-bold hover:bg-cyan-500/30 transition-all mb-3"><i class="fa-solid fa-magnifying-glass mr-2"></i>검색</button>
+                <p id="mes-search-status" class="meshint mb-4">검색어를 입력하면 관련 대표영역과 세부 단계가 자동으로 연결됩니다.</p>
+
+                <div class="text-sm font-bold text-white mb-3">대표항목 4가지</div>
+                <div class="grid grid-cols-2 gap-2 mb-4" id="mes-domain-buttons">
+                    <button class="mes-domain-button active px-3 py-3 rounded-xl bg-slate-900/60 border border-slate-800 text-left text-sm text-slate-200" data-domain="progress"><strong class="block">선박 진도</strong><span class="text-[11px] text-slate-400">선박 → 작업 → 진도</span></button>
+                    <button class="mes-domain-button px-3 py-3 rounded-xl bg-slate-900/60 border border-slate-800 text-left text-sm text-slate-200" data-domain="defect"><strong class="block">불량 사례</strong><span class="text-[11px] text-slate-400">항목 → 사례 → 조치</span></button>
+                    <button class="mes-domain-button px-3 py-3 rounded-xl bg-slate-900/60 border border-slate-800 text-left text-sm text-slate-200" data-domain="alarm"><strong class="block">알람 이력</strong><span class="text-[11px] text-slate-400">설비 → 코드 → 이력</span></button>
+                    <button class="mes-domain-button px-3 py-3 rounded-xl bg-slate-900/60 border border-slate-800 text-left text-sm text-slate-200" data-domain="document"><strong class="block">기술 문서</strong><span class="text-[11px] text-slate-400">로봇 → 문서 → 상세</span></button>
+                </div>
+                <div id="mes-detail-panel" class="p-4 rounded-2xl bg-slate-900/50 border border-slate-800"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. DB Architecture -->
+    <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25 mb-8">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-11 h-11 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400"><i class="fa-solid fa-database"></i></div>
+            <div>
+                <span class="text-[11px] font-mono text-cyan-400 uppercase">02 · Database Architecture</span>
+                <h4 class="text-2xl font-bold text-white mt-1">생산관리 MES Database 설계방안</h4>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            <div class="p-4 rounded-xl bg-slate-950/55 border border-slate-800"><strong class="text-cyan-300">Relational DB</strong><p class="text-slate-300 mt-2">선박, 블록, 작업지시, 진도, 설비, 알람, 문서 메타데이터를 PK/FK로 연결합니다.</p></div>
+            <div class="p-4 rounded-xl bg-slate-950/55 border border-slate-800"><strong class="text-emerald-300">Object Storage</strong><p class="text-slate-300 mt-2">불량 이미지, 점검표 PDF, CAD 구조도 원본을 사내 파일 저장소에 보관합니다.</p></div>
+            <div class="p-4 rounded-xl bg-slate-950/55 border border-slate-800"><strong class="text-purple-300">Embedding Index</strong><p class="text-slate-300 mt-2">문서 chunk와 source_id를 연결해 유사 문서·유사 사례 검색에 활용합니다.</p></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-cyan-500/5 border border-cyan-500/20"><span class="text-[10px] font-mono text-cyan-400">01 · PRODUCTION</span><h5 class="font-bold text-white mt-1">선박·의장작업 진도</h5><p class="text-slate-400 mt-2">선박 → 블록/Zone → 작업 → 작업지시 → 계획·실적·진행률</p></div>
+            <div class="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20"><span class="text-[10px] font-mono text-emerald-400">02 · DEFECT</span><h5 class="font-bold text-white mt-1">불량 이미지 사례</h5><p class="text-slate-400 mt-2">불량유형 → 작업 → Case → 이미지 → 원인·조치 → 유사 사례</p></div>
+            <div class="p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/20"><span class="text-[10px] font-mono text-indigo-400">03 · ALARM</span><h5 class="font-bold text-white mt-1">PLC·HMI 알람 이력</h5><p class="text-slate-400 mt-2">설비 → Alarm Code → Event → 상태 Snapshot → 원인·조치</p></div>
+            <div class="p-4 rounded-xl bg-purple-500/5 border border-purple-500/20"><span class="text-[10px] font-mono text-purple-400">04 · DOCUMENT</span><h5 class="font-bold text-white mt-1">협동로봇 기술문서</h5><p class="text-slate-400 mt-2">로봇 모델 → 문서유형 → Revision → 페이지/CAD → 점검·안전기준</p></div>
+        </div>
+    </div>
+
+    <!-- 3. Security -->
+    <div class="glass-panel p-6 rounded-2xl border border-cyan-500/25">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-11 h-11 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400"><i class="fa-solid fa-shield-halved"></i></div>
+            <div>
+                <span class="text-[11px] font-mono text-cyan-400 uppercase">03 · Security Principle</span>
+                <h4 class="text-2xl font-bold text-white mt-1">보안 적용 원칙</h4>
+                <p class="meshint mt-1">On-Premise, RBAC, Audit Log, 망분리 원칙을 적용합니다.</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 text-sm text-slate-300">
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">외부 API 전송을 차단합니다.</div>
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">문서별 접근 권한을 분리합니다.</div>
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">검색·열람 기록을 Audit Log로 남깁니다.</div>
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">제어망과 AI 검색망을 분리합니다.</div>
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">원본 문서 기반 RAG로 허위 생성을 줄입니다.</div>
+            <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">폐쇄망에서도 검색·질의가 동작하도록 설계합니다.</div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+    <!-- Physical AI Embedded Hardware Architecture -->
+    <section id="mcu-sbc" class="py-16 px-6 max-w-7xl mx-auto border-t border-slate-800/80 report-visual-upgraded hw-architecture-section">
+        <div class="text-center max-w-4xl mx-auto mb-10">
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">Embedded Hardware Architecture</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">Physical AI 내장 HW · MCU/SBC · 통신 설계</h3>
+            <p class="text-slate-400 text-sm mt-3">MES 데이터 활용 이후 실제 로봇 제어까지 이어지는 <strong class="text-cyan-300">전원 → 연산 → 센서 인터페이스</strong> 구조를 3단계로 정리했습니다. 부품 행을 클릭하면 데이터시트와 연결 도면을 확인할 수 있습니다.</p>
+        </div>
+
+        <!-- STEP 01 -->
+        <div class="hw-step-block glass-panel p-6 rounded-2xl border border-cyan-500/25 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
+                <div>
+                    <span class="text-[11px] font-mono text-cyan-400 uppercase">01 · Embedded Hardware & Power</span>
+                    <h4 class="text-2xl font-bold text-white mt-1">Physical AI 내장 HW 및 전원 사양</h4>
+                </div>
+                <span class="mini-badge">CLICK ROW · DATASHEET + WIRING</span>
+            </div>
+            <div class="hw-table-wrap">
+                <table class="hw-spec-table">
+                    <thead><tr><th>구분</th><th>대표 모델</th><th>정격/입력 전압</th><th>정격·소비 전류</th><th>Peak/최대값</th><th>주요 역할</th></tr></thead>
+                    <tbody>
+                        <tr class="hw-click-row" data-hw="mcu"><td><strong>MCU</strong></td><td>ESP32-S3-WROOM-1</td><td>3.0–3.6 VDC</td><td>동작모드별 변동</td><td>전원 Rail ≥500 mA 권장</td><td>센서 수집 · 실시간 제어 · Alarm</td></tr>
+                        <tr class="hw-click-row" data-hw="sbc"><td><strong>SBC</strong></td><td>Jetson Orin Nano 8GB</td><td>Carrier Board 전원</td><td>7–25 W 전력모드</td><td>25 W급</td><td>YOLO · Depth · 좌표연산</td></tr>
+                        <tr class="hw-click-row" data-hw="vision"><td><strong>AI Vision</strong></td><td>RealSense D455</td><td>5 VDC · USB</td><td>약 0.7 A급</td><td>동작모드별 변동</td><td>RGB + Depth 영상 취득</td></tr>
+                        <tr class="hw-click-row" data-hw="encoder"><td><strong>Encoder</strong></td><td>ams OSRAM AS5047P</td><td>3.3 / 5 V</td><td>약 15 mA급</td><td>별도 Peak 미미</td><td>Joint 절대각 Feedback</td></tr>
+                        <tr class="hw-click-row" data-hw="ft"><td><strong>F/T Sensor</strong></td><td>ATI Mini45 Digital F/T</td><td>12–18 VDC</td><td>약 0.17–0.25 A</td><td>공급전력 약 3 W</td><td>6축 힘 · 토크 측정</td></tr>
+                        <tr class="hw-click-row" data-hw="prox"><td><strong>근접센서</strong></td><td>OMRON E2EW PNP</td><td>10–30 VDC</td><td>≤30 mA @24 V</td><td>≤720 mW</td><td>작업물 · Tool 검출</td></tr>
+                        <tr class="hw-click-row" data-hw="servo"><td><strong>Servo Motor</strong></td><td>maxon EC-i 40 예시</td><td>24 VDC</td><td>1.49 A 연속</td><td>14.1 A Stall</td><td>Joint 위치 · 속도 · 토크 구동</td></tr>
+                        <tr class="hw-click-row" data-hw="light"><td><strong>Vision LED</strong></td><td>CCS LDR2-100SW2-LA</td><td>24 VDC</td><td>약 0.50 A</td><td>12 W max.</td><td>저조도 · 금속반사 보정</td></tr>
+                        <tr class="hw-click-row" data-hw="pwr"><td><strong>PWR</strong></td><td>MEAN WELL RSD-100B-24</td><td>16.8–31.2 VDC In</td><td>24 V / 4.2 A Out</td><td>100.8 W</td><td>24 V Main Rail · DC/DC 분배</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="hw-power-strip mt-5">
+                <span class="hw-power-node">24 V MAIN</span><span class="hw-power-arrow">→</span><span>Servo · F/T · Proximity · LED</span><span class="hw-power-arrow">→</span><span>5 V : RGB-D</span><span class="hw-power-arrow">→</span><span>3.3 V : MCU · Encoder</span>
+            </div>
+        </div>
+
+        <!-- STEP 02 -->
+        <div class="hw-step-block glass-panel p-6 rounded-2xl border border-emerald-500/25 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
+                <div>
+                    <span class="text-[11px] font-mono text-emerald-400 uppercase">02 · Computing Role Separation</span>
+                    <h4 class="text-2xl font-bold text-white mt-1">MCU · SBC 기능 분류</h4>
+                </div>
+                <span class="mini-badge">REAL-TIME ↔ AI COMPUTE</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-5">
+                <div class="hw-kpi-card"><span>MCU CONTROL</span><strong>0.1–1 ms</strong><small>설계 기준 1–10 kHz</small></div>
+                <div class="hw-kpi-card"><span>MCU RESPONSE</span><strong>μs–ms</strong><small>Feedback · I/O · Interlock</small></div>
+                <div class="hw-kpi-card"><span>SBC VISION</span><strong>15–30 FPS</strong><small>약 33–67 ms / Frame</small></div>
+                <div class="hw-kpi-card"><span>AI + COORD.</span><strong>≤250 ms</strong><small>전체 전처리 ≤500 ms</small></div>
+            </div>
+            <div class="hw-table-wrap">
+                <table class="hw-role-table">
+                    <thead><tr><th>MCU · Real-Time Control</th><th>SBC · AI / High-Level Computing</th></tr></thead>
+                    <tbody>
+                        <tr><td>Encoder · Torque · F/T Sensor 수집</td><td>RGB-D 영상 수집 · 영상 전처리</td></tr>
+                        <tr><td>SPI · RS-485 · Digital I/O 처리</td><td>YOLO26n 추론 · Depth → XYZ</td></tr>
+                        <tr><td>Position / Velocity / Torque Feedback</td><td>Camera → Robot Base 좌표변환</td></tr>
+                        <tr><td>PID / FOC · PWM · Servo Motor 구동</td><td>ΔX · ΔY · ΔZ · Δθ 계산</td></tr>
+                        <tr><td>Nutrunner / Welding Touch I/O 제어</td><td>Welding Path / Target Pose 생성</td></tr>
+                        <tr><td>E-STOP · 충돌 · 과전류 상태 처리</td><td>AI Confidence · Depth 이상 판단</td></tr>
+                        <tr><td>저수준 HW Alarm · Safety Interlock</td><td>MES DB · 이미지 · Embedding · RAG</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="hw-flow-line mt-5"><strong>SBC</strong>가 보고·판단·좌표를 계산 → <strong>MCU</strong>가 센서를 읽고·모터를 움직이고·즉시 정지</div>
+        </div>
+
+        <!-- STEP 03 -->
+        <div class="hw-step-block glass-panel p-6 rounded-2xl border border-purple-500/25">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
+                <div>
+                    <span class="text-[11px] font-mono text-purple-400 uppercase">03 · Sensor Interface & Pin Map</span>
+                    <h4 class="text-2xl font-bold text-white mt-1">Sensor / Device ↔ ESP32-S3 연결 및 통신</h4>
+                </div>
+                <span class="mini-badge">PIN MAP · 5 INTERFACE LINES</span>
+            </div>
+            <div class="hw-table-wrap">
+                <table class="hw-spec-table hw-pin-table">
+                    <thead><tr><th>센서/장치</th><th>대표모델</th><th>센서/장치측 단자</th><th>ESP32-S3 단자(핀)</th><th>대표 통신방식</th><th>핀 연결방식과 통신방식의 근거</th></tr></thead>
+                    <tbody>
+                        <tr class="hw-click-row" data-hw="encoder"><td><strong>Joint Encoder</strong></td><td>AS5047P</td><td><code>CSn / CLK / MISO / MOSI</code></td><td><code>GPIO10 / 12 / 13 / 11</code></td><td><b>SPI</b></td><td>14-bit 절대각을 반복 취득하는 4-wire SPI. CSn→10, CLK→12, MISO→13, MOSI→11</td></tr>
+                        <tr class="hw-click-row" data-hw="ft"><td><strong>6축 F/T Sensor</strong></td><td>ATI Mini45 Digital F/T</td><td><code>RS485+ / RS485−</code></td><td><code>GPIO17 TX / GPIO18 RX / GPIO16 DE·RE</code></td><td><b>RS-485</b></td><td>차동 RS-485를 Transceiver에서 UART 신호로 변환해 노이즈 환경에서 고속 수집</td></tr>
+                        <tr class="hw-click-row" data-hw="prox"><td><strong>근접센서</strong></td><td>OMRON E2EW PNP</td><td><code>Brown +V / Blue 0V / Black OUT</code></td><td><code>GPIO4 DI</code></td><td><b>Digital I/O</b></td><td>ON/OFF 검출이므로 Black OUT → Optocoupler → 3.3 V GPIO4</td></tr>
+                        <tr class="hw-click-row" data-hw="weld"><td><strong>Welding Touch</strong></td><td>Fronius TPS/i Touch</td><td><code>Touch Signal OUT</code></td><td><code>GPIO5 DI</code></td><td><b>Digital I/O</b></td><td>Wire/Nozzle 접촉 시 Single-bit Touch 신호를 절연 DI로 즉시 검출</td></tr>
+                        <tr class="hw-click-row" data-hw="tool"><td><strong>Tool 장착센서</strong></td><td>OMRON Proximity</td><td><code>Brown +V / Blue 0V / Black OUT</code></td><td><code>GPIO6 DI</code></td><td><b>Digital I/O</b></td><td>Tool 장착 여부는 Binary 상태이므로 OUT → Optocoupler → GPIO6</td></tr>
+                        <tr class="hw-click-row" data-hw="sbc"><td><strong>SBC ↔ MCU</strong></td><td>Jetson Orin ↔ ESP32-S3</td><td><code>TX / RX / GND</code></td><td><code>GPIO43 RX / GPIO44 TX / GND</code></td><td><b>UART</b></td><td>SBC의 Target XYZ·θ를 MCU로 전송하고 MCU Sensor/Alarm 상태를 SBC로 반환</td></tr>
+                        <tr class="hw-click-row" data-hw="vision"><td><strong>RGB-D Vision</strong></td><td>RealSense D455</td><td><code>USB Type-C</code></td><td><strong>ESP32 연결 X</strong></td><td><b>USB 3.x</b></td><td>RGB·Depth 대용량 영상이므로 Jetson SBC USB에 직접 연결</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="hw-interface-summary mt-5">
+                <span>Encoder <b>─SPI→ MCU</b></span><span>F/T <b>─RS-485→ MCU</b></span><span>Proximity/Touch <b>─DI→ MCU</b></span><span>MCU <b>─UART↔ SBC</b></span><span>RGB-D <b>─USB→ SBC</b></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Component Detail Modal: offline SVG drawings + official datasheet links -->
+    <div id="hw-detail-modal" class="hw-modal" aria-hidden="true">
+        <div class="hw-modal-backdrop" data-hw-close></div>
+        <div class="hw-modal-card" role="dialog" aria-modal="true" aria-labelledby="hw-modal-title">
+            <button class="hw-modal-close" type="button" data-hw-close aria-label="닫기">×</button>
+            <div class="hw-modal-head"><span class="hw-modal-tag">COMPONENT DETAIL</span><h4 id="hw-modal-title">Hardware</h4><p id="hw-modal-subtitle"></p></div>
+            <div class="hw-modal-grid">
+                <div class="hw-drawing-panel"><div id="hw-modal-drawing"></div></div>
+                <div class="hw-modal-info">
+                    <div class="hw-info-box"><span>전원 / 전류</span><strong id="hw-modal-power"></strong></div>
+                    <div class="hw-info-box"><span>연결 / 통신</span><strong id="hw-modal-interface"></strong></div>
+                    <div class="hw-info-box"><span>연결 근거</span><p id="hw-modal-reason"></p></div>
+                    <a id="hw-modal-link" class="hw-datasheet-link" href="#" target="_blank" rel="noopener noreferrer">공식 데이터시트 / 제조사 자료 열기 ↗</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="simulator"
+        class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">3D Robot Coordinate Simulation</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">X·Y·Z 3차원 좌표·각도 자동보정 시뮬레이터</h3>
+            <p class="text-slate-400 text-sm mt-3">
+                로봇 Base 기준점 <strong>O(0,0,0)</strong>에서 타겟까지의 X·Y·Z 절대좌표를 3차원 축으로 표시하고,
+                검출 편차 ΔX·ΔY·ΔZ와 회전각 θ를 반영합니다. 기준점에서 타겟까지의 직선거리는
+                <strong>d = √(X² + Y² + Z²)</strong>로 실시간 계산합니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-5 glass-panel p-6 rounded-2xl flex flex-col justify-between">
+                <div>
+                    <h4 class="text-base font-bold text-white mb-4 flex items-center justify-between">
+                        <span>검출 좌표 편차·각도 입력</span>
+                        <span id="status-badge" class="px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">정상 가동</span>
+                    </h4>
+
+                    <div class="p-3 rounded-xl bg-slate-950/55 border border-slate-800 mb-5 text-[11px] text-slate-400 font-mono">
+                        시뮬레이션 기준 타겟 T₀ = (650, 250, 420) mm · Base O = (0, 0, 0)
+                    </div>
+
+                    <div class="space-y-4 text-xs">
+                        <div>
+                            <div class="flex justify-between text-slate-300 font-mono mb-1"><span>ΔX 편차</span><span id="val-dx" class="text-cyan-400 font-bold">+0.12mm</span></div>
+                            <input type="range" id="slider-dx" min="-2" max="2" step="0.05" value="0.12" class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-slate-300 font-mono mb-1"><span>ΔY 편차</span><span id="val-dy" class="text-cyan-400 font-bold">-0.08mm</span></div>
+                            <input type="range" id="slider-dy" min="-2" max="2" step="0.05" value="-0.08" class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-slate-300 font-mono mb-1"><span>ΔZ 편차 · Depth</span><span id="val-dz" class="text-cyan-400 font-bold">+0.18mm</span></div>
+                            <input type="range" id="slider-dz" min="-3" max="3" step="0.05" value="0.18" class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-slate-300 font-mono mb-1"><span>회전각 θ 편차</span><span id="val-dt" class="text-cyan-400 font-bold">+0.25°</span></div>
+                            <input type="range" id="slider-dt" min="-3" max="3" step="0.05" value="0.25" class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-3 mt-6">
+                        <button id="btn-random" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-dice text-cyan-400"></i><span>랜덤 편차</span>
+                        </button>
+                        <button id="btn-calibrate" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i><span>AI 자동보정</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-800 text-xs font-mono space-y-2">
+                    <div class="flex justify-between text-slate-400"><span>연산 지연</span><span id="res-latency" class="text-slate-200 font-bold">142ms</span></div>
+                    <div class="flex justify-between text-slate-400 gap-4"><span>타겟 절대좌표</span><span id="res-target-coordinate" class="text-cyan-300 font-bold text-right">X 650.12 / Y 249.92 / Z 420.18 mm</span></div>
+                    <div class="flex justify-between text-slate-400 gap-4"><span>Base → Target 거리</span><span id="res-distance" class="text-cyan-300 font-bold text-right">813.43mm</span></div>
+                    <div class="flex justify-between text-slate-400 gap-4"><span>보정 오프셋</span><span id="res-offset" class="text-cyan-300 font-bold text-right">ΔX -0.12 / ΔY +0.08 / ΔZ -0.18 / Δθ -0.25°</span></div>
+                    <div class="flex justify-between text-slate-400"><span>3D 위치 오차</span><span id="res-residual" class="text-emerald-400 font-bold">0.23mm · PASS</span></div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 glass-panel p-6 rounded-2xl flex flex-col justify-between">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
+                    <h4 class="text-sm font-bold text-slate-200">Robot Base O → Target T · 3D 좌표계</h4>
+                    <span class="text-xs text-slate-400 font-mono">위치 허용오차 ±0.30mm · 각도 허용오차 ±1.0°</span>
+                </div>
+                <div class="relative w-full h-72 md:h-96 flex items-center justify-center bg-slate-950/60 rounded-xl border border-slate-800 overflow-hidden">
+                    <canvas id="calibrationCanvas" class="w-full h-full"></canvas>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4 text-[10px] font-mono text-slate-400">
+                    <div class="p-2 rounded bg-slate-950/50 border border-slate-800">X: 전후/작업방향</div>
+                    <div class="p-2 rounded bg-slate-950/50 border border-slate-800">Y: 좌우방향</div>
+                    <div class="p-2 rounded bg-slate-950/50 border border-slate-800">Z: 높이/Depth</div>
+                    <div class="p-2 rounded bg-slate-950/50 border border-slate-800">θ: Tool 회전편차</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI Section -->
+    
+
+<section id="roi" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-800/80 report-visual-upgraded">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-xs font-mono text-emerald-400 tracking-widest uppercase mb-2">Return on Investment</h2>
+        <h3 class="text-4xl md:text-5xl font-bold text-white">⑥ ROI · 유지보수비 가변 입력형 투자 경제성</h3>
+        <div class="section-guide mt-4 text-left max-w-2xl mx-auto">
+            <span><i class="fa-solid fa-circle-dot"></i><span>초기 투자비와 연간 절감효과는 고정값입니다.</span></span>
+            <span><i class="fa-solid fa-circle-dot"></i><span>유지보수비는 사용자가 직접 입력할 수 있는 변동비입니다.</span></span>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
+        <div class="glass-panel p-5 rounded-2xl border border-emerald-500/25 metric-kpi"><span class="text-[11px] font-mono text-emerald-300 uppercase">Fixed CAPEX</span><div class="text-3xl font-black text-white font-mono mt-3">2,300<span class="text-sm text-emerald-300 ml-1">만원</span></div><p class="text-slate-400 mt-2">초기 투자비는 고정값입니다.</p></div>
+        <div class="glass-panel p-5 rounded-2xl border border-emerald-500/25 metric-kpi"><span class="text-[11px] font-mono text-emerald-300 uppercase">Fixed Saving</span><div class="text-3xl font-black text-white font-mono mt-3">4,000<span class="text-sm text-emerald-300 ml-1">만원/년</span></div><p class="text-slate-400 mt-2">연간 절감효과는 고정값입니다.</p></div>
+        <div class="glass-panel p-5 rounded-2xl border border-amber-500/25 metric-kpi"><span class="text-[11px] font-mono text-amber-300 uppercase">Variable Cost</span><div class="text-lg font-bold text-white mt-3 mb-3">유지보수 비용 입력</div><input id="maintenance-input" type="number" min="0" step="10" value="360" class="maint-input"><p class="text-slate-400 mt-2">단위: 만원/년</p></div>
+        <div class="glass-panel p-5 rounded-2xl border border-cyan-500/25 metric-kpi"><span class="text-[11px] font-mono text-cyan-300 uppercase">Updated Payback</span><div id="payback-display" class="text-3xl font-black text-white font-mono mt-3">0.63<span class="text-sm text-cyan-300 ml-1">년</span></div><p id="bep-display" class="text-slate-400 mt-2">손익분기점 약 7.6개월</p></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+        <div class="lg:col-span-4 glass-panel p-6 rounded-2xl border border-emerald-500/20"><div class="mb-4"><span class="text-[11px] font-mono text-emerald-400 uppercase">Fixed Cost</span><h4 class="text-xl font-bold text-white mt-1">초기 투자비 구성</h4></div><div class="space-y-3 text-sm"><div class="calc-line"><span>카메라·조명</span><strong class="text-emerald-300">500만원</strong></div><div class="calc-line"><span>산업용 PC</span><strong class="text-emerald-300">300만원</strong></div><div class="calc-line"><span>로봇 통신·제어장치</span><strong class="text-emerald-300">300만원</strong></div><div class="calc-line"><span>SW 개발비</span><strong class="text-emerald-300">1,200만원</strong></div></div></div>
+        <div class="lg:col-span-4 glass-panel p-6 rounded-2xl border border-emerald-500/20"><div class="mb-4"><span class="text-[11px] font-mono text-emerald-400 uppercase">Fixed Saving</span><h4 class="text-xl font-bold text-white mt-1">연간 절감효과 구성</h4></div><div class="space-y-3 text-sm"><div class="calc-line"><span>수동 재티칭 절감</span><strong class="text-emerald-300">1,200만원/년</strong></div><div class="calc-line"><span>위치 불량·재작업 감소</span><strong class="text-emerald-300">2,000만원/년</strong></div><div class="calc-line"><span>생산중단시간 감소</span><strong class="text-emerald-300">800만원/년</strong></div><div class="calc-line"><span>총 연간 절감효과</span><strong class="text-emerald-300">4,000만원/년</strong></div></div></div>
+        <div class="lg:col-span-4 glass-panel p-6 rounded-2xl border border-cyan-500/25 bg-gradient-to-b from-cyan-950/10 to-transparent"><div class="mb-4"><span class="text-[11px] font-mono text-cyan-400 uppercase">Auto Calculation</span><h4 class="text-xl font-bold text-white mt-1">입력값 반영 결과</h4></div><div class="space-y-3 text-sm"><div class="calc-line"><span>유지보수 비용</span><strong id="calc-maintenance" class="text-amber-300">360만원/년</strong></div><div class="calc-line"><span>순 연간효과</span><strong id="calc-net-saving" class="text-cyan-300">3,640만원/년</strong></div><div class="calc-line"><span>1년차 순 ROI</span><strong id="calc-roi" class="text-cyan-300">58.3%</strong></div><div class="calc-line"><span>손익분기점</span><strong id="calc-bep-month" class="text-cyan-300">7.6개월</strong></div></div></div>
+    </div>
+    <div class="glass-panel p-6 rounded-2xl border border-emerald-500/25">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-4"><div><span class="text-[11px] font-mono text-emerald-400 uppercase">Investment Recovery Curve</span><h4 class="text-xl font-bold text-white mt-1">초기 투자비 대비 회수기간 그래프</h4><p class="payback-note mt-2">X축은 월(Month)입니다. Y축은 누적 순효과(만원)입니다. 유지보수 비용 입력값에 따라 그래프와 손익분기점이 즉시 바뀝니다.</p></div><div class="flex flex-wrap gap-2 text-[12px]"><span class="data-chip">고정비: 초기 투자비 2,300만원</span><span class="data-chip">고정효과: 연간 절감 4,000만원</span></div></div>
+        <div class="rounded-2xl bg-slate-950/55 border border-slate-800 p-4" style="height:360px;"><canvas id="paybackChart"></canvas></div>
+    </div>
+</section>
+
+
+
+    <!-- Contact -->
+    <section id="contact"
+        class="py-16 px-6 max-w-7xl mx-auto border-t border-slate-800/80">
+
+        <div
+            class="glass-panel p-8 rounded-2xl text-center bg-gradient-to-r from-cyan-950/30 via-indigo-950/30 to-purple-950/30">
+
+            <h3 class="text-2xl font-bold text-white mb-3">
+                선박 의장·용접 Physical AI 시스템
+            </h3>
+
+            <p class="text-sm text-slate-400 mb-6">
+                작업부 검출부터 3D 좌표 자동보정까지 하나의 로봇 비전 시스템으로 연결합니다.
+            </p>
+
+            <a href="mailto:contact@example.com"
+                class="inline-flex items-center px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white text-sm font-bold transition-all">
+
+                <i class="fa-solid fa-envelope mr-2"></i>
+                프로젝트 문의
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-xs text-slate-500 border-t border-slate-900">
+        <p>
+            © 2026 Physical AI Robotics Inc. All rights reserved.
+        </p>
+    </footer>
+
+    </main>
+
+    
+
+<script>
+    const canvas = document.getElementById('calibrationCanvas');
+    const ctx = canvas.getContext('2d');
+    const sliderDx = document.getElementById('slider-dx');
+    const sliderDy = document.getElementById('slider-dy');
+    const sliderDz = document.getElementById('slider-dz');
+    const sliderDt = document.getElementById('slider-dt');
+    const valueDx = document.getElementById('val-dx');
+    const valueDy = document.getElementById('val-dy');
+    const valueDz = document.getElementById('val-dz');
+    const valueDt = document.getElementById('val-dt');
+    const resultLatency = document.getElementById('res-latency');
+    const resultTargetCoordinate = document.getElementById('res-target-coordinate');
+    const resultDistance = document.getElementById('res-distance');
+    const resultOffset = document.getElementById('res-offset');
+    const resultResidual = document.getElementById('res-residual');
+    const statusBadge = document.getElementById('status-badge');
+    const randomButton = document.getElementById('btn-random');
+    const calibrateButton = document.getElementById('btn-calibrate');
+    const targetNominal = { x: 650, y: 250, z: 420 };
+    let dx = Number(sliderDx.value), dy = Number(sliderDy.value), dz = Number(sliderDz.value), dt = Number(sliderDt.value);
+    function formatSigned(value, unit = '') { const n = Number(value); return `${n >= 0 ? '+' : ''}${n.toFixed(2)}${unit}`; }
+    function targetActual() { return { x: targetNominal.x + dx, y: targetNominal.y + dy, z: targetNominal.z + dz }; }
+    function euclideanDistance(point) { return Math.sqrt(point.x**2 + point.y**2 + point.z**2); }
+    function resizeCanvas() { const rect = canvas.getBoundingClientRect(); const r = window.devicePixelRatio || 1; canvas.width = rect.width * r; canvas.height = rect.height * r; ctx.setTransform(r,0,0,r,0,0); drawCalibration3D(); }
+    function drawPoint(point, radius, color) { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(point.x, point.y, radius, 0, Math.PI * 2); ctx.fill(); }
+    function drawCalibration3D() {
+        const width = canvas.clientWidth, height = canvas.clientHeight;
+        ctx.clearRect(0,0,width,height); ctx.fillStyle='rgba(2,6,23,0.96)'; ctx.fillRect(0,0,width,height);
+        const origin={x:width*0.22,y:height*0.78}; const actual=targetActual(); const maxX=820,maxY=520,maxZ=620; const scale=Math.min(width/980,height/690);
+        function project3D(x,y,z){ return {x:origin.x+(x*0.72-y*0.42)*scale, y:origin.y+(x*0.06+y*0.28-z*0.72)*scale}; }
+        function drawAxis(end,label,color){ ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(origin.x,origin.y); ctx.lineTo(end.x,end.y); ctx.stroke(); ctx.fillStyle=color; ctx.font='bold 12px monospace'; ctx.fillText(label,end.x+7,end.y-5); }
+        ctx.strokeStyle='rgba(71,85,105,0.20)'; ctx.lineWidth=1;
+        for(let x=0;x<=maxX;x+=100){ const p1=project3D(x,0,0), p2=project3D(x,maxY,0); ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
+        for(let y=0;y<=maxY;y+=100){ const p1=project3D(0,y,0), p2=project3D(maxX,y,0); ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
+        drawAxis(project3D(maxX,0,0),'X','rgba(34,211,238,0.95)'); drawAxis(project3D(0,maxY,0),'Y','rgba(52,211,153,0.95)'); drawAxis(project3D(0,0,maxZ),'Z','rgba(192,132,252,0.95)');
+        const nominal2D=project3D(targetNominal.x,targetNominal.y,targetNominal.z), actual2D=project3D(actual.x,actual.y,actual.z);
+        ctx.strokeStyle='rgba(99,239,201,0.70)'; ctx.lineWidth=2.5; ctx.setLineDash([7,5]); ctx.beginPath(); ctx.moveTo(origin.x,origin.y); ctx.lineTo(actual2D.x,actual2D.y); ctx.stroke(); ctx.setLineDash([]);
+        drawPoint(nominal2D,6,'rgba(52,211,153,1)'); ctx.strokeStyle='rgba(52,211,153,0.8)'; ctx.lineWidth=2; ctx.strokeRect(nominal2D.x-10,nominal2D.y-10,20,20); drawPoint(actual2D,6,'rgba(129,140,248,1)');
+        ctx.strokeStyle='rgba(129,140,248,0.95)'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(nominal2D.x,nominal2D.y); ctx.lineTo(actual2D.x,actual2D.y); ctx.stroke();
+        const theta=dt*Math.PI/180, toolLength=38, thetaVisual=theta*12; ctx.save(); ctx.translate(actual2D.x,actual2D.y); ctx.rotate(thetaVisual); ctx.strokeStyle='rgba(251,191,36,0.95)'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(-toolLength/2,0); ctx.lineTo(toolLength/2,0); ctx.stroke(); ctx.restore();
+        ctx.fillStyle='rgba(226,232,240,0.95)'; ctx.font='11px monospace'; ctx.fillText('O Robot Base (0,0,0)',origin.x+8,origin.y+18); ctx.fillStyle='rgba(52,211,153,1)'; ctx.fillText('T₀ Nominal',nominal2D.x+10,nominal2D.y-12); ctx.fillStyle='rgba(129,140,248,1)'; ctx.fillText('T Detected',actual2D.x+10,actual2D.y+18); ctx.fillStyle='rgba(251,191,36,1)'; ctx.fillText(`θ ${formatSigned(dt,'°')}`,actual2D.x+10,actual2D.y-22);
+        const d=euclideanDistance(actual); ctx.fillStyle='rgba(103,232,249,1)'; ctx.font='bold 11px monospace'; ctx.fillText(`d = √(X²+Y²+Z²) = ${d.toFixed(2)} mm`,width*0.52,height*0.91);
+    }
+    function updateValues(){ dx=Number(sliderDx.value); dy=Number(sliderDy.value); dz=Number(sliderDz.value); dt=Number(sliderDt.value); const actual=targetActual(); const distance=euclideanDistance(actual); const positionError=Math.sqrt(dx*dx+dy*dy+dz*dz); const anglePass=Math.abs(dt)<=1.0; const positionPass=positionError<=0.30; valueDx.textContent=formatSigned(dx,'mm'); valueDy.textContent=formatSigned(dy,'mm'); valueDz.textContent=formatSigned(dz,'mm'); valueDt.textContent=formatSigned(dt,'°'); resultTargetCoordinate.textContent=`X ${actual.x.toFixed(2)} / Y ${actual.y.toFixed(2)} / Z ${actual.z.toFixed(2)} mm`; resultDistance.textContent=`${distance.toFixed(2)}mm`; resultOffset.textContent=`ΔX ${formatSigned(-dx)} / ΔY ${formatSigned(-dy)} / ΔZ ${formatSigned(-dz)} / Δθ ${formatSigned(-dt,'°')}`; if(positionPass&&anglePass){ statusBadge.textContent='정상 가동'; statusBadge.className='px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'; resultResidual.textContent=`${positionError.toFixed(2)}mm · PASS`; resultResidual.className='text-emerald-400 font-bold'; } else { statusBadge.textContent='보정 필요'; statusBadge.className='px-2.5 py-1 rounded-full text-[11px] font-mono bg-amber-500/20 text-amber-400 border border-amber-500/30'; resultResidual.textContent=`${positionError.toFixed(2)}mm · ${anglePass ? 'POSITION OFFSET' : 'ANGLE OFFSET'}`; resultResidual.className='text-amber-400 font-bold'; } drawCalibration3D(); }
+    sliderDx.addEventListener('input', updateValues); sliderDy.addEventListener('input', updateValues); sliderDz.addEventListener('input', updateValues); sliderDt.addEventListener('input', updateValues);
+    randomButton.addEventListener('click',()=>{ sliderDx.value=(Math.random()*4-2).toFixed(2); sliderDy.value=(Math.random()*4-2).toFixed(2); sliderDz.value=(Math.random()*6-3).toFixed(2); sliderDt.value=(Math.random()*6-3).toFixed(2); resultLatency.textContent=`${Math.floor(Math.random()*100)+120}ms`; updateValues(); });
+    calibrateButton.addEventListener('click',()=>{ const originalText=calibrateButton.innerHTML; calibrateButton.disabled=true; calibrateButton.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i><span>보정 중</span>'; statusBadge.textContent='AI 보정 중'; statusBadge.className='px-2.5 py-1 rounded-full text-[11px] font-mono bg-indigo-500/20 text-indigo-400 border border-indigo-500/30'; setTimeout(()=>{ sliderDx.value='0.02'; sliderDy.value='-0.01'; sliderDz.value='0.02'; sliderDt.value='0.05'; resultLatency.textContent=`${Math.floor(Math.random()*80)+120}ms`; updateValues(); calibrateButton.disabled=false; calibrateButton.innerHTML=originalText; },700); });
+    window.addEventListener('resize', resizeCanvas); resizeCanvas(); updateValues();
+
+    const mesData={
+        progress:{title:'선박·의장작업 생산진도',steps:[{label:'선박 선택',options:['LNG-2410','LNG-2411']},{label:'의장작업 선택',options:['체결','용접','좌표보정']},{label:'대상 항목 선택',options:['M16 브래킷 볼트','파이프 서포트','케이블 트레이']}],result(values){const map={'M16 브래킷 볼트':82,'파이프 서포트':64,'케이블 트레이':91}; const pct=map[values[2]]||78; return {badge:'MES PROGRESS',heading:`${values[0]} · ${values[1]} · ${values[2]}`,details:[`블록: 기관실 Zone A`,`계획 대비 진도: ${pct}%`,`미완료 수량: ${Math.max(2,10-Math.floor(pct/12))}건`,`협동로봇 상태: R1 가동 / R2 비가동`]};}},
+        defect:{title:'작업 이상·불량 이미지 사례',steps:[{label:'불량 항목 선택',options:['체결불량','용접불량','케이블 접속불량']},{label:'대표 사례 선택',options:['와셔 누락','비드 불연속','단자 체결미흡']},{label:'조치 이력 선택',options:['재작업 실시','토크 재검증','작업표준 수정']}],result(values){return {badge:'VISION CASE',heading:`${values[0]} · ${values[1]}`,details:[`유사 사례 수: 14건`,`주요 원인: 작업자 접근성 저하 / 시야 가림`,`추천 조치: ${values[2]}`,`이미지 검색 결과: 유사도 0.91`]};}},
+        alarm:{title:'PLC·HMI 인터록/알람 이력',steps:[{label:'설비 선택',options:['협동로봇 R1','토크 툴','용접 전원장치']},{label:'Alarm Code 선택',options:['E-STOP','TORQUE_LOW','ARC_FAULT']},{label:'상세 이력 선택',options:['발생시각 확인','조치이력 확인','재발빈도 확인']}],result(values){return {badge:'ALARM LOG',heading:`${values[0]} · ${values[1]}`,details:[`최근 발생: 2026-08-08 10:41`,`상태: 수동 Reset 후 정상`,`관련 인터록: 작업자 접근 안전문`,`상세조회: ${values[2]}`]};}},
+        document:{title:'협동로봇 점검·교체 표준서 / CAD / 안전기준',steps:[{label:'로봇 종류 선택',options:['UR10e','Doosan M0609','Hanwha HCR-5']},{label:'문서 종류 선택',options:['점검 표준서','내부 구조도 CAD','로봇 안전기준']},{label:'세부 문서 선택',options:['일일 점검표','감속기 모듈도','협동운전 안전거리']}],result(values){return {badge:'ROBOT DOCS',heading:`${values[0]} · ${values[1]}`,details:[`선택 문서: ${values[2]}`,`Rev.: 2026.07`,`권한 등급: 생산관리 / 설비기술 열람 가능`,`연결 문서: 점검표, 부품리스트, 안전기준 동시 조회`]};}}
+    };
+    const mesDetailPanel=document.getElementById('mes-detail-panel'); const mesButtons=[...document.querySelectorAll('.mes-domain-button')]; const mesSearchInput=document.getElementById('mes-search-input'); const mesSearchButton=document.getElementById('mes-search-button'); const mesSearchStatus=document.getElementById('mes-search-status'); let activeMesValues={};
+    function renderMesDetail(domainKey){ mesButtons.forEach(btn=>btn.classList.toggle('active', btn.dataset.domain===domainKey)); const domain=mesData[domainKey]; const defaults=domain.steps.map(step=>(activeMesValues[domainKey]?.[step.label]||step.options[0])); const summary=domain.result(defaults); mesDetailPanel.innerHTML=`<div class="flex items-center justify-between gap-3 mb-4"><div><span class="text-[11px] font-mono text-emerald-400 uppercase">${summary.badge}</span><h5 class="text-lg font-bold text-white mt-1">${domain.title}</h5></div><span class="mini-badge"><i class="fa-solid fa-sitemap"></i>Drill-down</span></div><div class="grid grid-cols-1 gap-3 mb-4">${domain.steps.map((step,index)=>`<div><label class="block text-[12px] text-slate-400 mb-1">${index+1}. ${step.label}</label><select class="mes-step-select" data-domain="${domainKey}" data-step="${step.label}">${step.options.map(option=>`<option value="${option}" ${defaults[index]===option?'selected':''}>${option}</option>`).join('')}</select></div>`).join('')}</div><div class="p-4 rounded-xl bg-slate-950/55 border border-slate-800"><div class="text-sm font-bold text-white mb-2">상세 조회 결과</div><div class="text-cyan-300 font-semibold mb-3">${summary.heading}</div><div class="grid gap-2 text-sm text-slate-300">${summary.details.map(line=>`<div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800">${line}</div>`).join('')}</div></div>`; mesDetailPanel.querySelectorAll('.mes-step-select').forEach(select=>{ select.addEventListener('change',()=>{ const key=select.dataset.domain; activeMesValues[key]=activeMesValues[key]||{}; activeMesValues[key][select.dataset.step]=select.value; renderMesDetail(key); });}); }
+    function pickMesDomainByQuery(query){ const q=String(query||'').toLowerCase(); if(!q) return 'progress'; if(/(불량|이미지|와셔|비드|케이블)/.test(q)) return 'defect'; if(/(알람|interlock|인터록|e-stop|torque|fault)/.test(q)) return 'alarm'; if(/(점검|cad|도면|안전|문서|robot|ur)/.test(q)) return 'document'; return 'progress'; }
+    function runMesSearch(){ const query=mesSearchInput?.value?.trim()||''; const domainKey=pickMesDomainByQuery(query); renderMesDetail(domainKey); if(mesSearchStatus){ mesSearchStatus.textContent=query?`“${query}” 검색 결과입니다. 관련 대표영역이 선택되었고 아래 단계에서 세부항목을 계속 좁혀갈 수 있습니다.`:'검색어를 입력하면 관련 대표영역과 세부 단계가 자동으로 연결됩니다.'; } }
+    mesButtons.forEach(button=>button.addEventListener('click',()=>{ renderMesDetail(button.dataset.domain); if(mesSearchStatus) mesSearchStatus.textContent=`${button.querySelector('strong').textContent} 항목을 선택했습니다. 단계별 상세항목을 계속 좁혀 확인하세요.`; })); mesSearchButton?.addEventListener('click',runMesSearch); mesSearchInput?.addEventListener('keydown',(event)=>{ if(event.key==='Enter') runMesSearch(); }); renderMesDetail('progress');
+
+    const FIXED_CAPEX=2300; const FIXED_SAVING=4000; const maintenanceInput=document.getElementById('maintenance-input'); const calcMaintenance=document.getElementById('calc-maintenance'); const calcNetSaving=document.getElementById('calc-net-saving'); const calcRoi=document.getElementById('calc-roi'); const calcBepMonth=document.getElementById('calc-bep-month'); const paybackDisplay=document.getElementById('payback-display'); const bepDisplay=document.getElementById('bep-display');
+    function formatMoney(v){ return `${Number(v).toLocaleString('ko-KR')}만원`; }
+    function drawPaybackCanvas(maintenance){
+        const c=document.getElementById('paybackChart'); if(!c) return;
+        const box=c.parentElement.getBoundingClientRect(); const dpr=window.devicePixelRatio||1; const W=Math.max(640,box.width-32), H=320; c.width=W*dpr; c.height=H*dpr; c.style.width='100%'; c.style.height=H+'px'; const g=c.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,W,H);
+        const ml=72,mr=28,mt=32,mb=52,pw=W-ml-mr,ph=H-mt-mb; const net=FIXED_SAVING-maintenance; const monthly=net/12; const vals=Array.from({length:13},(_,m)=>-FIXED_CAPEX+monthly*m); const minY=Math.min(-2500,Math.min(...vals)-200), maxY=Math.max(1600,Math.max(...vals)+200); const xPix=m=>ml+(m/12)*pw; const yPix=v=>mt+(maxY-v)/(maxY-minY)*ph;
+        g.fillStyle='#071019'; g.fillRect(0,0,W,H);
+        g.strokeStyle='rgba(148,163,184,.13)'; g.lineWidth=1; g.font='11px monospace'; g.fillStyle='#8fa09a';
+        for(let m=0;m<=12;m+=2){ const x=xPix(m); g.beginPath(); g.moveTo(x,mt); g.lineTo(x,mt+ph); g.stroke(); g.fillText(m+'M',x-8,H-24); }
+        const steps=5; for(let i=0;i<=steps;i++){ const v=minY+(maxY-minY)*i/steps; const y=yPix(v); g.beginPath(); g.moveTo(ml,y); g.lineTo(ml+pw,y); g.stroke(); g.fillText(Math.round(v).toLocaleString(),8,y+4); }
+        const zeroY=yPix(0); g.strokeStyle='rgba(226,232,240,.45)'; g.lineWidth=1.4; g.beginPath(); g.moveTo(ml,zeroY); g.lineTo(ml+pw,zeroY); g.stroke();
+        g.strokeStyle='rgba(24,230,173,.95)'; g.lineWidth=3; g.beginPath(); vals.forEach((v,m)=>{const x=xPix(m),y=yPix(v); if(m===0)g.moveTo(x,y);else g.lineTo(x,y);}); g.stroke();
+        vals.forEach((v,m)=>{const x=xPix(m),y=yPix(v); g.fillStyle='#18e6ad'; g.beginPath(); g.arc(x,y,3,0,Math.PI*2); g.fill();});
+        if(net>0){ const bep=FIXED_CAPEX/monthly; if(bep<=12){ const x=xPix(bep); g.setLineDash([7,5]); g.strokeStyle='#facc15'; g.lineWidth=2; g.beginPath(); g.moveTo(x,mt); g.lineTo(x,mt+ph); g.stroke(); g.setLineDash([]); g.fillStyle='#facc15'; g.font='bold 12px monospace'; g.fillText(`BEP ${bep.toFixed(1)}개월`,Math.min(x+8,W-118),mt+16); }}
+        g.fillStyle='#aebbc2'; g.font='bold 12px sans-serif'; g.fillText('누적 순효과(만원)',8,18); g.fillText('월(Month)',W/2-28,H-6);
+    }
+    function updateRoi(){ const maintenance=Math.max(0,Number(maintenanceInput?.value||0)); const net=FIXED_SAVING-maintenance; const roi=((net-FIXED_CAPEX)/FIXED_CAPEX)*100; const paybackYears=net>0?FIXED_CAPEX/net:Infinity; const paybackMonths=net>0?paybackYears*12:Infinity; calcMaintenance.textContent=`${formatMoney(maintenance)}/년`; calcNetSaving.textContent=`${formatMoney(net)}/년`; calcRoi.textContent=Number.isFinite(roi)?`${roi.toFixed(1)}%`:'계산불가'; calcBepMonth.textContent=Number.isFinite(paybackMonths)?`${paybackMonths.toFixed(1)}개월`:'도달 불가'; paybackDisplay.innerHTML=Number.isFinite(paybackYears)?`${paybackYears.toFixed(2)}<span class="text-sm text-cyan-300 ml-1">년</span>`:'<span class="text-lg text-amber-300">회수 불가</span>'; bepDisplay.textContent=Number.isFinite(paybackMonths)?`손익분기점 약 ${paybackMonths.toFixed(1)}개월`:'손익분기점 도달 불가'; drawPaybackCanvas(maintenance); }
+    maintenanceInput?.addEventListener('input',updateRoi); window.addEventListener('resize',()=>updateRoi()); updateRoi();
+
+    const dashboardSidebar=document.getElementById('dashboard-sidebar'); const mobileSidebarButton=document.getElementById('mobile-sidebar-button'); const dashboardLinks=document.querySelectorAll('.dashboard-nav a'); if(mobileSidebarButton && dashboardSidebar){ mobileSidebarButton.addEventListener('click',()=>dashboardSidebar.classList.toggle('open')); } dashboardLinks.forEach(link=>{ link.addEventListener('click',()=>{ dashboardLinks.forEach(item=>item.classList.remove('active')); link.classList.add('active'); dashboardSidebar?.classList.remove('open'); });}); const dashboardSections=[...dashboardLinks].map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean); const sectionObserver=new IntersectionObserver((entries)=>{ entries.forEach((entry)=>{ if(!entry.isIntersecting) return; const targetLink=document.querySelector(`.dashboard-nav a[href="#${entry.target.id}"]`); if(targetLink){ dashboardLinks.forEach((item)=>item.classList.remove('active')); targetLink.classList.add('active'); } }); }, {rootMargin:'-30% 0px -60% 0px', threshold:0.01}); dashboardSections.forEach((section)=>sectionObserver.observe(section));
+</script>
+
+
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reportSections = document.querySelectorAll(
+                '#overview, #problem, #safety, #process, #technology-stack, #pipeline, #yolo-training, #model-validation, #embedding-rag, #simulator, #roi'
+            );
+
+            reportSections.forEach(section => {
+                section.querySelectorAll('p').forEach(p => {
+                    const plainText = p.textContent.replace(/\s+/g, ' ').trim();
+                    const isLongCopy = plainText.length >= 58;
+                    const isCardDescription = p.closest('.glass-panel, .glass-card');
+
+                    if (isLongCopy && isCardDescription && !p.closest('pre, code')) {
+                        p.classList.add('gradient-copy');
+                    }
+                });
+
+                section.querySelectorAll('li').forEach(li => {
+                    const plainText = li.textContent.replace(/\s+/g, ' ').trim();
+                    if (plainText.length >= 34 && !li.closest('pre, code')) {
+                        li.classList.add('gradient-copy');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+<script id="hw-architecture-script">
+(function(){
+ const details={
+  mcu:{title:'MCU · ESP32-S3-WROOM-1',sub:'Real-Time Sensor & Motion Control',power:'3.0–3.6 VDC · 3.3 V Rail / 공급능력 ≥500 mA 권장',iface:'SPI · RS-485(UART) · Digital I/O · UART(SBC)',reason:'GPIO Matrix로 SPI/UART 신호를 유연하게 배치하고 센서 Feedback·Interlock 등 빠른 제어를 담당합니다.',url:'https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf',draw:['AS5047P','SPI','ESP32-S3','UART','Jetson SBC']},
+  sbc:{title:'SBC · NVIDIA Jetson Orin Nano',sub:'AI / Vision / High-Level Computing',power:'7–25 W급 Power Mode · Carrier Board 전원 사용',iface:'D455 USB 3.x 입력 · ESP32-S3와 UART',reason:'RGB-D 영상과 YOLO26n 추론, Depth→XYZ 및 Target Pose 계산처럼 MCU보다 큰 연산량을 담당합니다.',url:'https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/nano-super-developer-kit/',draw:['RealSense D455','USB 3.x','Jetson Orin','UART','ESP32-S3']},
+  vision:{title:'AI Vision · RealSense D455',sub:'Eye-in-Hand RGB-D Camera',power:'USB 5 VDC · 약 0.7 A급 동작 조건',iface:'USB Type-C → Jetson SBC USB 3.x',reason:'RGB·Depth 프레임은 데이터량이 크므로 ESP32를 거치지 않고 SBC로 직접 수집하여 AI 추론과 3D 좌표 계산에 사용합니다.',url:'https://realsenseai.com/wp-content/uploads/2025/09/Intel-RealSense-D400-Series-Datasheet-October-2025.pdf',draw:['D455 RGB-D','USB Type-C','Jetson SBC','YOLO26n','XYZ / θ']},
+  encoder:{title:'Joint Encoder · AS5047P',sub:'14-bit Absolute Rotary Position Sensor',power:'3.3 V / 5 V · 약 15 mA급',iface:'CSn→GPIO10 · CLK→GPIO12 · MISO→GPIO13 · MOSI→GPIO11 / SPI',reason:'데이터시트가 CSn·CLK·MISO·MOSI의 4-wire SPI 인터페이스를 제공하며 Joint 절대각의 반복 고속 취득에 적합합니다.',url:'https://look.ams-osram.com/m/d05ee39221f9857/original/AS5047P-DS000324.pdf',draw:['AS5047P','CSn / CLK / MISO / MOSI','ESP32-S3','GPIO10/12/13/11','Position FB']},
+  ft:{title:'6축 F/T Sensor · ATI Mini45 Digital F/T',sub:'Force / Torque Feedback',power:'12–18 VDC · 약 3 W → 0.17–0.25 A',iface:'RS485+ / RS485− → RS-485 Transceiver → GPIO17/18/16',reason:'ATI Digital F/T는 고속 RS-485 인터페이스를 사용합니다. ESP32 UART와 센서 사이에는 차동 신호 변환용 RS-485 Transceiver를 둡니다.',url:'https://www.ati-ia.com/app_content/documents/9610-05-1033.pdf',draw:['ATI Mini45','RS485+ / −','RS-485 Transceiver','UART','ESP32-S3']},
+  prox:{title:'근접센서 · OMRON E2EW PNP',sub:'Workpiece / Tool Presence Detection',power:'10–30 VDC · ≤30 mA @24 V',iface:'Brown +V · Blue 0V · Black OUT → Optocoupler → GPIO4 DI',reason:'산업용 PNP 출력은 24 V 계통이므로 3.3 V GPIO에 직접 연결하지 않고 절연 입력회로를 거쳐 Binary 상태로 취득합니다.',url:'https://www.ia.omron.com/products/family/3770/specification.html',draw:['E2EW PNP','Black OUT 24V','Optocoupler','3.3V DI','ESP32 GPIO4']},
+  tool:{title:'Tool 장착센서 · OMRON Proximity',sub:'End-effector Mount Confirmation',power:'10–30 VDC 계열',iface:'OUT → Optocoupler → GPIO6 DI',reason:'Tool 장착 여부는 ON/OFF Binary 상태만 필요하므로 Digital I/O가 가장 단순하고 즉각적인 인터페이스입니다.',url:'https://www.ia.omron.com/products/family/3770/specification.html',draw:['Tool Proximity','OUT 24V','Optocoupler','3.3V DI','ESP32 GPIO6']},
+  weld:{title:'Welding Touch · Fronius TPS/i',sub:'Wire / Nozzle Touch Sensing',power:'Welding Controller I/O 전원 계통',iface:'Touch Signal OUT → 절연 Digital Input → GPIO5 DI',reason:'TPS/i는 Wire 또는 Gas Nozzle이 Workpiece에 접촉하면 Single-bit Touch 신호를 Robot 측으로 출력하므로 Digital I/O로 취득합니다.',url:'https://manuals.fronius.com/html/4204260227/en-US.html',draw:['Fronius TPS/i','Touch Signal','Opto DI','ESP32 GPIO5','Contact Position']},
+  servo:{title:'Servo Motor · maxon EC-i 40 예시',sub:'Joint Actuator',power:'24 VDC · 1.49 A 연속 · 14.1 A Stall 예시',iface:'ESP32 PWM/Command → Servo Drive → 3상 Motor',reason:'MCU가 모터 전력단을 직접 구동하지 않고 Servo Drive에 제어명령을 전달하며 Encoder Feedback으로 위치·속도·토크 루프를 구성합니다.',url:'https://www.maxongroup.com/maxon/view/product/motor/ecmotor/EC-i/539473',draw:['ESP32-S3','PWM / Cmd','Servo Drive','U/V/W','EC-i Motor']},
+  light:{title:'Vision LED · CCS LDR2-100SW2-LA',sub:'Industrial Ring Light',power:'24 VDC · 12 W max. → 약 0.50 A',iface:'24 V Main Rail → LED Controller/Light',reason:'RGB-D 인식 시 저조도·금속반사 조건을 안정화하기 위해 카메라 주변에 24 V 산업용 조명을 배치합니다.',url:'https://www.ccs-grp.com/products/model/2457',draw:['24V MAIN','LED Controller','LDR2 Ring','Illumination','D455 FOV']},
+  pwr:{title:'PWR · MEAN WELL RSD-100B-24',sub:'Main 24 V DC/DC Rail',power:'16.8–31.2 VDC In · 24 V / 4.2 A Out · 100.8 W',iface:'Main DC → 24 V Rail → 12/5/3.3 V DC/DC Branch',reason:'산업용 24 V를 기준 Rail로 두고 Vision·MCU·Sensor에 필요한 저전압을 하위 DC/DC에서 분기하면 전원 구조가 단순해집니다.',url:'https://www.meanwell.com/Upload/PDF/RSD-100/RSD-100-spec.pdf',draw:['DC INPUT','RSD-100B-24','24V MAIN','DC/DC 5V·3.3V','AI + Sensor']}
+ };
+ function diagram(nodes){const W=760,H=280,x0=28,y=105,gap=(W-56)/(nodes.length-1);let boxes='',lines='';nodes.forEach((n,i)=>{const x=x0+i*gap;const bw=128,bh=58;boxes+=`<g><rect x="${x-bw/2}" y="${y}" width="${bw}" height="${bh}" rx="9" fill="#121f29" stroke="${i===0||i===nodes.length-1?'#18e6ad':'#40515d'}"/><text x="${x}" y="${y+25}" text-anchor="middle" fill="#e5efeb" font-size="12" font-family="monospace">${n.replace(/&/g,'&amp;')}</text><text x="${x}" y="${y+44}" text-anchor="middle" fill="#789087" font-size="9" font-family="monospace">${i===0?'SOURCE':i===nodes.length-1?'TARGET':'INTERFACE'}</text></g>`;if(i<nodes.length-1){const nx=x0+(i+1)*gap;lines+=`<line x1="${x+bw/2+5}" y1="${y+29}" x2="${nx-bw/2-10}" y2="${y+29}" stroke="#18e6ad" stroke-width="2"/><polygon points="${nx-bw/2-10},${y+29} ${nx-bw/2-20},${y+23} ${nx-bw/2-20},${y+35}" fill="#18e6ad"/>`;}});return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Hardware wiring diagram"><rect width="${W}" height="${H}" rx="12" fill="#071019"/><text x="28" y="38" fill="#63efc9" font-size="11" font-family="monospace" letter-spacing="2">PHYSICAL AI · CONNECTION DIAGRAM</text><text x="28" y="62" fill="#6f827a" font-size="10" font-family="monospace">Signal / Power flow · simplified wiring concept</text>${lines}${boxes}<line x1="30" y1="215" x2="730" y2="215" stroke="#25343e"/><text x="30" y="240" fill="#859790" font-size="10" font-family="monospace">※ ESP32 GPIO 번호는 본 프로젝트 Pin Allocation 예시이며 GPIO Matrix로 재배치 가능합니다.</text></svg>`}
+ const modal=document.getElementById('hw-detail-modal'); if(!modal)return;
+ const title=document.getElementById('hw-modal-title'),sub=document.getElementById('hw-modal-subtitle'),power=document.getElementById('hw-modal-power'),iface=document.getElementById('hw-modal-interface'),reason=document.getElementById('hw-modal-reason'),link=document.getElementById('hw-modal-link'),drawing=document.getElementById('hw-modal-drawing');
+ function openDetail(key){const d=details[key];if(!d)return;title.textContent=d.title;sub.textContent=d.sub;power.textContent=d.power;iface.textContent=d.iface;reason.textContent=d.reason;link.href=d.url;drawing.innerHTML=diagram(d.draw);modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'}
+ function closeDetail(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+ document.querySelectorAll('.hw-click-row').forEach(r=>{r.setAttribute('tabindex','0');r.setAttribute('role','button');r.addEventListener('click',()=>openDetail(r.dataset.hw));r.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDetail(r.dataset.hw)}})});
+ modal.querySelectorAll('[data-hw-close]').forEach(el=>el.addEventListener('click',closeDetail));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeDetail()});
+})();
+</script>
+
+</body>
+
+</html>
