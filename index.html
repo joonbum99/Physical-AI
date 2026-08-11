@@ -2711,10 +2711,13 @@
 
         <style>
             #physical-ai-dataflow{
-                width:100%;
-                max-width:100%;
+                width:100% !important;
+                max-width:100% !important;
+                min-width:0 !important;
                 box-sizing:border-box;
-                overflow:hidden;
+                overflow:hidden !important;
+                margin-left:0 !important;
+                margin-right:0 !important;
             }
             #physical-ai-dataflow *{
                 box-sizing:border-box;
@@ -2728,13 +2731,15 @@
             }
 
             #physical-ai-dataflow .df-shell{
-                width:100%;
-                max-width:100%;
+                width:100% !important;
+                max-width:100% !important;
+                min-width:0 !important;
                 background:linear-gradient(145deg,rgba(14,22,30,.98),rgba(10,16,23,.98));
                 border:1px solid rgba(24,230,173,.20);
                 border-radius:10px;
-                padding:clamp(10px,1.4vw,18px);
-                overflow:hidden;
+                padding:clamp(8px,1vw,14px);
+                overflow:hidden !important;
+                box-sizing:border-box;
             }
             #physical-ai-dataflow .df-toolbar{
                 display:flex;
@@ -2744,6 +2749,16 @@
                 margin-bottom:14px;
                 flex-wrap:wrap;
             }
+            #physical-ai-dataflow .df-stage{
+                width:100%;
+                max-width:100%;
+                min-width:0;
+                overflow:hidden;
+                display:flex;
+                justify-content:center;
+                align-items:flex-start;
+            }
+
             #physical-ai-dataflow .df-status{
                 display:inline-flex;
                 align-items:center;
@@ -2770,13 +2785,14 @@
                 width:8px;height:8px;border-radius:2px;display:inline-block;
             }
             #physical-ai-dataflow .df-svg{
-                display:block;
-                width:100%;
-                max-width:100%;
-                min-width:0;
-                height:auto;
-                margin:0 auto;
-                overflow:visible;
+                display:block !important;
+                width:100% !important;
+                max-width:100% !important;
+                min-width:0 !important;
+                height:auto !important;
+                aspect-ratio: 1840 / 860;
+                margin:0 auto !important;
+                overflow:hidden !important;
             }
             #physical-ai-dataflow .df-caption{
                 margin-top:14px;
@@ -2813,6 +2829,29 @@
                 }
             }
 
+
+            @media(max-width:1024px){
+                #physical-ai-dataflow{
+                    padding-left:14px !important;
+                    padding-right:14px !important;
+                }
+                #physical-ai-dataflow .df-shell{
+                    padding:8px !important;
+                }
+                #physical-ai-dataflow .df-toolbar{
+                    margin-bottom:8px;
+                }
+            }
+            @media(max-width:720px){
+                #physical-ai-dataflow{
+                    padding-left:8px !important;
+                    padding-right:8px !important;
+                }
+                #physical-ai-dataflow .df-svg{
+                    width:100% !important;
+                    height:auto !important;
+                }
+            }
             @media(max-width:900px){
                 #physical-ai-dataflow .df-caption{grid-template-columns:1fr 1fr;}
             }
@@ -2832,7 +2871,7 @@
                 </div>
             </div>
 
-            <svg class="df-svg" viewBox="0 0 1760 860" preserveAspectRatio="xMidYMid meet" role="img"
+            <div class="df-stage"><svg class="df-svg" viewBox="0 0 1840 860" preserveAspectRatio="xMidYMid meet" role="img"
                  aria-label="Physical AI 데이터 흐름도: RGB-D 입력, AI 검출, 좌표 보정, Safety 검증, 로봇 실행, MES 저장, 예외처리, 학습, RAG 검색">
 
                 <defs>
@@ -2936,12 +2975,12 @@
                     </g>
 
                     <!-- Step 6 -->
-                    <rect x="1250" y="84" width="190" height="182" rx="10"
+                    <rect x="1210" y="84" width="190" height="182" rx="10"
                           fill="#101b25" stroke="#22d3ee" stroke-width="1.7"/>
-                    <text x="1345" y="112" fill="#f0fdfa" font-size="15" font-weight="800" text-anchor="middle">6. 로봇 작업 실행</text>
-                    <text x="1345" y="141" fill="#8debd3" font-size="11" text-anchor="middle">6축 협동로봇 제어</text>
-                    <text x="1345" y="162" fill="#b7c5c0" font-size="10.5" text-anchor="middle">조립·체결 / 용접 / 케이블 접속</text>
-                    <g transform="translate(1317,196) scale(.86)" fill="none" stroke="#22d3ee" stroke-width="4">
+                    <text x="1305" y="112" fill="#f0fdfa" font-size="15" font-weight="800" text-anchor="middle">6. 로봇 작업 실행</text>
+                    <text x="1305" y="141" fill="#8debd3" font-size="11" text-anchor="middle">6축 협동로봇 제어</text>
+                    <text x="1305" y="162" fill="#b7c5c0" font-size="10.5" text-anchor="middle">조립·체결 / 용접 / 케이블 접속</text>
+                    <g transform="translate(1277,196) scale(.86)" fill="none" stroke="#22d3ee" stroke-width="4">
                         <rect x="3" y="49" width="65" height="10" rx="2"/>
                         <path d="M18 49v-21l18-12 16 15 13-12"/>
                         <circle cx="18" cy="28" r="7"/><circle cx="36" cy="16" r="7"/><circle cx="52" cy="31" r="7"/>
@@ -2949,14 +2988,14 @@
                     </g>
 
                     <!-- Step 7 -->
-                    <rect x="1455" y="84" width="145" height="182" rx="12"
+                    <rect x="1415" y="84" width="145" height="182" rx="12"
                           fill="#10201c" stroke="#18e6ad" stroke-width="2"/>
-                    <ellipse cx="1527.5" cy="103" rx="72.5" ry="19"
+                    <ellipse cx="1487.5" cy="103" rx="72.5" ry="19"
                              fill="#10201c" stroke="#18e6ad" stroke-width="2"/>
-                    <text x="1527.5" y="139" fill="#eafff8" font-size="14" font-weight="800" text-anchor="middle">7. MES / 로그</text>
-                    <text x="1527.5" y="164" fill="#a6d8c9" font-size="10.5" text-anchor="middle">검사결과 · 작업실적</text>
-                    <text x="1527.5" y="184" fill="#a6d8c9" font-size="10.5" text-anchor="middle">불량이미지 · 알람이력</text>
-                    <g transform="translate(1504,205) scale(.86)" fill="none" stroke="#18e6ad" stroke-width="3.2">
+                    <text x="1487.5" y="139" fill="#eafff8" font-size="14" font-weight="800" text-anchor="middle">7. MES / 로그</text>
+                    <text x="1487.5" y="164" fill="#a6d8c9" font-size="10.5" text-anchor="middle">검사결과 · 작업실적</text>
+                    <text x="1487.5" y="184" fill="#a6d8c9" font-size="10.5" text-anchor="middle">불량이미지 · 알람이력</text>
+                    <g transform="translate(1464,205) scale(.86)" fill="none" stroke="#18e6ad" stroke-width="3.2">
                         <ellipse cx="27" cy="5" rx="27" ry="8"/>
                         <path d="M0 5v30c0 4 12 8 27 8s27-4 27-8V5"/>
                         <path d="M0 19c0 4 12 8 27 8s27-4 27-8"/>
@@ -2969,8 +3008,8 @@
                     <path d="M465 175H505"/>
                     <path d="M710 175H750"/>
                     <path d="M970 175H1014"/>
-                    <path d="M1210 175H1250"/>
-                    <path d="M1440 175H1455"/>
+                    <path d="M1210 175H1218"/>
+                    <path d="M1400 175H1415"/>
                 </g>
 
                 <!-- LOWER: EXCEPTION PANEL -->
@@ -3032,48 +3071,48 @@
                 </g>
 
                 <!-- LOWER: KNOWLEDGE PANEL -->
-                <rect x="1092" y="376" width="564" height="274" rx="16"
+                <rect x="1075" y="376" width="520" height="274" rx="16"
                       fill="#101817" stroke="#2a7d62" stroke-width="1.4"/>
-                <rect x="1110" y="360" width="222" height="32" rx="7" fill="#174b3b"/>
-                <text x="1125" y="381" fill="#ecfdf5" font-size="14" font-weight="800">04 · KNOWLEDGE / MONITORING</text>
+                <rect x="1093" y="360" width="222" height="32" rx="7" fill="#174b3b"/>
+                <text x="1108" y="381" fill="#ecfdf5" font-size="14" font-weight="800">04 · KNOWLEDGE / MONITORING</text>
 
                 <g font-family="system-ui,sans-serif">
-                    <rect x="1128" y="438" width="125" height="135" rx="9" fill="#14201c" stroke="#34d399" stroke-width="1.5"/>
-                    <text x="1190.5" y="465" fill="#ecfdf5" font-size="12" font-weight="800" text-anchor="middle">Object Storage</text>
-                    <text x="1190.5" y="485" fill="#9acdbb" font-size="10" text-anchor="middle">이미지 · 문서</text>
-                    <text x="1190.5" y="502" fill="#9acdbb" font-size="10" text-anchor="middle">메타데이터</text>
-                    <ellipse cx="1190" cy="532" rx="27" ry="8" fill="none" stroke="#34d399" stroke-width="2"/>
-                    <path d="M1163 532v24c0 4 12 8 27 8s27-4 27-8v-24" fill="none" stroke="#34d399" stroke-width="2"/>
+                    <rect x="1103" y="438" width="118" height="135" rx="9" fill="#14201c" stroke="#34d399" stroke-width="1.5"/>
+                    <text x="1162" y="465" fill="#ecfdf5" font-size="12" font-weight="800" text-anchor="middle">Object Storage</text>
+                    <text x="1162" y="485" fill="#9acdbb" font-size="10" text-anchor="middle">이미지 · 문서</text>
+                    <text x="1162" y="502" fill="#9acdbb" font-size="10" text-anchor="middle">메타데이터</text>
+                    <ellipse cx="1162" cy="532" rx="27" ry="8" fill="none" stroke="#34d399" stroke-width="2"/>
+                    <path d="M1135 532v24c0 4 12 8 27 8s27-4 27-8v-24" fill="none" stroke="#34d399" stroke-width="2"/>
 
-                    <rect x="1280" y="438" width="120" height="135" rx="9" fill="#14201c" stroke="#34d399" stroke-width="1.5"/>
-                    <text x="1340" y="465" fill="#ecfdf5" font-size="12" font-weight="800" text-anchor="middle">Embedding</text>
-                    <text x="1340" y="483" fill="#ecfdf5" font-size="12" font-weight="800" text-anchor="middle">Vector DB</text>
-                    <g transform="translate(1315,517)" fill="none" stroke="#34d399" stroke-width="2">
+                    <rect x="1245" y="438" width="112" height="135" rx="9" fill="#14201c" stroke="#34d399" stroke-width="1.5"/>
+                    <text x="1301" y="465" fill="#ecfdf5" font-size="12" font-weight="800" text-anchor="middle">Embedding</text>
+                    <text x="1301" y="483" fill="#ecfdf5" font-size="12" font-weight="800" text-anchor="middle">Vector DB</text>
+                    <g transform="translate(1276,517)" fill="none" stroke="#34d399" stroke-width="2">
                         <circle cx="25" cy="0" r="5"/><circle cx="0" cy="22" r="5"/><circle cx="50" cy="22" r="5"/><circle cx="25" cy="44" r="5"/>
                         <path d="M21 4L4 18M29 4l17 14M4 26l17 14M46 26L29 40M5 22h40"/>
                     </g>
 
-                    <rect x="1410" y="438" width="90" height="135" rx="9" fill="#141b1d" stroke="#64748b" stroke-width="1.3"/>
-                    <text x="1455" y="466" fill="#edf6f3" font-size="12" font-weight="800" text-anchor="middle">사내 RAG</text>
-                    <circle cx="1444" cy="526" r="20" fill="none" stroke="#8ca5a0" stroke-width="2.5"/>
-                    <line x1="1459" y1="541" x2="1475" y2="557" stroke="#8ca5a0" stroke-width="3"/>
+                    <rect x="1380" y="438" width="88" height="135" rx="9" fill="#141b1d" stroke="#64748b" stroke-width="1.3"/>
+                    <text x="1424" y="466" fill="#edf6f3" font-size="12" font-weight="800" text-anchor="middle">사내 RAG</text>
+                    <circle cx="1413" cy="526" r="20" fill="none" stroke="#8ca5a0" stroke-width="2.5"/>
+                    <line x1="1428" y1="541" x2="1444" y2="557" stroke="#8ca5a0" stroke-width="3"/>
 
-                    <rect x="1515" y="438" width="90" height="135" rx="9" fill="#141b1d" stroke="#64748b" stroke-width="1.3"/>
-                    <text x="1560" y="464" fill="#edf6f3" font-size="11.5" font-weight="800" text-anchor="middle">MES 종합</text>
-                    <text x="1560" y="482" fill="#edf6f3" font-size="11.5" font-weight="800" text-anchor="middle">모니터링</text>
-                    <rect x="1533" y="510" width="54" height="37" rx="3" fill="none" stroke="#8ca5a0" stroke-width="2"/>
-                    <path d="M1541 538l10-8 9 4 15-16" fill="none" stroke="#34d399" stroke-width="2"/>
+                    <rect x="1490" y="438" width="82" height="135" rx="9" fill="#141b1d" stroke="#64748b" stroke-width="1.3"/>
+                    <text x="1531" y="464" fill="#edf6f3" font-size="11.5" font-weight="800" text-anchor="middle">MES 종합</text>
+                    <text x="1531" y="482" fill="#edf6f3" font-size="11.5" font-weight="800" text-anchor="middle">모니터링</text>
+                    <rect x="1504" y="510" width="54" height="37" rx="3" fill="none" stroke="#8ca5a0" stroke-width="2"/>
+                    <path d="M1512 538l10-8 9 4 15-16" fill="none" stroke="#34d399" stroke-width="2"/>
                 </g>
                 <g fill="none" stroke="#34d399" stroke-width="2" marker-end="url(#dfArrowGreen)">
-                    <path d="M1253 505H1280"/>
-                    <path d="M1400 505H1410"/>
-                    <path d="M1500 505H1515"/>
+                    <path d="M1221 505H1245"/>
+                    <path d="M1357 505H1380"/>
+                    <path d="M1468 505H1490"/>
                 </g>
 
                 <!-- CROSS-FLOW FEEDBACK : 분리된 전용 경로 -->
                 <g fill="none" stroke-width="1.8" stroke-dasharray="7 6">
                     <!-- MES → Learning : y=350 corridor -->
-                    <path d="M1558 266V350H653V438"
+                    <path d="M1488 266V350H653V438"
                           stroke="#a78bfa" marker-end="url(#dfArrowPurple)"/>
 
                     <!-- Deployed model → AI : y=336 corridor -->
@@ -3081,11 +3120,11 @@
                           stroke="#a78bfa" marker-end="url(#dfArrowPurple)"/>
 
                     <!-- MES → Object Storage : right-side x=1210 corridor -->
-                    <path d="M1548 266V402H1210V438"
+                    <path d="M1510 266V402H1162V438"
                           stroke="#34d399" marker-end="url(#dfArrowGreen)"/>
 
                     <!-- Monitoring → MES : far-right x=1642 corridor -->
-                    <path d="M1560 438V420H1660V286H1575V266"
+                    <path d="M1531 438V420H1615V286H1505V266"
                           stroke="#34d399" marker-end="url(#dfArrowGreen)"/>
 
                     <!-- Recapture → Input : far-left x=34 corridor -->
@@ -3093,11 +3132,11 @@
                           stroke="#fb923c" marker-end="url(#dfArrowOrange)"/>
 
                     <!-- Operator record → MES : y=700 corridor -->
-                    <path d="M280 573V700H1490V286H1508V266"
+                    <path d="M280 573V700H1460V286H1472V266"
                           stroke="#fb923c" marker-end="url(#dfArrowOrange)"/>
 
                     <!-- E-STOP alarm → MES : y=724 corridor -->
-                    <path d="M438 573V724H1640V300H1548V266"
+                    <path d="M438 573V724H1605V300H1500V266"
                           stroke="#fb923c" marker-end="url(#dfArrowOrange)"/>
                 </g>
 
@@ -3125,7 +3164,7 @@
                     <line x1="1210" y1="789" x2="1325" y2="789"/>
                     <line x1="1405" y1="789" x2="1492" y2="789"/>
                 </g>
-            </svg>
+            </svg></div>
 
             <div class="df-caption">
                 <div>
