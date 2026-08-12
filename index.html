@@ -3198,7 +3198,8 @@
 
         <style>
             #docker-container-tree .dc-wrap{
-                max-width:1100px;
+                width:100%;
+                max-width:1400px;
                 margin:0 auto;
             }
             #docker-container-tree .dc-tree{
@@ -3208,7 +3209,8 @@
                 border-radius:6px;
                 background:#0f151b;
                 font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
-                overflow:hidden;
+                overflow-x:auto;
+                overflow-y:hidden;
             }
             #docker-container-tree .dc-host{
                 display:flex;
@@ -3231,7 +3233,7 @@
                 display:grid;
                 grid-template-columns:44px minmax(0,1fr);
                 align-items:stretch;
-                min-height:70px;
+                min-height:94px;
             }
             #docker-container-tree .dc-branch{
                 position:relative;
@@ -3259,25 +3261,49 @@
             }
             #docker-container-tree .dc-node{
                 display:grid;
-                grid-template-columns:minmax(215px,290px) minmax(0,1fr);
-                gap:16px;
+                grid-template-columns:minmax(285px,32%) minmax(690px,68%);
+                column-gap:34px;
                 align-items:center;
-                padding:9px 12px;
+                min-width:1020px;
+                padding:11px 18px;
                 margin:4px 0;
                 border-left:2px solid #18e6ad;
                 background:linear-gradient(90deg,rgba(24,230,173,.055),rgba(18,26,33,.72) 42%,rgba(18,26,33,.38));
             }
             #docker-container-tree .dc-name{
                 color:#71efd0;
-                font-size:12px;
+                font-size:clamp(10px,0.78vw,12px);
                 font-weight:800;
                 letter-spacing:.01em;
+                white-space:nowrap;
             }
             #docker-container-tree .dc-desc{
                 color:#aeb9b5;
                 font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif;
                 font-size:12px;
                 line-height:1.55;
+            }
+            #docker-container-tree .dc-desc{
+                display:flex;
+                flex-direction:column;
+                gap:6px;
+                min-width:0;
+                padding-left:22px;
+                border-left:1px solid rgba(148,163,184,.18);
+            }
+            #docker-container-tree .dc-desc-line{
+                display:block;
+                color:#aeb9b5;
+                line-height:1.45;
+                white-space:nowrap;
+                font-size:clamp(10px,0.78vw,12px);
+            }
+            #docker-container-tree .dc-desc-label{
+                display:inline-block;
+                min-width:46px;
+                color:#62e8c7;
+                font-weight:800;
+                font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
             }
             #docker-container-tree .dc-desc b{
                 color:#dce6e2;
@@ -3306,8 +3332,10 @@
                 border-radius:4px;
                 color:#aeb9b5;
                 font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif;
-                font-size:12px;
+                font-size:clamp(10px,0.76vw,12px);
                 line-height:1.55;
+                white-space:nowrap;
+                overflow-x:auto;
             }
             #docker-container-tree .dc-safety strong{
                 color:#f5cc7a;
@@ -3329,14 +3357,33 @@
                 font-size:9px;
                 letter-spacing:.08em;
                 font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+                white-space:nowrap;
             }
-            @media(max-width:800px){
-                #docker-container-tree .dc-tree{padding:15px 12px;}
-                #docker-container-tree .dc-line{grid-template-columns:30px minmax(0,1fr);}
+            #docker-container-tree .dc-host,
+            #docker-container-tree .dc-safety-title{
+                white-space:nowrap;
+            }
+            @media(max-width:1050px){
+                #docker-container-tree .dc-wrap{
+                    max-width:100%;
+                }
+                #docker-container-tree .dc-tree{
+                    padding:18px 16px;
+                }
+            }
+            @media(max-width:760px){
+                #docker-container-tree .dc-tree{
+                    padding:15px 12px;
+                }
+                #docker-container-tree .dc-line{
+                    grid-template-columns:30px minmax(0,1fr);
+                }
                 #docker-container-tree .dc-branch::before{left:10px;}
                 #docker-container-tree .dc-branch::after{left:10px;width:17px;}
-                #docker-container-tree .dc-node{grid-template-columns:1fr;gap:4px;}
-                #docker-container-tree .dc-safety-grid{grid-template-columns:1fr;}
+                #docker-container-tree .dc-safety-grid{
+                    grid-template-columns:minmax(470px,1fr) minmax(470px,1fr);
+                    min-width:960px;
+                }
             }
         </style>
 
@@ -3367,7 +3414,10 @@
                     <div class="dc-branch"></div>
                     <div class="dc-node">
                         <div class="dc-name">1. [Mqtt-Broker] · 메시지 중계</div>
-                        <div class="dc-desc">촬영·AI·좌표·로봇 상태 이벤트를 <b>컨테이너 간 중계</b></div>
+                        <div class="dc-desc">
+                            <span class="dc-desc-line"><span class="dc-desc-label">역할</span> 촬영·AI·좌표·로봇 상태 이벤트 중계</span>
+                            <span class="dc-desc-line"><span class="dc-desc-label">특징</span> Producer ↔ Broker ↔ Consumer 구조로 기능 간 결합도 최소화</span>
+                        </div>
                     </div>
                 </div>
 
@@ -3375,7 +3425,10 @@
                     <div class="dc-branch"></div>
                     <div class="dc-node">
                         <div class="dc-name">2. [RGBD-Camera-Capture] · 영상 생산</div>
-                        <div class="dc-desc">RealSense D455의 <b>RGB·Depth 프레임 획득</b> · USB 장치만 허용</div>
+                        <div class="dc-desc">
+                            <span class="dc-desc-line"><span class="dc-desc-label">역할</span> RealSense D455의 RGB·Depth 프레임 획득</span>
+                            <span class="dc-desc-line"><span class="dc-desc-label">특징</span> RealSense SDK 독립 관리 · 카메라 USB 장치만 접근 허용</span>
+                        </div>
                     </div>
                 </div>
 
@@ -3383,7 +3436,10 @@
                     <div class="dc-branch"></div>
                     <div class="dc-node">
                         <div class="dc-name">3. [YOLO26n-Vision-Inference] · AI 추론</div>
-                        <div class="dc-desc">YOLO26n 검출 + Depth 기반 <b>3D 좌표 산출</b> · ONNX 환경 독립</div>
+                        <div class="dc-desc">
+                            <span class="dc-desc-line"><span class="dc-desc-label">역할</span> YOLO26n 검출 · Depth 기반 3D 좌표 산출</span>
+                            <span class="dc-desc-line"><span class="dc-desc-label">특징</span> ONNX Runtime 환경 독립 · AI 오류의 제어부 전파 차단</span>
+                        </div>
                     </div>
                 </div>
 
@@ -3391,7 +3447,10 @@
                     <div class="dc-branch"></div>
                     <div class="dc-node">
                         <div class="dc-name">4. [Coordinate-Safety-Engine] · 좌표/Safety</div>
-                        <div class="dc-desc">CAD 기준 <b>ΔX·ΔY·ΔZ·Δθ 보정</b> 및 오차·충돌 조건 검증</div>
+                        <div class="dc-desc">
+                            <span class="dc-desc-line"><span class="dc-desc-label">역할</span> CAD 기준 ΔX·ΔY·ΔZ·Δθ 좌표보정 및 Safety 검증</span>
+                            <span class="dc-desc-line"><span class="dc-desc-label">특징</span> 오차·충돌 기준 초과 시 재촬영·작업자 확인·정지로 분기</span>
+                        </div>
                     </div>
                 </div>
 
@@ -3399,7 +3458,10 @@
                     <div class="dc-branch"></div>
                     <div class="dc-node">
                         <div class="dc-name">5. [Robot-IO-Gateway] · MCU 연동</div>
-                        <div class="dc-desc">승인 좌표를 ESP32-S3로 전달하고 <b>센서·Interlock 상태 수신</b></div>
+                        <div class="dc-desc">
+                            <span class="dc-desc-line"><span class="dc-desc-label">역할</span> 승인 좌표를 ESP32-S3로 전달 · 센서 상태 수신</span>
+                            <span class="dc-desc-line"><span class="dc-desc-label">특징</span> UART 등 필요한 장치만 접근 · 전체 privileged 권한 미사용</span>
+                        </div>
                     </div>
                 </div>
 
@@ -3407,7 +3469,10 @@
                     <div class="dc-branch"></div>
                     <div class="dc-node">
                         <div class="dc-name">6. [MES-Data-Logger] · 이력 저장</div>
-                        <div class="dc-desc">작업·이미지·좌표·알람 이력을 <b>Docker Volume에 영속 저장</b></div>
+                        <div class="dc-desc">
+                            <span class="dc-desc-line"><span class="dc-desc-label">역할</span> 작업·이미지·좌표·알람·E-STOP 이력 저장</span>
+                            <span class="dc-desc-line"><span class="dc-desc-label">특징</span> Docker Volume 매핑으로 컨테이너 재시작 후에도 데이터 보존</span>
+                        </div>
                     </div>
                 </div>
 
@@ -3415,7 +3480,10 @@
                     <div class="dc-branch"></div>
                     <div class="dc-node">
                         <div class="dc-name">7. [RAG-Knowledge-Service] · 지식 검색</div>
-                        <div class="dc-desc">MES·Vector DB 기반 <b>유사사례·조치정보 검색</b> · 제어망과 분리</div>
+                        <div class="dc-desc">
+                            <span class="dc-desc-line"><span class="dc-desc-label">역할</span> MES·Vector DB 기반 유사사례·조치정보 검색</span>
+                            <span class="dc-desc-line"><span class="dc-desc-label">특징</span> 제어망과 분리 · RBAC/Audit Log 적용으로 검색 장애 영향 격리</span>
+                        </div>
                     </div>
                 </div>
 
